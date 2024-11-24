@@ -18,8 +18,8 @@ class Maze
     public Maze()
     {
         //Cantidad de filas y columnas generadas aleatoriamente
-        int rows = _random.Next(20, 21); 
-        int cols = _random.Next(20, 21);
+        int rows = _random.Next(20, 31); 
+        int cols = _random.Next(20, 31);
         // Asegurarse de que el tamaño sea impar para facilitar la generación del laberinto
         _rows = (rows % 2 == 0) ? rows + 1 : rows;
         _cols = (cols % 2 == 0) ? cols + 1 : cols;
@@ -43,21 +43,19 @@ class Maze
     }
 
     // Genera el laberinto utilizando el algoritmo de backtracking
-    int i = 0;
     private void _generarLaberinto(int x, int y)
     {
         _maze[y, x] = 0; // Marca la celda actual como un camino vacío
         // Lista de direcciones aleatorias para explorar
-        List<int> direcciones = new List<int> { 0, 1, 2, 3 };
-        direcciones.Sort((a, b) => _random.Next(-1, 1)); // Aleatoriza las direcciones
+        int[] direcciones = {0, 1, 2, 3};
+        direcciones = Desordenar(direcciones); // Aleatoriza las direcciones{abajo, derecha, arriba, izquierda}
 
         foreach (int direccion in direcciones)
         {
             // Saltamos dos celdas en la dirección
             int nx = x + DirX[direccion] * 2;
             int ny = y + DirY[direccion] * 2;
-            i++;
-            System.Console.WriteLine(nx + " " + ny + " " + i);
+
             // Si la nueva celda es válida (dentro de los límites y no ha sido recorrida)
             if (_esValido(nx, ny))
             {
@@ -69,7 +67,20 @@ class Maze
         }
     }
 
-    // Verifica si una celda es válida para colocar un camino
+    //Desordenar Array
+    private int[] Desordenar(int[] a)
+    {
+        int k;
+        int l = a.Length;
+        for(int i = 0; i < a.Length; i++) 
+        {
+            k = _random.Next(i, l);
+            (a[k], a[i]) = (a[i], a[k]);
+        }
+        return a;
+    }
+
+    // Verifica si una celda es válida para colocar un camino*******
     private bool _esValido(int x, int y)
     {
         return x > 0 && y > 0 && x < _rows - 1 && y < _cols - 1 && _maze[y, x] == 1;
