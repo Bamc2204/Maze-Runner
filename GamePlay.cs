@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Name
+namespace GamePlay
 {
-    class Program
+    class GamePlay
     {
         static void Main(string[] args)
         {
@@ -11,6 +11,9 @@ namespace Name
             Maze laberinto = new Maze();
 
             laberinto.ImprimirLaberinto();
+
+            laberinto.Desplazamiento(10000);
         }
     }   
 }
+

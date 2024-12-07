@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 
 class Maze
 {
@@ -28,6 +27,7 @@ class Maze
         _inicializarLaberinto(); //Crea el laberinto pero vacio(con todo paredes);
         _generarLaberinto(1, 1); // Comenzar desde la celda (1,1) a construir el laberinto;
         _establecerEntradaSalida(); //Crear la entrada/salida del laberinto;
+        _establecerJugador();
     }
 
     // Inicializa el laberinto con paredes (1) por defecto
@@ -71,10 +71,9 @@ class Maze
     private int[] Desordenar(int[] a)
     {
         int k;
-        int l = a.Length;
         for(int i = 0; i < a.Length; i++) 
         {
-            k = _random.Next(i, l);
+            k = _random.Next(i, a.Length);
             (a[k], a[i]) = (a[i], a[k]);
         }
         return a;
@@ -93,16 +92,79 @@ class Maze
         _maze[_cols - 2, _rows - 1] = 0; // Salida (cerca de la esquina inferior derecha)
     }
 
+    // Establece el jugador
+    private void _establecerJugador()
+    {
+        _maze[1,0] = 2; // Jugador (cerca de la esquina superior izquierda)
+    }
+
     // Muestra el laberinto en la consola
     public void ImprimirLaberinto()
     {
-        for (int y = 0; y < _cols; y++)
+        Console.Clear(); //Limpia la consola
+        for (int x = 0; x < _cols; x++)
         {
-            for (int x = 0; x < _rows; x++)
+            for (int y = 0; y < _rows; y++)
             {
-                Console.Write(_maze[y, x] == 1 ? "██" : "  "); // Paredes representadas por '#' y caminos por espacios
+                Console.Write(_maze[x, y] == 1 ? "██" : _maze[x, y] == 2 ? "PP" : "  "); // Paredes representadas por '██' y caminos por espacios
             }
             Console.WriteLine();
         }
+    }
+
+    //Desplaza la ficha
+    public void Desplazamiento(int pasos)
+    {   
+        _maze[1,0] = 2;
+        int x = 1;
+        int y = 0;
+        int newX = x;
+        int newY = y;
+        bool running = true;
+        
+        while(pasos != 0 && running)
+        {
+            //Si llegas al final del juego
+            if(x == _cols - 2 && y == _rows - 1)//Si llego al final del laberinto o no
+            {
+                System.Console.WriteLine("Felicidades, Completaste El Laberinto");
+                running = false;
+            }
+            
+            else
+            {
+                //Tecla q toca el jugador en el teclado            
+                ConsoleKey key = Console.ReadKey().Key;
+
+                //Casos para cada tecla
+                switch (key)
+                {
+                    case ConsoleKey.UpArrow:    newX = x - 1; break;
+                    case ConsoleKey.DownArrow:  newX = x + 1; break;
+                    case ConsoleKey.LeftArrow:  newY = y - 1; break;
+                    case ConsoleKey.RightArrow: newY = y + 1; break;
+                    case ConsoleKey.Escape: Console.WriteLine("Simulación detenida."); running = false; break;
+                }
+
+                // Dentro de filas, columnas y si es un camino
+                if (newX >= 0 && newX < _maze.GetLength(0) && newY >= 0 && newY < _maze.GetLength(1) && _maze[newX, newY] == 0)                    
+                {
+                    // Actualiza el tablero
+                    _maze[x, y] = 0;        // Vacía la posición actual
+                    _maze[newX, newY] = 2;  // Mueve la ficha
+                    x = newX;                 // Actualiza las coordenadas actuales
+                    y = newY;
+                    pasos --;
+                }
+
+                else
+                {
+                    System.Console.WriteLine("los pasos no son validos");
+                    newX = x; newY = y;                    
+                }
+
+                ImprimirLaberinto();//Imprime el laberinto
+            }
+        }   
     }
 }
