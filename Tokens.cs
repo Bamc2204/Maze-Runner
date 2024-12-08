@@ -4,8 +4,8 @@ class Tokens
 {
     //Propiedades de las fichas
     private string _name; //Nombre de ficha
-    private int _coordX; //Coordenada X
-    private int _coordY; //Coordenada Y
+    public int _coordX; //Coordenada X
+    public int _coordY; //Coordenada Y
     private string _caracter;
     public int health; //Salud
     private string _skill; //Habilidad
@@ -52,5 +52,39 @@ class Tokens
                 break;
             }    
         }
+    }
+
+    //Usar objetos bolsa
+    public void _useBoxObject(ref bool pico)
+    {
+        //Tecla q toca el jugador en el teclado            
+        ConsoleKeyInfo key = Console.ReadKey();
+        int index = key.KeyChar - '1';
+        if(index >= 0 && index < 3 && _box[index] != 0)
+        {
+            Objets objeto = (Objets)_box[index];
+            switch (objeto)
+            {
+                case Objets.healthPotion:
+                    health += 20;
+                    Console.WriteLine($"{_name} usó una poción de salud. Salud actual: {health}");
+                    break;
+                case Objets.speedPotion:
+                    _speed += 2;
+                    Console.WriteLine($"{_name} usó una poción de velocidad. Velocidad actual: {_speed}");
+                    break;
+                case Objets.shield:
+                    Console.WriteLine($"{_name} usó un escudo.");
+                    break;
+                case Objets.pick:
+                    pico = true;
+                    Console.WriteLine($"{_name} va a usar un pico.");
+                    break;
+            }
+            _box[index] = 0; // Elimina el objeto de la bolsa
+        }
+        else
+            System.Console.WriteLine("No hay nada en esa espacio de la bolsa");
+
     }
 }

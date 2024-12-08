@@ -3,7 +3,7 @@ using System;
 class Maze
 {
     private int _rows, _cols;
-    private int[,] _maze;
+    public int[,] _maze;
     private Random _random = new Random();
 
     // Direcciones posibles (arriba, derecha, abajo, izquierda)
@@ -49,7 +49,7 @@ class Maze
         _maze[y, x] = 0; // Marca la celda actual como un camino vacío
         // Lista de direcciones aleatorias para explorar
         int[] direcciones = {0, 1, 2, 3};
-        direcciones = Desordenar(direcciones); // Aleatoriza las direcciones{abajo, derecha, arriba, izquierda}
+        direcciones = _desordenar(direcciones); // Aleatoriza las direcciones{abajo, derecha, arriba, izquierda}
 
         foreach (int direccion in direcciones)
         {
@@ -69,7 +69,7 @@ class Maze
     }
 
     //Desordenar Array
-    private int[] Desordenar(int[] a)
+    private int[] _desordenar(int[] a)
     {
         int k;
         for(int i = 0; i < a.Length; i++) 
@@ -123,61 +123,5 @@ class Maze
             }
             Console.WriteLine();
         }
-    }
-
-    //Desplaza la ficha
-    public void Desplazamiento(int pasos)
-    {   
-        _maze[1,0] = 2;
-        int x = 1;
-        int y = 0;
-        int newX = x;
-        int newY = y;
-        bool running = true;
-        
-        while(pasos != 0 && running)
-        {
-            //Si llegas al final del juego
-            if(x == _cols - 2 && y == _rows - 1)//Si llego al final del laberinto o no
-            {
-                System.Console.WriteLine("Felicidades, Completaste El Laberinto");
-                running = false;
-            }
-            
-            else
-            {
-                //Tecla q toca el jugador en el teclado            
-                ConsoleKey key = Console.ReadKey().Key;
-
-                //Casos para cada tecla
-                switch (key)
-                {
-                    case ConsoleKey.UpArrow:    newX = x - 1; break;
-                    case ConsoleKey.DownArrow:  newX = x + 1; break;
-                    case ConsoleKey.LeftArrow:  newY = y - 1; break;
-                    case ConsoleKey.RightArrow: newY = y + 1; break;
-                    case ConsoleKey.Escape: Console.WriteLine("Simulación detenida."); running = false; break;
-                }
-
-                // Dentro de filas, columnas y si es un camino
-                if (newX >= 0 && newX < _maze.GetLength(0) && newY >= 0 && newY < _maze.GetLength(1) && _maze[newX, newY] != 1)                    
-                {
-                    // Actualiza el tablero
-                    _maze[x, y] = 0;        // Vacía la posición actual
-                    _maze[newX, newY] = 2;  // Mueve la ficha
-                    x = newX;                 // Actualiza las coordenadas actuales
-                    y = newY;
-                    pasos --;
-                }
-
-                else
-                {
-                    System.Console.WriteLine("los pasos no son validos");
-                    newX = x; newY = y;                    
-                }
-
-                ImprimirLaberinto();//Imprime el laberinto
-            }
-        }   
     }
 }
