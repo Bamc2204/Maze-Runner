@@ -28,6 +28,7 @@ class Maze
         _generarLaberinto(1, 1); // Comenzar desde la celda (1,1) a construir el laberinto;
         _establecerEntradaSalida(); //Crear la entrada/salida del laberinto;
         _establecerJugador();
+        _establecerTrampas();
     }
 
     // Inicializa el laberinto con paredes (1) por defecto
@@ -98,6 +99,18 @@ class Maze
         _maze[1,0] = 2; // Jugador (cerca de la esquina superior izquierda)
     }
 
+    // Establece Trampas
+    private void _establecerTrampas()
+    {
+        for(int i = 0; i < 15; i++) 
+        {
+            int x = _random.Next(5, _rows);
+            int y = _random.Next(5, _cols);
+            if(_maze[y, x] == 0)
+                _maze [y, x] = 3;
+        }
+    }
+
     // Muestra el laberinto en la consola
     public void ImprimirLaberinto()
     {
@@ -106,7 +119,7 @@ class Maze
         {
             for (int y = 0; y < _rows; y++)
             {
-                Console.Write(_maze[x, y] == 1 ? "██" : _maze[x, y] == 2 ? "PP" : "  "); // Paredes representadas por '██' y caminos por espacios
+                Console.Write(_maze[x, y] == 1 ? "██" : _maze[x, y] == 2 ? "PP" : _maze[x, y] == 3 ? "TT" : "  "); // Paredes representadas por '██' y caminos por espacios
             }
             Console.WriteLine();
         }
@@ -147,7 +160,7 @@ class Maze
                 }
 
                 // Dentro de filas, columnas y si es un camino
-                if (newX >= 0 && newX < _maze.GetLength(0) && newY >= 0 && newY < _maze.GetLength(1) && _maze[newX, newY] == 0)                    
+                if (newX >= 0 && newX < _maze.GetLength(0) && newY >= 0 && newY < _maze.GetLength(1) && _maze[newX, newY] != 1)                    
                 {
                     // Actualiza el tablero
                     _maze[x, y] = 0;        // Vacía la posición actual
