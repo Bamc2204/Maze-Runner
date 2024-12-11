@@ -55,7 +55,7 @@ class Maze
         {
             // Saltamos dos celdas en la dirección
             int nx = x + DirX[direccion] * 2;
-            int ny = y + DirY[direccion] * 2;
+            int ny = y + DirY[direccion];
 
             // Si la nueva celda es válida (dentro de los límites y no ha sido recorrida)
             if (_esValido(nx, ny))

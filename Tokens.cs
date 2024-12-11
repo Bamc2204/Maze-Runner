@@ -55,7 +55,7 @@ class Tokens
     }
 
     //Usar objetos bolsa
-    public void _useBoxObject(ref bool pico)
+    public void _useBoxObject(Maze lab, ref int x, ref int y, ref int newX, ref int newY, ref Tokens pieza)
     {
         //Tecla q toca el jugador en el teclado            
         ConsoleKeyInfo key = Console.ReadKey();
@@ -77,7 +77,7 @@ class Tokens
                     Console.WriteLine($"{_name} usó un escudo.");
                     break;
                 case Objets.pick:
-                    pico = true;
+                    _pico(lab, ref x, ref y, ref newX, ref newY, ref pieza);
                     Console.WriteLine($"{_name} va a usar un pico.");
                     break;
             }
@@ -85,6 +85,41 @@ class Tokens
         }
         else
             System.Console.WriteLine("No hay nada en esa espacio de la bolsa");
+    }
+
+    //Metodo de la herramenta pico
+        private void _pico(Maze lab, ref int x, ref int y, ref int newX, ref int newY, ref Tokens pieza)  //Mini metodo de Desplazamiento
+    {
+        newX = x;
+        newY = y;
+        bool running = true;
+        
+        for(int i = 0; i < 3; i++)
+        {
+            //Tecla q toca el jugador en el teclado            
+            ConsoleKey key = Console.ReadKey().Key;
+            GamePlay._readBoard(key, lab, ref x, ref y, ref newX, ref newY, ref running, ref pieza);
+
+            // Dentro de filas, columnas y si es un camino
+            if (newX >= 0 && newX < lab._maze.GetLength(0) && newY >= 0 && newY < lab._maze.GetLength(1))                    
+            {
+                // Actualiza el tablero
+                lab._maze[x, y] = 0;        // Vacía la posición actual
+                lab._maze[newX, newY] = 2;  // Mueve la ficha
+                x = newX;                 // Actualiza las coordenadas actuales
+                y = newY;
+            }
+
+            else
+            {
+                System.Console.WriteLine("los pasos no son validos");
+                newX = x; newY = y;                    
+            }
+
+            lab.ImprimirLaberinto();//Imprime el laberinto
+                
+        }
 
     }
+
 }
