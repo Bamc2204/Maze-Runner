@@ -55,7 +55,7 @@ class Maze
         {
             // Saltamos dos celdas en la dirección
             int nx = x + DirX[direccion] * 2;
-            int ny = y + DirY[direccion];
+            int ny = y + DirY[direccion] * 2;
 
             // Si la nueva celda es válida (dentro de los límites y no ha sido recorrida)
             if (_esValido(nx, ny))
@@ -102,7 +102,7 @@ class Maze
     // Establece Trampas
     private void _establecerTrampas()
     {
-        for(int i = 0; i < 15; i++) 
+        for(int i = 0; i < 20; i++) 
         {
             int x = _random.Next(5, _rows);
             int y = _random.Next(5, _cols);

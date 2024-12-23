@@ -37,17 +37,19 @@ class GamePlay
                 //Tecla q toca el jugador en el teclado            
                 ConsoleKey key = Console.ReadKey().Key;
 
-                _readBoard(key, lab, ref pieza._coordX, ref pieza._coordY, ref newX, ref newY, ref running, ref pieza);
+                _readBoard(key, lab, ref newX, ref newY, ref running, ref pieza);
+
+                _verificarTrampas(lab, ref newX, ref newY, ref running, ref pieza);
 
                 // Dentro de filas, columnas y si es un camino
                 if (newX >= 0 && newX < lab._maze.GetLength(0) && newY >= 0 && newY < lab._maze.GetLength(1) && lab._maze[newX, newY] != 1 )                    
                 {
                     // Actualiza el tablero
                     lab._maze[pieza._coordX, pieza._coordY] = 0;        // Vacía la posición actual
-                    lab._maze[newX, newY] = 2;            // Mueve la ficha
-                    pieza._coordX = newX;                 // Actualiza las coordenadas actuales
+                    lab._maze[newX, newY] = 2;                          // Mueve la ficha
+                    pieza._coordX = newX;                               // Actualiza las coordenadas actuales
                     pieza._coordY = newY;
-                    pasos --;                  //Pasos q puede recorer cada ficha
+                    pasos --;                                           //Pasos q puede recorer cada ficha
                 }
 
                 else
@@ -61,17 +63,31 @@ class GamePlay
         }   
     }
 
-    public static void _readBoard(ConsoleKey key, Maze lab, ref int x, ref int y, ref int newX, ref int newY, ref bool running, ref Tokens pieza) 
+    public static void _readBoard(ConsoleKey key, Maze lab, ref int newX, ref int newY, ref bool running, ref Tokens pieza) 
     {
         //Casos para cada tecla
         switch (key)
         {
-            case ConsoleKey.UpArrow:    newX = x - 1; break;
-            case ConsoleKey.DownArrow:  newX = x + 1; break;
-            case ConsoleKey.LeftArrow:  newY = y - 1; break;
-            case ConsoleKey.RightArrow: newY = y + 1; break;
+            case ConsoleKey.UpArrow:    newX = pieza._coordX - 1; break;
+            case ConsoleKey.DownArrow:  newX = pieza._coordX + 1; break;
+            case ConsoleKey.LeftArrow:  newY = pieza._coordY - 1; break;
+            case ConsoleKey.RightArrow: newY = pieza._coordY + 1; break;
             case ConsoleKey.Escape: Console.WriteLine("Simulación detenida."); running = false; break;
-            case ConsoleKey.Tab: pieza._useBoxObject(lab, ref x, ref y, ref newX, ref newY, ref pieza); break;
+            case ConsoleKey.Tab: pieza._useBoxObject(lab, ref newX, ref newY, ref pieza); break;
+        }
+    }
+
+    public static void _verificarTrampas(Maze lab, ref int newX, ref int newY, ref bool running, ref Tokens pieza)
+    {
+        if(lab._maze[newX, newY] == 3) //Verificacion de trapas
+        {
+            pieza.health -= 20;
+            System.Console.WriteLine("Has caido en una trampa y has perdido 20 puntos de vidas");
+            if(pieza.health == 0)
+            {   
+                running = false;
+                System.Console.WriteLine("Has muerto");
+            }
         }
     }
 }   

@@ -55,7 +55,7 @@ class Tokens
     }
 
     //Usar objetos bolsa
-    public void _useBoxObject(Maze lab, ref int x, ref int y, ref int newX, ref int newY, ref Tokens pieza)
+    public void _useBoxObject(Maze lab, ref int newX, ref int newY, ref Tokens pieza)
     {
         //Tecla q toca el jugador en el teclado            
         ConsoleKeyInfo key = Console.ReadKey();
@@ -77,7 +77,7 @@ class Tokens
                     Console.WriteLine($"{_name} usó un escudo.");
                     break;
                 case Objets.pick:
-                    _pico(lab, ref x, ref y, ref newX, ref newY, ref pieza);
+                    _pico(lab, ref newX, ref newY, ref pieza);
                     Console.WriteLine($"{_name} va a usar un pico.");
                     break;
             }
@@ -88,32 +88,32 @@ class Tokens
     }
 
     //Metodo de la herramenta pico
-        private void _pico(Maze lab, ref int x, ref int y, ref int newX, ref int newY, ref Tokens pieza)  //Mini metodo de Desplazamiento
+    private void _pico(Maze lab, ref int newX, ref int newY, ref Tokens pieza)  //Minimetodo de Desplazamiento
     {
-        newX = x;
-        newY = y;
+        newX = pieza._coordX;
+        newY = pieza._coordY;
         bool running = true;
         
         for(int i = 0; i < 3; i++)
         {
             //Tecla q toca el jugador en el teclado            
             ConsoleKey key = Console.ReadKey().Key;
-            GamePlay._readBoard(key, lab, ref x, ref y, ref newX, ref newY, ref running, ref pieza);
+            GamePlay._readBoard(key, lab, ref newX, ref newY, ref running, ref pieza);
 
             // Dentro de filas, columnas y si es un camino
             if (newX >= 0 && newX < lab._maze.GetLength(0) && newY >= 0 && newY < lab._maze.GetLength(1))                    
             {
                 // Actualiza el tablero
-                lab._maze[x, y] = 0;        // Vacía la posición actual
+                lab._maze[pieza._coordX, pieza._coordY] = 0;        // Vacía la posición actual
                 lab._maze[newX, newY] = 2;  // Mueve la ficha
-                x = newX;                 // Actualiza las coordenadas actuales
-                y = newY;
+                pieza._coordX = newX;                 // Actualiza las coordenadas actuales
+                pieza._coordY = newY;
             }
 
             else
             {
                 System.Console.WriteLine("los pasos no son validos");
-                newX = x; newY = y;                    
+                newX = pieza._coordX; newY = pieza._coordY;                    
             }
 
             lab.ImprimirLaberinto();//Imprime el laberinto
