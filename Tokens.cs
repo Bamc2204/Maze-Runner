@@ -6,7 +6,7 @@ class Tokens
     private string _name; //Nombre de ficha
     public int _coordX; //Coordenada X
     public int _coordY; //Coordenada Y
-    private string _caracter;
+    private string _character;
     public int health; //Salud
     private string _skill; //Habilidad
     private bool _skillActivation = true; //Verificador de Habilidad
@@ -16,13 +16,13 @@ class Tokens
     private bool _goals = false; //Objetivo
 
     //Creador de fichas
-    public Tokens(string name, int coordX, int coordY, string caracter, string skill, int coldTime, int speed, 
+    public Tokens(string name, int coordX, int coordY, string character, string skill, int coldTime, int speed, 
     int obj1 = 0, int obj2 = 0, int obj3 = 0, int health = 100)
     {
         _name = name;
         _coordX = coordX;
         _coordY = coordY;
-        _caracter = caracter;
+        _character = character;
         this.health = health;
         _skill = skill;
         _coldTime = coldTime;
@@ -42,7 +42,7 @@ class Tokens
     }
 
     //Recoger recursos
-    private void Recoger(Objets objet) 
+    private void _collect(Objets objet) 
     {
         for(int i = 0; i < _box.Length; i++) 
         {
@@ -55,14 +55,14 @@ class Tokens
     }
 
     //Usar objetos bolsa
-    public void _useBoxObject(Maze lab, ref int newX, ref int newY, ref Tokens pieza)
+    public void _useBoxObject(Maze lab, ref int newX, ref int newY, ref Tokens piece)
     {
         //Tecla q toca el jugador en el teclado            
         ConsoleKeyInfo key = Console.ReadKey();
-        int index = key.KeyChar - '1';
+        int index = key.KeyChar - '1'; //Posicion de la bolsa
         if(index >= 0 && index < 3 && _box[index] != 0)
         {
-            Objets objeto = (Objets)_box[index];
+            Objets objeto = (Objets)_box[index];//Objeto de la bolsa
             switch (objeto)
             {
                 case Objets.healthPotion:
@@ -77,7 +77,7 @@ class Tokens
                     Console.WriteLine($"{_name} usó un escudo.");
                     break;
                 case Objets.pick:
-                    _pico(lab, ref newX, ref newY, ref pieza);
+                    _beak(lab, ref newX, ref newY, ref piece);
                     Console.WriteLine($"{_name} va a usar un pico.");
                     break;
             }
@@ -88,35 +88,35 @@ class Tokens
     }
 
     //Metodo de la herramenta pico
-    private void _pico(Maze lab, ref int newX, ref int newY, ref Tokens pieza)  //Minimetodo de Desplazamiento
+    private void _beak(Maze lab, ref int newX, ref int newY, ref Tokens piece)  //Minimetodo de Desplazamiento
     {
-        newX = pieza._coordX;
-        newY = pieza._coordY;
+        newX = piece._coordX;
+        newY = piece._coordY;
         bool running = true;
         
         for(int i = 0; i < 3; i++)
         {
             //Tecla q toca el jugador en el teclado            
             ConsoleKey key = Console.ReadKey().Key;
-            GamePlay._readBoard(key, lab, ref newX, ref newY, ref running, ref pieza);
+            GamePlay._readBoard(key, lab, ref newX, ref newY, ref running, ref piece);
 
             // Dentro de filas, columnas y si es un camino
             if (newX >= 0 && newX < lab._maze.GetLength(0) && newY >= 0 && newY < lab._maze.GetLength(1))                    
             {
                 // Actualiza el tablero
-                lab._maze[pieza._coordX, pieza._coordY] = 0;        // Vacía la posición actual
+                lab._maze[piece._coordX, piece._coordY] = 0;        // Vacía la posición actual
                 lab._maze[newX, newY] = 2;  // Mueve la ficha
-                pieza._coordX = newX;                 // Actualiza las coordenadas actuales
-                pieza._coordY = newY;
+                piece._coordX = newX;                 // Actualiza las coordenadas actuales
+                piece._coordY = newY;
             }
 
             else
             {
                 System.Console.WriteLine("los pasos no son validos");
-                newX = pieza._coordX; newY = pieza._coordY;                    
+                newX = piece._coordX; newY = piece._coordY;                    
             }
 
-            lab.ImprimirLaberinto();//Imprime el laberinto
+            lab.PrintMaze();//Imprime el laberinto
                 
         }
 
