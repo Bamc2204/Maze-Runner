@@ -11,7 +11,7 @@ class Tokens
     private string _skill; //Habilidad
     private bool _skillActivation = true; //Verificador de Habilidad
     private int _coldTime; //Tiempo de enfriamiento de habilidad
-    private int _speed; //Velocidad para recorrer casillas
+    public int _speed; //Velocidad para recorrer casillas
     private int[] _box = new int[3]; //Bolsa con objetos
     private bool _goals = false; //Objetivo
 
@@ -70,8 +70,8 @@ class Tokens
                     Console.WriteLine($"{_name} usó una poción de salud. Salud actual: {health}");
                     break;
                 case Objets.speedPotion:
-                    _speed += 2;
-                    Console.WriteLine($"{_name} usó una poción de velocidad. Velocidad actual: {_speed}");
+                    _speed += 4;
+                    Console.WriteLine($"{_name} usó una poción de velocidad. Velocidad actual: {(_speed - 1)}");
                     break;
                 case Objets.shield:
                     Console.WriteLine($"{_name} usó un escudo.");
@@ -94,7 +94,7 @@ class Tokens
         newY = piece._coordY;
         bool running = true;
         
-        for(int i = 0; i < 3; i++)
+        do
         {
             //Tecla q toca el jugador en el teclado            
             ConsoleKey key = Console.ReadKey().Key;
@@ -105,8 +105,8 @@ class Tokens
             {
                 // Actualiza el tablero
                 lab._maze[piece._coordX, piece._coordY] = 0;        // Vacía la posición actual
-                lab._maze[newX, newY] = 2;  // Mueve la ficha
-                piece._coordX = newX;                 // Actualiza las coordenadas actuales
+                lab._maze[newX, newY] = 2;                          // Mueve la ficha
+                piece._coordX = newX;                               // Actualiza las coordenadas actuales
                 piece._coordY = newY;
             }
 
@@ -117,9 +117,7 @@ class Tokens
             }
 
             lab.PrintMaze();//Imprime el laberinto
-                
-        }
-
+        }while(false);
     }
 
 }

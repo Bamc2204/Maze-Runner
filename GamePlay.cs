@@ -12,11 +12,13 @@ class GamePlay
 
         laberinto.PrintMaze();
 
-        Displacement(10000, laberinto, piece1);
+        _displacement(ref piece1._speed, laberinto, piece1);
     }
 
+    //private
+
     //Desplaza la ficha
-    public static void Displacement(int pasos, Maze lab, Tokens piece)
+    private static void _displacement(ref int pasos, Maze lab, Tokens piece)
     {   
         lab._maze[piece._coordX, piece._coordY] = 2;
         int newX = piece._coordX;
@@ -42,7 +44,7 @@ class GamePlay
                 _checkTricks(lab, ref newX, ref newY, ref running, ref piece);
 
                 // Dentro de filas, columnas y si es un camino
-                if (newX >= 0 && newX < lab._maze.GetLength(0) && newY >= 0 && newY < lab._maze.GetLength(1) && lab._maze[newX, newY] != 1 )                    
+                if (newX >= 0 && newX < lab._maze.GetLength(0) && newY >= 0 && newY < lab._maze.GetLength(1) && lab._maze[newX, newY] != 1)                    
                 {
                     // Actualiza el tablero
                     lab._maze[piece._coordX, piece._coordY] = 0;        // Vacía la posición actual
