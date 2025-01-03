@@ -114,7 +114,6 @@ class Maze
                 _maze[x, y] = 3;
                 cont++;
             }
-            System.Console.WriteLine(_rows + " " + _maze.GetLength(0) + " " + _cols + " " + _maze.GetLength(1));
         }
     }
 
@@ -125,7 +124,6 @@ class Maze
         {
             for(int j = 0; j < 3; j++)
             {
-                //Da una Exception de rango *******************************
                 //Verifica si se puede colocar trampas
                 if((_maze[x + i, y + j] == 3) || (_maze[x - i, y - j] == 3) || (_maze[x + i, y - j] == 3) || (_maze[x - i, y + j] == 3) 
                 || (!((_maze[(x+1), y] == 0 && _maze[(x-1), y] == 0) || (_maze[x, (y+1)] == 0 && _maze[x, (y-1)] == 0))))

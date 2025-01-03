@@ -7,11 +7,11 @@ class Tokens
     public int _coordX; //Coordenada X
     public int _coordY; //Coordenada Y
     private string _character;
-    public int health; //Salud
+    private int _health; //Salud
     private string _skill; //Habilidad
     private bool _skillActivation = true; //Verificador de Habilidad
     private int _coldTime; //Tiempo de enfriamiento de habilidad
-    public int _speed; //Velocidad para recorrer casillas
+    private int _speed; //Velocidad para recorrer casillas
     private int[] _box = new int[3]; //Bolsa con objetos
     private bool _goals = false; //Objetivo
 
@@ -23,7 +23,7 @@ class Tokens
         _coordX = coordX;
         _coordY = coordY;
         _character = character;
-        this.health = health;
+        _health = health;
         _skill = skill;
         _coldTime = coldTime;
         _speed = speed;
@@ -66,8 +66,8 @@ class Tokens
             switch (objeto)
             {
                 case Objets.healthPotion:
-                    health += 20;
-                    Console.WriteLine($"{_name} usó una poción de salud. Salud actual: {health}");
+                    _health += 20;
+                    Console.WriteLine($"{_name} usó una poción de salud. Salud actual: {_health}");
                     break;
                 case Objets.speedPotion:
                     _speed += 4;
@@ -93,7 +93,7 @@ class Tokens
         newX = piece._coordX;
         newY = piece._coordY;
         bool running = true;
-        
+        piece._speed ++;
         do
         {
             //Tecla q toca el jugador en el teclado            
@@ -119,5 +119,39 @@ class Tokens
             lab.PrintMaze();//Imprime el laberinto
         }while(false);
     }
+    
+    //informacion de la vida
+    public int InfoHealth()
+    {
+        return _health;
+    }
 
+    //informacion de la velocidad
+    public int InfoSpeed()
+    {
+        return _speed;
+    }
+
+    //Metodo para agregar salud
+    public void AddHealth(int add)
+    {
+        _health += add;
+    }
+
+    //Metodo para quitar a la salud
+    public void RemoveHealth(int remove) 
+    {
+        _health -= remove;    
+    }
+
+    //Metodo para mostrar todo soble la ficha
+    public void DisplayStatus()
+    {
+        //Informacion del Nombre, Salud, Velocidad, Habilidad, Tiempo de Enfrimiento
+        Console.WriteLine($"Ficha: {_name} | Salud: {_health} | Velocidad: {_speed} | Habilidad: {_skill} | Tiempo de enfriamiento: {_coldTime}"); 
+        for(int i = 0; i < _box.Length; i++) 
+        {
+            Console.WriteLine($"Objeto {(i+1)}: {(Objets)_box[i]}" );   //Objetos de la bolsa
+        }
+    }
 }

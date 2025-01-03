@@ -8,29 +8,35 @@ class GamePlay
 
         Maze laberinto = new Maze();
 
-        Tokens piece1 = new Tokens("Joseito", 1, 0, "PP", "Velocidad", 4, 3, 3, 4, 6);
+        Tokens piece1 = new Tokens("Joseito", 1, 0, "PP", "Velocidad", 4, 8, 3, 4, 6);
 
         laberinto.PrintMaze();
 
-        _displacement(ref piece1._speed, laberinto, piece1);
+        _displacement(piece1.InfoSpeed(), laberinto, piece1);
     }
 
-    //private
+    private bool _turn(bool turn)
+    {
+        if(turn)
+            return false;
+        return turn;
+    }
 
     //Desplaza la ficha
-    private static void _displacement(ref int pasos, Maze lab, Tokens piece)
+    private static void _displacement(int steps, Maze lab, Tokens piece)
     {   
+        int copysteps = steps;
         lab._maze[piece._coordX, piece._coordY] = 2;
         int newX = piece._coordX;
         int newY = piece._coordY;
         bool running = true;
 
-        while(pasos != 0 && running)
+        while(steps != 0 && running)
         {
             //Si llegas al final del juego
             if(piece._coordX == lab._maze.GetLength(0) - 2 && piece._coordY == lab._maze.GetLength(1) - 1)//Si llego al final del laberinto o no
             {
-                System.Console.WriteLine("Felicidades, Completaste El Laberinto");
+                System.Console.WriteLine("Felicidades, Completaste El Laberinto");                
                 running = false;
             }
                 
@@ -51,7 +57,7 @@ class GamePlay
                     lab._maze[newX, newY] = 2;                          // Mueve la ficha
                     piece._coordX = newX;                               // Actualiza las coordenadas actuales
                     piece._coordY = newY;
-                    pasos --;                                           //Pasos q puede recorer cada ficha
+                    steps --;                                           //Pasos q puede recorer cada ficha
                 }
 
                 else
@@ -62,7 +68,7 @@ class GamePlay
 
                 lab.PrintMaze();//Imprime el laberinto
             }
-        }   
+        }  
     }
 
     public static void _readBoard(ConsoleKey key, Maze lab, ref int newX, ref int newY, ref bool running, ref Tokens piece) 
@@ -76,6 +82,7 @@ class GamePlay
             case ConsoleKey.RightArrow: newY = piece._coordY + 1; break;
             case ConsoleKey.Escape: Console.WriteLine("Simulación detenida."); running = false; break;
             case ConsoleKey.Tab: piece._useBoxObject(lab, ref newX, ref newY, ref piece); break;
+            case ConsoleKey.I: piece.DisplayStatus(); break;
         }
     }
 
@@ -83,9 +90,9 @@ class GamePlay
     {
         if(lab._maze[newX, newY] == 3) //Verificacion de trapas
         {
-            piece.health -= 20;
+            piece.RemoveHealth(20);
             System.Console.WriteLine("Has caido en una trampa y has perdido 20 puntos de vidas");
-            if(piece.health == 0)
+            if(piece.InfoHealth() == 0)
             {   
                 running = false;
                 System.Console.WriteLine("Has muerto");
