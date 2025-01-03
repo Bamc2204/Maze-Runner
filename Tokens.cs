@@ -93,7 +93,6 @@ class Tokens
         newX = piece._coordX;
         newY = piece._coordY;
         bool running = true;
-        piece._speed ++;
         do
         {
             //Tecla q toca el jugador en el teclado            

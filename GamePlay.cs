@@ -6,30 +6,44 @@ class GamePlay
     {
         System.Console.WriteLine("Holaaaaa");
 
+        bool running = true;
+
         Maze laberinto = new Maze();
 
-        Tokens piece1 = new Tokens("Joseito", 1, 0, "PP", "Velocidad", 4, 8, 3, 4, 6);
+        Tokens piece1 = new Tokens("Joseito", 1, 0, "P1", "Velocidad", 4, 3, 3, 4, 6);
+
+        Tokens piece2 = new Tokens("Pedrito", 5, 0, "P2", "Velocidad", 4, 4, 4, 4, 6);
+
+        Tokens piece3 = new Tokens("Pedrito", 7, 0, "P2", "Velocidad", 4, 8, 4, 4, 6);
+
+        Tokens piece4 = new Tokens("Pedrito", 9, 0, "P4", "Velocidad", 4, 8, 4, 4, 6);
+
+        Players Bryan = new Players("Bryan");
+
+        Bryan.AddTokens(piece1, piece2, piece3, piece4);
 
         laberinto.PrintMaze();
 
-        _displacement(piece1.InfoSpeed(), laberinto, piece1);
-    }
+        int indexPiece;
 
-    private bool _turn(bool turn)
-    {
-        if(turn)
-            return false;
-        return turn;
+        while(running)
+        {    
+            Console.WriteLine("Inroduzca cual de sus fichas va a coger (del 1 al 4)");
+
+            indexPiece = int.Parse(Console.ReadLine()!);            
+            
+            Console.WriteLine("Ya puede desplazarse");
+
+            _displacement(Bryan.SelectToken(indexPiece - 1).InfoSpeed(), laberinto, Bryan.SelectToken(indexPiece - 1), ref running);
+        }
     }
 
     //Desplaza la ficha
-    private static void _displacement(int steps, Maze lab, Tokens piece)
+    private static void _displacement(int steps, Maze lab, Tokens piece, ref bool running)
     {   
-        int copysteps = steps;
         lab._maze[piece._coordX, piece._coordY] = 2;
         int newX = piece._coordX;
         int newY = piece._coordY;
-        bool running = true;
 
         while(steps != 0 && running)
         {
@@ -47,10 +61,11 @@ class GamePlay
 
                 _readBoard(key, lab, ref newX, ref newY, ref running, ref piece);
 
-                _checkTricks(lab, ref newX, ref newY, ref running, ref piece);
+                _checkTrap(lab, ref newX, ref newY, ref running, ref piece);
 
                 // Dentro de filas, columnas y si es un camino
-                if (newX >= 0 && newX < lab._maze.GetLength(0) && newY >= 0 && newY < lab._maze.GetLength(1) && lab._maze[newX, newY] != 1)                    
+                if (newX >= 0 && newX < lab._maze.GetLength(0) && newY >= 0 && newY < lab._maze.GetLength(1) && 
+                lab._maze[newX, newY] != 1 && lab._maze[newX, newY] != 2)                    
                 {
                     // Actualiza el tablero
                     lab._maze[piece._coordX, piece._coordY] = 0;        // Vacía la posición actual
@@ -70,7 +85,7 @@ class GamePlay
             }
         }  
     }
-
+    //Lee el teclado
     public static void _readBoard(ConsoleKey key, Maze lab, ref int newX, ref int newY, ref bool running, ref Tokens piece) 
     {
         //Casos para cada tecla
@@ -86,7 +101,8 @@ class GamePlay
         }
     }
 
-    public static void _checkTricks(Maze lab, ref int newX, ref int newY, ref bool running, ref Tokens piece)
+    //Chequea si caiste en una trampa
+    public static void _checkTrap(Maze lab, ref int newX, ref int newY, ref bool running, ref Tokens piece)
     {
         if(lab._maze[newX, newY] == 3) //Verificacion de trapas
         {

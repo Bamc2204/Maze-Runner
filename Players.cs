@@ -26,12 +26,15 @@ class Players
     }
 
     //Metodo para seleccionar ficha
-    public void SelectToken(int index) 
+    public Tokens SelectToken(int index) 
     {
-        if(index > -1 && index < 4)
-            _selectToken = index;
-        else
-            System.Console.WriteLine("No existe esa ficha");    
+        return _token[index];    
+    }
+
+    //Informacion del turno del jugador
+    public bool InfoTurn()
+    {
+        return _myTurn;
     }
 
     //Metodo para iniciar el turno del jugador
