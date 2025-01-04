@@ -6,6 +6,8 @@ class GamePlay
     {
         System.Console.WriteLine("Holaaaaa");
 
+        bool run;
+
         Tokens piece1 = new Tokens("Joseito", "P1", "Velocidad", 4, 3, 3, 4, 6);
 
         Tokens piece2 = new Tokens("Pedrito", "P2", "Velocidad", 4, 4, 4, 4, 6);
@@ -34,8 +36,9 @@ class GamePlay
 
         laberinto.PrintMaze();
 
+        run = Bryan.StartTurn();
 
-        Bryan.PlayersTurn(laberinto, Bryan);
+        Players.Run(run, laberinto, Bryan, Daniel);
     }
 }   
 

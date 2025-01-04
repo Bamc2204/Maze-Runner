@@ -57,7 +57,7 @@ class Players
         return false;    
     }
 
-    //Turno del jugador
+    //Turno del jugador ***********************
     public void PlayersTurn(Maze maze, Players player, bool running = true)
     {
         int indexPiece;
@@ -156,4 +156,17 @@ class Players
         }
     }
 
+    //Metodo de Caminar en el turno ***********************
+    public static void Run(bool run, Maze _maze, Players player1, Players player2)
+    {
+        while(run)
+        {
+            player1.PlayersTurn(_maze, player1);
+            
+            player2.PlayersTurn(_maze, player2);
+
+            if(_maze.Win(player1.SelectToken(0)._coordX, player1.SelectToken(0)._coordY))
+                run = false;
+        }
+    }	
 }

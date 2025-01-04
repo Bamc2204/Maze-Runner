@@ -163,4 +163,13 @@ class Maze
             Console.WriteLine();
         }
     }
+
+    //Condicion de Victoria ******************
+    public bool Win(int x, int y)
+    {
+        if(IsExit(x, y))
+            return true;
+        return false;
+    }
+
 }
