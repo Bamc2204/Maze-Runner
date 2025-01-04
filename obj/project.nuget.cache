@@ -1,14 +1,8 @@
 {
   "version": 2,
-<<<<<<< HEAD
-  "dgSpecHash": "EopLzzYX+AReB7WYwoEIjCX1/sNz8x5CBevWUHEBbNJfWIoouCuTh9EWRgGGAiMf7Dqv6lVU1+H5SwdMvHGcpA==",
-  "success": true,
-  "projectFilePath": "/home/bamc/Desktop/Proyecto Maze Runner/Maze Runner/Backend/Backend.csproj",
-=======
   "dgSpecHash": "D9PQ80O89AA=",
   "success": true,
   "projectFilePath": "D:\\Programacion\\Maze-Runner\\Backend\\Backend.csproj",
->>>>>>> 5e34124 (thirtieth commit)
   "expectedPackageFiles": [],
   "logs": []
 }
