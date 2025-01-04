@@ -2,7 +2,7 @@ using System;
 
 class Tokens
 {
-    //Propiedades de las fichas
+    #region Propiedades de las fichas
     private string _name; //Nombre de ficha
     public int _coordX; //Coordenada X
     public int _coordY; //Coordenada Y
@@ -14,14 +14,16 @@ class Tokens
     private int _speed; //Velocidad para recorrer casillas
     private int[] _box = new int[3]; //Bolsa con objetos
     private bool _goals = false; //Objetivo
+    #endregion
 
     //Creador de fichas
-    public Tokens(string name, int coordX, int coordY, string character, string skill, int coldTime, int speed, 
+    public Tokens(string name, string character, string skill, int coldTime, int speed, 
     int obj1 = 0, int obj2 = 0, int obj3 = 0, int health = 100)
     {
+        Random random = new Random();
         _name = name;
-        _coordX = coordX;
-        _coordY = coordY;
+        _coordX = random.Next(1, 30);
+        _coordY = random.Next(1, 30);
         _character = character;
         _health = health;
         _skill = skill;

@@ -2,8 +2,9 @@ using System;
 
 class Maze
 {
-    private int _rows, _cols;
-    public int[,] _maze;
+    #region Propiedades del Laberinto
+    private int _rows, _cols;       //Filas y columnas
+    public int[,] _maze;            //Laberinto
     private Random _random = new Random();
 
     // Direcciones posibles (arriba, derecha, abajo, izquierda)
@@ -12,23 +13,24 @@ class Maze
 
     // Propiedades para acceder al laberinto
     public int[,] CopyMaze => _maze;
+    #endregion
 
     // Constructor
-    public Maze()
+    public Maze(Players player1, Players player2)
     {
         //Cantidad de filas y columnas generadas aleatoriamente
-        int rows = _random.Next(20, 31); 
-        int cols = _random.Next(20, 31);
+        int rows = _random.Next(30, 41); 
+        int cols = _random.Next(30, 41);
         // Asegurarse de que el tamaño sea impar para facilitar la generación del laberinto
         _rows = (rows % 2 == 0) ? rows + 1 : rows;
         _cols = (cols % 2 == 0) ? cols + 1 : cols;
 
         _maze = new int[_rows, _cols];
-        _initializeMaze(); //Crea el laberinto pero vacio(con todo paredes);
-        _generateMaze(1, 1); // Comenzar desde la celda (1,1) a construir el laberinto;
-        _setEntryExit(); //Crear la entrada/salida del laberinto;
-        _setPlayer();
-        _setTraps();
+        _initializeMaze();          //Crea el laberinto pero vacio(con todo paredes);
+        _generateMaze(1, 1);        // Comenzar desde la celda (1,1) a construir el laberinto;
+        _setEntryExit();            //Crear la entrada/salida del laberinto;
+        _setPlayer(player1, player2);
+        _setTraps();                //Genera las trampas
     }
 
     // Inicializa el laberinto con paredes (1) por defecto
@@ -89,14 +91,21 @@ class Maze
     // Establece la entrada y salida del laberinto
     private void _setEntryExit()
     {
-        _maze[1, 0] = 0; // Entrada (cerca de la esquina superior izquierda)
+        // Entrada (cerca de la esquina superior izquierda)
+        _maze[1, 0] = 0;
+        _maze[_rows - 2, 0] = 0;
+        _maze[1, _cols - 1] = 0;
         _maze[_rows - 2, _cols - 1] = 0; // Salida (cerca de la esquina inferior derecha)
     }
 
     // Establece el jugador
-    private void _setPlayer()
+    private void _setPlayer(Players player1, Players player2)
     {
-        _maze[1,0] = 2; // Jugador (cerca de la esquina superior izquierda)
+        for(int i = 0; i < 4; i++)
+        {
+            _maze[player1.InfoTokes(i)._coordX, player1.InfoTokes(i)._coordY] = 2; // Jugador (cerca de la esquina superior izquierda)
+            _maze[player2.InfoTokes(i)._coordX, player2.InfoTokes(i)._coordY] = 2;
+        }
     }
 
     // Establece Trampas

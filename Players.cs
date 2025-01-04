@@ -2,10 +2,12 @@ using System;
 
 class Players
 {
+    #region Propiedades
     private string _name;
     private bool _myTurn;               //Turno de la ficha
     private Tokens[] _token;            //Cantidad de fichas (hasta 4)   
     private int _selectToken;           //Indice de la ficha seleccionado por el jugador
+    #endregion
 
     //Constructor del Jugador
     public Players(string name)
@@ -23,6 +25,12 @@ class Players
         _token[1] = token2;
         _token[2] = token3;
         _token[3] = token4;
+    }
+
+    //Metodo para acceder a las fichas sin modificarlas
+    public Tokens InfoTokes(int index)
+    {
+        return _token[index];
     }
 
     //Metodo para seleccionar ficha

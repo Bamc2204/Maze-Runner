@@ -1,6 +1,7 @@
 {
   "version": 3,
   "targets": {
+<<<<<<< HEAD
     "net7.0": {}
   },
   "libraries": {},
@@ -9,10 +10,21 @@
   },
   "packageFolders": {
     "/home/bamc/.nuget/packages/": {}
+=======
+    "net9.0": {}
+  },
+  "libraries": {},
+  "projectFileDependencyGroups": {
+    "net9.0": []
+  },
+  "packageFolders": {
+    "C:\\Users\\Bamc\\.nuget\\packages\\": {}
+>>>>>>> 5e34124 (thirtieth commit)
   },
   "project": {
     "version": "1.0.0",
     "restore": {
+<<<<<<< HEAD
       "projectUniqueName": "/home/bamc/Desktop/Proyecto Maze Runner/Maze Runner/Backend/Backend.csproj",
       "projectName": "Backend",
       "projectPath": "/home/bamc/Desktop/Proyecto Maze Runner/Maze Runner/Backend/Backend.csproj",
@@ -31,6 +43,28 @@
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
+=======
+      "projectUniqueName": "D:\\Programacion\\Maze-Runner\\Backend\\Backend.csproj",
+      "projectName": "Backend",
+      "projectPath": "D:\\Programacion\\Maze-Runner\\Backend\\Backend.csproj",
+      "packagesPath": "C:\\Users\\Bamc\\.nuget\\packages\\",
+      "outputPath": "D:\\Programacion\\Maze-Runner\\Backend\\obj\\",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "C:\\Users\\Bamc\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "originalTargetFrameworks": [
+        "net9.0"
+      ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+>>>>>>> 5e34124 (thirtieth commit)
           "projectReferences": {}
         }
       },
@@ -38,11 +72,25 @@
         "warnAsError": [
           "NU1605"
         ]
+<<<<<<< HEAD
       }
     },
     "frameworks": {
       "net7.0": {
         "targetAlias": "net7.0",
+=======
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
+      },
+      "SdkAnalysisLevel": "9.0.100"
+    },
+    "frameworks": {
+      "net9.0": {
+        "targetAlias": "net9.0",
+>>>>>>> 5e34124 (thirtieth commit)
         "imports": [
           "net461",
           "net462",
@@ -59,7 +107,11 @@
             "privateAssets": "all"
           }
         },
+<<<<<<< HEAD
         "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/7.0.117/RuntimeIdentifierGraph.json"
+=======
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
+>>>>>>> 5e34124 (thirtieth commit)
       }
     }
   }
