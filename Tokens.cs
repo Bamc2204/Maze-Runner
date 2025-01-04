@@ -22,8 +22,8 @@ class Tokens
     {
         Random random = new Random();
         _name = name;
-        _coordX = random.Next(1, 30);
-        _coordY = random.Next(1, 30);
+        _coordX = random.Next(5, 30);
+        _coordY = random.Next(5, 30);
         _character = character;
         _health = health;
         _skill = skill;
@@ -99,7 +99,7 @@ class Tokens
         {
             //Tecla q toca el jugador en el teclado            
             ConsoleKey key = Console.ReadKey().Key;
-            GamePlay._readBoard(key, lab, ref newX, ref newY, ref running, ref piece);
+            Players._readBoard(key, lab, ref newX, ref newY, ref running, ref piece);
 
             // Dentro de filas, columnas y si es un camino
             if (newX >= 0 && newX < lab._maze.GetLength(0) && newY >= 0 && newY < lab._maze.GetLength(1))                    

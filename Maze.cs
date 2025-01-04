@@ -98,6 +98,14 @@ class Maze
         _maze[_rows - 2, _cols - 1] = 0; // Salida (cerca de la esquina inferior derecha)
     }
 
+    //Informacion de si esta en la salida del Laberinto
+    public bool IsExit(int x, int y)
+    {
+        if((x == _rows - 2 && y == _cols - 1) || (x == 1 && y == 0) || (x == _rows - 2 && y == 0) || (x == 1 && y == _cols - 1))
+            return true;
+        return false;
+    }
+
     // Establece el jugador
     private void _setPlayer(Players player1, Players player2)
     {
