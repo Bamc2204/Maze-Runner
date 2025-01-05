@@ -9,7 +9,7 @@ class Players
     private int _selectToken;           //Indice de la ficha seleccionado por el jugador
     #endregion
 
-    //Constructor del Jugador
+    // Constructor del Jugador
     public Players(string name)
     {
         _name = name;                   //Nombre del jugador
@@ -18,7 +18,7 @@ class Players
         _selectToken = -1;               //No se ha seleccionado fichas
     }
 
-    //Metodo para coger las fichas del jugador
+    // Metodo para coger las fichas del jugador
     public void AddTokens(Tokens token1, Tokens token2, Tokens token3, Tokens token4)
     {
         _token[0] = token1;
@@ -27,37 +27,43 @@ class Players
         _token[3] = token4;
     }
 
-    //Metodo para acceder a las fichas sin modificarlas
-    public Tokens InfoTokes(int index)
+    // Metodo para acceder a las fichas sin modificarlas
+    public Tokens InfoTokens(int index)
     {
         return _token[index];
     }
 
-    //Metodo para seleccionar ficha
+    // Metodo de sobrecarga para acceder a las fichas sin modificarlas
+    public Tokens[] InfoTokens()
+    {
+        return _token;
+    }
+
+    // Metodo para seleccionar ficha
     public Tokens SelectToken(int index) 
     {
         return _token[index];    
     }
 
-    //Informacion del turno del jugador
+    // Informacion del turno del jugador
     public bool InfoTurn()
     {
         return _myTurn;
     }
 
-    //Metodo para iniciar el turno del jugador
+    // Metodo para iniciar el turno del jugador
     public bool StartTurn()
     {
         return true;
     }
 
-    //Terminar el turno
+    // Terminar el turno
     public bool EndTurn() 
     {
         return false;    
     }
 
-    //Turno del jugador
+    // Turno del jugador
     public void PlayersTurn(Maze maze, Players player, ref bool running)
     {
         int indexPiece = 0;
@@ -85,7 +91,7 @@ class Players
         }
     }
 
-    //Desplaza la ficha
+    // Desplaza la ficha
     private static void _displacement(int steps, Maze lab, Tokens piece, ref bool running)
     {   
         lab._maze[piece._coordX, piece._coordY] = 2;
@@ -94,8 +100,8 @@ class Players
 
         while(steps != 0 && running)
         {
-            //Si llegas al final del juego
-            if(lab.Win(piece._coordX, piece._coordY))//Si llego al final del laberinto o no
+            // Si llegas al final del juego
+            if(lab.Win(piece._coordX, piece._coordY))               // Si llego al final del laberinto o no
             {
                 Console.WriteLine("Felicidades, Completaste El Laberinto");                
                 running = false;
@@ -103,7 +109,7 @@ class Players
                 
             else
             {
-                //Tecla q toca el jugador en el teclado            
+                // Tecla q toca el jugador en el teclado            
                 ConsoleKey key = Console.ReadKey().Key;
 
                 _readBoard(key, lab, ref newX, ref newY, ref running, ref piece);
@@ -115,14 +121,14 @@ class Players
 
                 // Dentro de filas, columnas y si es un camino
                 if (newX >= 0 && newX < lab._maze.GetLength(0) && newY >= 0 && newY < lab._maze.GetLength(1) && 
-                lab._maze[newX, newY] != 1 && lab._maze[newX, newY] != 2)                    
+                lab._maze[newX, newY] != -1 && lab._maze[newX, newY] != 2)                    
                 {
                     // Actualiza el tablero
                     lab._maze[piece._coordX, piece._coordY] = 0;        // Vacía la posición actual
                     lab._maze[newX, newY] = 2;                          // Mueve la ficha
                     piece._coordX = newX;                               // Actualiza las coordenadas actuales
                     piece._coordY = newY;
-                    steps --;                                           //Pasos q puede recorer cada ficha
+                    steps --;                                           // Pasos q puede recorer cada ficha
                 }
 
                 else
@@ -131,12 +137,12 @@ class Players
                     newX = piece._coordX; newY = piece._coordY;                    
                 }
 
-                lab.PrintMaze();//Imprime el laberinto
+                lab.PrintMaze(piece);                   // Imprime el laberinto
             }
         }  
     }
     
-    //Lee el teclado
+    // Lee el teclado
     public static void _readBoard(ConsoleKey key, Maze lab, ref int newX, ref int newY, ref bool running, ref Tokens piece) 
     {
         //Casos para cada tecla
@@ -152,6 +158,7 @@ class Players
         }
     }
 
+    // Sobrecarga para leer el teclado
     public static void _readBoard(ConsoleKey key, ref int index, ref bool running)
     {
         switch (key)
@@ -166,10 +173,10 @@ class Players
             case ConsoleKey.D4: index = 3; break;
         }
     }
-    //Chequea si caiste en una trampa
+    // Chequea si caiste en una trampa
     public static void _checkTrap(Maze lab, ref int newX, ref int newY, ref bool running, ref Tokens piece)
     {
-        if(lab._maze[newX, newY] == 3) //Verificacion de trapas
+        if(lab._maze[newX, newY] == -2) //Verificacion de trapas
         {
             piece.RemoveHealth(20);
             System.Console.WriteLine("Has caido en una trampa y has perdido 20 puntos de vidas");
@@ -181,7 +188,7 @@ class Players
         }
     }
 
-    //Metodo de Caminar en el turno
+    // Metodo de Caminar en el turno
     public static void Run(bool run, Maze _maze, Players player1, Players player2)
     {
         while(run)

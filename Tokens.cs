@@ -3,25 +3,27 @@ using System;
 class Tokens
 {
     #region Propiedades de las fichas
-    private string _name; //Nombre de ficha
-    public int _coordX; //Coordenada X
-    public int _coordY; //Coordenada Y
-    private string _character;
-    private int _health; //Salud
-    private string _skill; //Habilidad
-    private bool _skillActivation = true; //Verificador de Habilidad
-    private int _coldTime; //Tiempo de enfriamiento de habilidad
-    private int _speed; //Velocidad para recorrer casillas
-    private int[] _box = new int[3]; //Bolsa con objetos
-    private bool _goals = false; //Objetivo
+    private string _name;                       // Nombre de ficha
+    private int _id;                            // Identidad de la ficha
+    public int _coordX;                         // Coordenada X
+    public int _coordY;                         // Coordenada Y
+    private string _character;                  // Caracter de la ficha
+    private int _health;                        // Salud
+    private string _skill;                      // Habilidad
+    private bool _skillActivation = true;       // Verificador de Habilidad
+    private int _coldTime;                      // Tiempo de enfriamiento de habilidad
+    private int _speed;                         // Velocidad para recorrer casillas
+    private int[] _box = new int[3];            // Bolsa con objetos
+    private bool _goals = false;                // Objetivo
     #endregion
 
-    //Creador de fichas
-    public Tokens(string name, string character, string skill, int coldTime, int speed, 
+    // Creador de fichas
+    public Tokens(string name, int id, string character, string skill, int coldTime, int speed, 
     int obj1 = 0, int obj2 = 0, int obj3 = 0, int health = 100)
     {
         Random random = new Random();
         _name = name;
+        _id = id;
         _coordX = random.Next(5, 30);
         _coordY = random.Next(5, 30);
         _character = character;
@@ -34,7 +36,7 @@ class Tokens
         _box[2] = obj3;
     }
 
-    //Objetos Bolsa
+    // Objetos Bolsa
     enum Objets
     {
         healthPotion = 3,
@@ -43,7 +45,7 @@ class Tokens
         pick = 6
     }
 
-    //Recoger recursos
+    // Recoger recursos
     private void _collect(Objets objet) 
     {
         for(int i = 0; i < _box.Length; i++) 
@@ -56,7 +58,7 @@ class Tokens
         }
     }
 
-    //Usar objetos bolsa
+    // Usar objetos bolsa
     public void _useBoxObject(Maze lab, ref int newX, ref int newY, ref Tokens piece)
     {
         //Tecla q toca el jugador en el teclado            
@@ -89,7 +91,7 @@ class Tokens
             System.Console.WriteLine("No hay nada en esa espacio de la bolsa");
     }
 
-    //Metodo de la herramenta pico
+    // Metodo de la herramenta pico
     private void _beak(Maze lab, ref int newX, ref int newY, ref Tokens piece)  //Minimetodo de Desplazamiento
     {
         newX = piece._coordX;
@@ -117,35 +119,47 @@ class Tokens
                 newX = piece._coordX; newY = piece._coordY;                    
             }
 
-            lab.PrintMaze();//Imprime el laberinto
+            lab.PrintMaze(piece);//Imprime el laberinto
         }while(false);
     }
     
-    //informacion de la vida
+    // Informacion de la Identidad
+    public int InfoId()
+    {
+        return _id;
+    }
+
+    // Informacion del caracter de la ficha
+    public string InfoCharacter()
+    {
+        return _character;
+    }
+
+    // informacion de la vida
     public int InfoHealth()
     {
         return _health;
     }
 
-    //informacion de la velocidad
+    // informacion de la velocidad
     public int InfoSpeed()
     {
         return _speed;
     }
 
-    //Metodo para agregar salud
+    // Metodo para agregar salud
     public void AddHealth(int add)
     {
         _health += add;
     }
 
-    //Metodo para quitar a la salud
+    // Metodo para quitar a la salud
     public void RemoveHealth(int remove) 
     {
         _health -= remove;    
     }
 
-    //Metodo para mostrar todo soble la ficha
+    // Metodo para mostrar todo soble la ficha
     public void DisplayStatus()
     {
         //Informacion del Nombre, Salud, Velocidad, Habilidad, Tiempo de Enfrimiento

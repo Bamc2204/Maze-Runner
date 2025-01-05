@@ -40,7 +40,7 @@ class Maze
         {
             for (int y = 0; y < _cols; y++)
             {
-                _maze[x, y] = 1; // Coloca paredes por defecto
+                _maze[x, y] = -1; // Coloca paredes por defecto
             }
         }
     }
@@ -111,8 +111,8 @@ class Maze
     {
         for(int i = 0; i < 4; i++)
         {
-            _maze[player1.InfoTokes(i)._coordX, player1.InfoTokes(i)._coordY] = 2; // Jugador (cerca de la esquina superior izquierda)
-            _maze[player2.InfoTokes(i)._coordX, player2.InfoTokes(i)._coordY] = 2;
+            _maze[player1.InfoTokens(i)._coordX, player1.InfoTokens(i)._coordY] = 2; // Jugador (cerca de la esquina superior izquierda)
+            _maze[player2.InfoTokens(i)._coordX, player2.InfoTokens(i)._coordY] = 2;
         }
     }
 
@@ -128,7 +128,7 @@ class Maze
             //Colocar trampas
             if(_validTrap(x, y))
             {
-                _maze[x, y] = 3;
+                _maze[x, y] = -2;
                 cont++;
             }
         }
@@ -142,7 +142,7 @@ class Maze
             for(int j = 0; j < 3; j++)
             {
                 //Verifica si se puede colocar trampas
-                if((_maze[x + i, y + j] == 3) || (_maze[x - i, y - j] == 3) || (_maze[x + i, y - j] == 3) || (_maze[x - i, y + j] == 3) 
+                if((_maze[x + i, y + j] == -2) || (_maze[x - i, y - j] == -2) || (_maze[x + i, y - j] == -2) || (_maze[x - i, y + j] == -2) 
                 || (!((_maze[(x+1), y] == 0 && _maze[(x-1), y] == 0) || (_maze[x, (y+1)] == 0 && _maze[x, (y-1)] == 0))))
                     return false;
             }    
@@ -151,20 +151,39 @@ class Maze
     }
 
     // Muestra el laberinto en la consola
-    public void PrintMaze()
+    public void PrintMaze(Tokens[] token1, Tokens[] token2)
     {
         Console.Clear(); //Limpia la consola
         for (int x = 0; x < _rows; x++)
         {
             for (int y = 0; y < _cols; y++)
             {
-                Console.Write(_maze[x, y] == 1 ? "██" : _maze[x, y] == 2 ? "PP" : _maze[x, y] == 3 ? "TT" : "  "); // Paredes representadas por '██' y caminos por espacios
+                // Paredes representadas por '██', caminos por espacios, trapas por 'TT' y jugadores por sus respectivos caracteres
+                Console.Write(_maze[x, y] == -1 ? "██" : _maze[x, y] == token1[0].InfoId() ? token1[0].InfoCharacter() 
+                : _maze[x, y] == token1[1].InfoId() ? token1[1].InfoCharacter() : _maze[x, y] == token1[2].InfoId() ? token1[2].InfoCharacter() 
+                : _maze[x, y] == token1[3].InfoId() ? token1[3].InfoCharacter() : _maze[x, y] == -2 ? "TT" : "  "); 
             }
             Console.WriteLine();
         }
     }
 
-    //Condicion de Victoria ******************
+    // Otra manera de imprimir el mapa
+    public void PrintMaze(Tokens piece)
+    {
+        Console.Clear(); //Limpia la consola
+        for (int x = 0; x < _rows; x++)
+        {
+            for (int y = 0; y < _cols; y++)
+            {
+                // Paredes representadas por '██' y caminos por espacios
+                Console.Write(_maze[x, y] == -1 ? "██" : _maze[x, y] == piece.InfoId() ? 
+                piece.InfoCharacter() : _maze[x, y] == -2 ? "TT" : "  "); 
+            }
+            Console.WriteLine();
+        }
+    }
+
+    // Condicion de Victoria ******************
     public bool Win(int x, int y)
     {
         if(IsExit(x, y))
