@@ -57,20 +57,31 @@ class Players
         return false;    
     }
 
-    //Turno del jugador ***********************
-    public void PlayersTurn(Maze maze, Players player, bool running = true)
+    //Turno del jugador
+    public void PlayersTurn(Maze maze, Players player, ref bool running)
     {
-        int indexPiece;
+        int indexPiece = 0;
 
         while(running)
         {    
             Console.WriteLine("Inroduzca cual de sus fichas va a coger (del 1 al 4)");
 
-            indexPiece = int.Parse(Console.ReadLine()!);            
-            
+            ConsoleKey key = Console.ReadKey().Key;
+
+            //Verifica q no escoja otro numero q no sea el de las fichas
+            if (!(key == ConsoleKey.NumPad1 || key == ConsoleKey.NumPad2 || key == ConsoleKey.NumPad3 || key == ConsoleKey.NumPad4 ||
+            key == ConsoleKey.D1 || key == ConsoleKey.D2 || key == ConsoleKey.D3 || key == ConsoleKey.D4))
+            {
+                Console.WriteLine("Esa ficha no exite, tiene q escoger una ficha del 1-4, inténtelo de nuevo " + key);
+
+                continue;
+            }
+
+            _readBoard(key, ref indexPiece, ref running);
+
             Console.WriteLine("Ya puede desplazarse");
 
-            _displacement(player.SelectToken(indexPiece - 1).InfoSpeed(), maze, player.SelectToken(indexPiece - 1), ref running);
+            _displacement(player.SelectToken(indexPiece).InfoSpeed(), maze, player.SelectToken(indexPiece), ref running);
         }
     }
 
@@ -84,9 +95,9 @@ class Players
         while(steps != 0 && running)
         {
             //Si llegas al final del juego
-            if(lab.IsExit(piece._coordX, piece._coordY))//Si llego al final del laberinto o no
+            if(lab.Win(piece._coordX, piece._coordY))//Si llego al final del laberinto o no
             {
-                System.Console.WriteLine("Felicidades, Completaste El Laberinto");                
+                Console.WriteLine("Felicidades, Completaste El Laberinto");                
                 running = false;
             }
                 
@@ -141,6 +152,20 @@ class Players
         }
     }
 
+    public static void _readBoard(ConsoleKey key, ref int index, ref bool running)
+    {
+        switch (key)
+        {
+            case ConsoleKey.NumPad1: index = 0; break;
+            case ConsoleKey.NumPad2: index = 1; break;
+            case ConsoleKey.NumPad3: index = 2; break;
+            case ConsoleKey.NumPad4: index = 3; break;
+            case ConsoleKey.D1: index = 0; break;
+            case ConsoleKey.D2: index = 1; break;
+            case ConsoleKey.D3: index = 2; break;
+            case ConsoleKey.D4: index = 3; break;
+        }
+    }
     //Chequea si caiste en una trampa
     public static void _checkTrap(Maze lab, ref int newX, ref int newY, ref bool running, ref Tokens piece)
     {
@@ -156,14 +181,14 @@ class Players
         }
     }
 
-    //Metodo de Caminar en el turno ***********************
+    //Metodo de Caminar en el turno
     public static void Run(bool run, Maze _maze, Players player1, Players player2)
     {
         while(run)
         {
-            player1.PlayersTurn(_maze, player1);
+            player1.PlayersTurn(_maze, player1, ref run);
             
-            player2.PlayersTurn(_maze, player2);
+            player2.PlayersTurn(_maze, player2, ref run);
 
             if(_maze.Win(player1.SelectToken(0)._coordX, player1.SelectToken(0)._coordY))
                 run = false;
