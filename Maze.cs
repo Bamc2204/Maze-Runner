@@ -3,34 +3,37 @@ using System;
 class Maze
 {
     #region Propiedades del Laberinto
+    private Random _random = new Random();  //Generador de numeros aleatorios
     private int _rows, _cols;       //Filas y columnas
     public int[,] _maze;            //Laberinto
-    private Random _random = new Random();
+    private Players _player1, _player2; //Jugadores
 
     // Direcciones posibles (arriba, derecha, abajo, izquierda)
     private static readonly int[] DirX = { 0, 1, 0, -1 };
     private static readonly int[] DirY = { -1, 0, 1, 0 };
-
-    // Propiedades para acceder al laberinto
-    public int[,] CopyMaze => _maze;
     #endregion
 
     // Constructor
     public Maze(Players player1, Players player2)
     {
+        // Jugadores
+        _player1 = player1;
+        _player2 = player2;
+
         //Cantidad de filas y columnas generadas aleatoriamente
         int rows = _random.Next(30, 41); 
         int cols = _random.Next(30, 41);
+
         // Asegurarse de que el tamaño sea impar para facilitar la generación del laberinto
         _rows = (rows % 2 == 0) ? rows + 1 : rows;
         _cols = (cols % 2 == 0) ? cols + 1 : cols;
 
         _maze = new int[_rows, _cols];
-        _initializeMaze();          //Crea el laberinto pero vacio(con todo paredes);
-        _generateMaze(1, 1);        // Comenzar desde la celda (1,1) a construir el laberinto;
-        _setEntryExit();            //Crear la entrada/salida del laberinto;
-        _setPlayer(player1, player2);
-        _setTraps();                //Genera las trampas
+        _initializeMaze();              //Crea el laberinto pero vacio(con todo paredes);
+        _generateMaze(1, 1);            // Comenzar desde la celda (1,1) a construir el laberinto;
+        _setEntryExit();                //Crear la entrada/salida del laberinto;
+        _setPlayer(player1, player2);   //Genera los jugadores
+        _setTraps();                    //Genera las trampas
     }
 
     // Inicializa el laberinto con paredes (1) por defecto
@@ -68,6 +71,7 @@ class Maze
                 _generateMaze(nx, ny);
             }
         }
+        _setRoad();  //Genera caminos alternativos
     }
  
     //Desordenar Array
@@ -80,6 +84,24 @@ class Maze
             (a[k], a[i]) = (a[i], a[k]);
         }
         return a;
+    }
+
+    // Establece caminos alternativos
+    private void _setRoad()
+    {
+        int cont = 0;
+        while(cont < 16)
+        {
+            //posiciones en el centro del mapa
+            int x = _random.Next(5, _rows - 5); 
+            int y = _random.Next(5, _cols - 5);
+            //Colocar trampas
+            if(_maze[x, y] == 1)
+            {
+                _maze[x, y] = 0;
+                cont++;
+            }
+        }
     }
 
     // Verifica si una celda es válida para colocar un camino*******
@@ -106,17 +128,21 @@ class Maze
         return false;
     }
 
-    // Establece el jugador
+    // Establece el jugador*******
     private void _setPlayer(Players player1, Players player2)
     {
         for(int i = 0; i < 4; i++)
         {
-            _maze[player1.InfoTokens(i)._coordX, player1.InfoTokens(i)._coordY] = 2; // Jugador (cerca de la esquina superior izquierda)
-            _maze[player2.InfoTokens(i)._coordX, player2.InfoTokens(i)._coordY] = 2;
+            System.Console.WriteLine("\n Metodo Set Player");
+            System.Console.WriteLine("\n coordenadas X: "+ player1.InfoTokens(i)._coordX + " coordenadas Y: " + player1.InfoTokens(i)._coordY);
+
+            // Jugador (cerca de la esquina superior izquierda)
+            _maze[player1.InfoTokens(i)._coordX, player1.InfoTokens(i)._coordY] = player1.InfoPiece(i).InfoId(); 
+            _maze[player2.InfoTokens(i)._coordX, player2.InfoTokens(i)._coordY] = player2.InfoPiece(i).InfoId();
         }
     }
 
-    // Establece Trampas
+    //Establece las trampas
     private void _setTraps()
     {
         int cont = 0;
@@ -168,16 +194,18 @@ class Maze
     }
 
     // Otra manera de imprimir el mapa
-    public void PrintMaze(Tokens piece)
+    public void PrintMaze(Players player1 , Players player2)
     {
         Console.Clear(); //Limpia la consola
         for (int x = 0; x < _rows; x++)
         {
             for (int y = 0; y < _cols; y++)
             {
-                // Paredes representadas por '██' y caminos por espacios
-                Console.Write(_maze[x, y] == -1 ? "██" : _maze[x, y] == piece.InfoId() ? 
-                piece.InfoCharacter() : _maze[x, y] == -2 ? "TT" : "  "); 
+                // Paredes representadas por '██', caminos por espacios, trapas por 'TT' y jugadores por sus respectivos caracteres
+                Console.Write(_maze[x, y] == -1 ? "██" : _maze[x, y] == player1.InfoTokens(0).InfoId() ? player1.InfoTokens(0).InfoCharacter() 
+                : _maze[x, y] == player1.InfoTokens(1).InfoId() ? player1.InfoTokens(1).InfoCharacter() : _maze[x, y] == player1.InfoTokens(2).InfoId() ? player1.InfoTokens(2).InfoCharacter() 
+                : _maze[x, y] == player1.InfoTokens(3).InfoId() ? player1.InfoTokens(3).InfoCharacter() : _maze[x, y] == -2 ? "TT" : "  ");
+                
             }
             Console.WriteLine();
         }
@@ -191,4 +219,15 @@ class Maze
         return false;
     }
 
+    // Informacion de las filas
+    public int InfoRows()
+    {
+        return _rows;
+    }
+
+    // Informacion de las columnas
+    public int InfoCols()
+    {
+        return _cols;
+    }
 }

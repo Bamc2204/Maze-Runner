@@ -4,42 +4,33 @@ class GamePlay
 {
     public static void Main(string[] args)
     {
-        Console.WriteLine("Holaaaaa");
+        Console.WriteLine("Bienvenido al juego del Laberinto, espero que se diviertan");
 
-        Console.WriteLine("Yo soy el tanke");
+        Console.WriteLine("Cual es su nombre jugador 1?");
 
-        Tokens piece1 = new Tokens("Joseito", 1, "B1", "Velocidad", 4, 3, 3, 4, 6);
+        string name1 = Console.ReadLine()!;
 
-        Tokens piece2 = new Tokens("Pedrito", 2, "B2", "Velocidad", 4, 4, 4, 4, 6);
+        Console.WriteLine("Ya tengo tu nombre " + name1);
 
-        Tokens piece3 = new Tokens("Pedrito", 3, "B3", "Velocidad", 4, 8, 4, 4, 6);
+        Console.WriteLine("Cual es su nombre jugador 2?");
 
-        Tokens piece4 = new Tokens("Pedrito", 4, "B4", "Velocidad", 4, 8, 4, 4, 6);
+        string name2 = Console.ReadLine()!;
 
-        Tokens piece21 = new Tokens("Joseito", 5, "D1", "Velocidad", 4, 3, 3, 4, 6);
+        Console.WriteLine("Ya tengo tu nombre " + name2);
 
-        Tokens piece22 = new Tokens("Pedrito", 6, "D2", "Velocidad", 4, 4, 4, 4, 6);
+        Console.WriteLine("Comiencen el juego");
 
-        Tokens piece23 = new Tokens("Pedrito", 7, "D3", "Velocidad", 4, 8, 4, 4, 6);
-
-        Tokens piece24 = new Tokens("Pedrito", 8, "D4", "Velocidad", 4, 8, 4, 4, 6);
-
-        Players Bryan = new Players("Bryan");
-
-        Bryan.AddTokens(piece1, piece2, piece3, piece4);
+        Players player1 = new Players(name1);
         
-        Players Daniel = new Players("Daniel");
+        Players player2 = new Players(name2);
 
-        Daniel.AddTokens(piece21, piece22, piece23, piece24);
+        Maze laberinto = new Maze(player1, player2);
 
-        Maze laberinto = new Maze(Bryan, Daniel);
+        laberinto.PrintMaze(player1, player2);
 
-        laberinto.PrintMaze(Bryan.InfoTokens(), Daniel.InfoTokens());
+        bool run = player1.StartTurn();
 
-        bool run = Bryan.StartTurn();
-
-        Players.Run(run, laberinto, Bryan, Daniel);
+        Players.Run(run, laberinto, player1, player2);
     }
 }   
-
 

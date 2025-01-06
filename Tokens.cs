@@ -18,14 +18,14 @@ class Tokens
     #endregion
 
     // Creador de fichas
-    public Tokens(string name, int id, string character, string skill, int coldTime, int speed, 
-    int obj1 = 0, int obj2 = 0, int obj3 = 0, int health = 100)
+    public Tokens(string name, int id, string character, int coordX, int coordY, string skill, int coldTime, int speed, 
+    int obj1, int obj2, int obj3, int health = 100)
     {
         Random random = new Random();
         _name = name;
         _id = id;
-        _coordX = random.Next(5, 30);
-        _coordY = random.Next(5, 30);
+        _coordX = coordX;
+        _coordY = coordY;
         _character = character;
         _health = health;
         _skill = skill;
@@ -34,6 +34,21 @@ class Tokens
         _box[0] = obj1;
         _box[1] = obj2;
         _box[2] = obj3;
+    }
+    
+    //Sobrecarga de constructor
+    public Tokens(string name, int id, string character, string skill, int coldTime, int speed, int health = 400)
+    {
+        Random random = new Random();
+        _name = name;
+        _id = id;
+        _coordX = random.Next(10, 30);
+        _coordY = random.Next(10, 30);
+        _character = character;
+        _health = health;
+        _skill = skill;
+        _coldTime = coldTime;
+        _speed = speed;
     }
 
     // Objetos Bolsa
@@ -58,8 +73,8 @@ class Tokens
         }
     }
 
-    // Usar objetos bolsa
-    public void _useBoxObject(Maze lab, ref int newX, ref int newY, ref Tokens piece)
+    // Usar objetos bolsa*****
+    public void _useBoxObject(Maze lab, ref int newX, ref int newY, ref Tokens piece, Players player1, Players player2)
     {
         //Tecla q toca el jugador en el teclado            
         ConsoleKeyInfo key = Console.ReadKey();
@@ -81,7 +96,7 @@ class Tokens
                     Console.WriteLine($"{_name} usó un escudo.");
                     break;
                 case Objets.pick:
-                    _beak(lab, ref newX, ref newY, ref piece);
+                    _beak(lab, ref newX, ref newY, ref piece, player1, player2);
                     Console.WriteLine($"{_name} va a usar un pico.");
                     break;
             }
@@ -91,17 +106,17 @@ class Tokens
             System.Console.WriteLine("No hay nada en esa espacio de la bolsa");
     }
 
-    // Metodo de la herramenta pico
-    private void _beak(Maze lab, ref int newX, ref int newY, ref Tokens piece)  //Minimetodo de Desplazamiento
+    // Metodo de la herramenta pico*****
+    private void _beak(Maze lab, ref int newX, ref int newY, ref Tokens piece, Players player1, Players player2)  
     {
         newX = piece._coordX;
         newY = piece._coordY;
         bool running = true;
-        do
+        do                                                          //Minimetodo de Desplazamiento
         {
             //Tecla q toca el jugador en el teclado            
             ConsoleKey key = Console.ReadKey().Key;
-            Players._readBoard(key, lab, ref newX, ref newY, ref running, ref piece);
+            Players._readBoard(key, lab, ref newX, ref newY, ref running, ref piece, player1, player2);
 
             // Dentro de filas, columnas y si es un camino
             if (newX >= 0 && newX < lab._maze.GetLength(0) && newY >= 0 && newY < lab._maze.GetLength(1))                    
@@ -119,7 +134,7 @@ class Tokens
                 newX = piece._coordX; newY = piece._coordY;                    
             }
 
-            lab.PrintMaze(piece);//Imprime el laberinto
+            lab.PrintMaze(player1,  player2);//Imprime el laberinto
         }while(false);
     }
     

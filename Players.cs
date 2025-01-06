@@ -2,11 +2,10 @@ using System;
 
 class Players
 {
-    #region Propiedades
-    private string _name;
-    private bool _myTurn;               //Turno de la ficha
-    private Tokens[] _token;            //Cantidad de fichas (hasta 4)   
-    private int _selectToken;           //Indice de la ficha seleccionado por el jugador
+    #region PropiedadesPepe
+    private string _name;               // Nombre del jugador
+    private bool _myTurn;               // Turno de la ficha
+    private Tokens[] _token;            // Cantidad de fichas (hasta 4) 
     #endregion
 
     // Constructor del Jugador
@@ -15,16 +14,97 @@ class Players
         _name = name;                   //Nombre del jugador
         _myTurn = false;                //Todos los turnos empiezan falso
         _token = new Tokens[4];         //Cantidad de fichas
-        _selectToken = -1;               //No se ha seleccionado fichas
+
+        _ChooseTokens(ref _token);                //Escoger Fichas
     }
 
-    // Metodo para coger las fichas del jugador
-    public void AddTokens(Tokens token1, Tokens token2, Tokens token3, Tokens token4)
+    // Metodo para escoger las fichas
+    public void _ChooseTokens(ref Tokens[] tokens)
     {
-        _token[0] = token1;
-        _token[1] = token2;
-        _token[2] = token3;
-        _token[3] = token4;
+        Console.WriteLine("Las fichas disponibles son:\n Los magos escogidos por Las 3 Grandes escuelas de Magia y Las Bestias q abundan en el laberinto para matar");
+
+        Console.WriteLine("El 1er jugador sera el q tenga la oportunidad de escoger primero, y el segundo se quedara con la faccion restante");
+
+        Console.WriteLine("Espero q ambos jugadores se puedan poner de acuerdo antes  de q el juego comience");  
+
+        Console.WriteLine("Presione la flecha a la izquierda si quiere ser mago y la flecha a la derecha si quiere ser Monstruo");      
+
+        ConsoleKey key = Console.ReadKey().Key;
+
+        _readBoard(key, ref tokens);
+    }
+
+    // Metodo para crear las fichas buenas*****
+    public void CreateTokensGoodPlayer(ref Tokens[] tokens)
+    {
+        System.Console.WriteLine("Metodo good player");
+
+        System.Console.WriteLine();
+
+        tokens[0] = new Tokens("Harry Potter", 1, "HP", 1, 0, "Velocidad", 4, 3, 3, 4, 6);
+
+        tokens[1] = new Tokens("Cedric Diggory", 2, "CD", 7, 0, "Velocidad", 4, 4, 4, 4, 6);
+
+        tokens[2] = new Tokens("Fleur Delacour", 3, "FD", 13, 0, "Velocidad", 4, 8, 4, 4, 6);
+
+        tokens[3] = new Tokens("Viktor Krum", 4, "VK", 19, 0, "Velocidad", 4, 8, 4, 4, 6);
+
+        for (int i = 0; i < 4; i++)
+        {
+            System.Console.WriteLine("\n coordenadas X: "+ tokens[i]._coordX + " coordenadas Y: " + tokens[i]._coordY);
+        }
+    }
+
+    // Metodo para crear las fichas malas
+    public void CreateTokensBadPlayer(ref Tokens[] tokens)
+    {
+        tokens[0] = new Tokens("Acromántula", 5, "Ac", "Velocidad", 4, 3, 300);
+
+        tokens[1] = new Tokens("Esfinge", 6, "Es", "Velocidad", 4, 4, 300);
+
+        tokens[2] = new Tokens("Boggart", 7, "Bo", "Velocidad", 4, 8, 300);
+
+        tokens[3] = new Tokens("Blast-Ended Skrewts", 8, "Bl", "Velocidad", 4, 8, 300);
+    }
+
+    // Metodo de Informacionde la faccion buena
+    public void InfGoodFaction()
+    {
+        Console.WriteLine("Informacion de la faccion:");
+        Console.WriteLine("ELEGIDOS POR LAS 3 GRANDES ESCUELAS DE MAGIA:");
+
+        // Expresa la informacion en forma de tabla
+        string nameRowName = string.Format("{0,-20} {1,-20} {2,-20} {3,-20}", "Harry Potter", "Cedric Diggory", "Fleur Delacour", "Viktor Krum");   // Nombres
+        string infoRowCharacter = string.Format("{0,-20} {1,-20} {2,-20} {3,-20}", "HP", "CD", "FD", "VK");                                         // Caracteres
+        string infoRowSkill = string.Format("{0,-20} {1,-20} {2,-20} {3,-20}", "Velocidad", "Velocidad", "Velocidad", "Velocidad");                 // Habilidad
+        string infoRowColdTime = string.Format("{0,-20} {1,-20} {2,-20} {3,-20}", "4", "4", "4", "4");                                              // Tiempo de Enfriamiento
+        string infoRowSpeed = string.Format("{0,-20} {1,-20} {2,-20} {3,-20}", "4", "4", "4", "4");                                                 // Velocidad
+
+        Console.WriteLine("NOMBRES \n" + nameRowName);
+        Console.WriteLine("CARACTERES \n" + infoRowCharacter);
+        Console.WriteLine("HABILIDADES \n" + infoRowSkill);
+        Console.WriteLine("TIEMPO DE ENFRIAMIENTO DE LAS HABILIDADES \n" + infoRowColdTime);
+        Console.WriteLine("VELOCIDAD \n" + infoRowSpeed);
+    }
+
+    // Metodo de Informacionde la faccion buena
+    public void InfBadFaction()
+    {
+        Console.WriteLine("Informacion de la faccion:");
+        Console.WriteLine("MONSTRUOS QUE VAGAN POR EL LABERINTO:");
+
+        // Expresa la informacion en forma de tabla
+        string nameRowName = string.Format("{0,-20} {1,-20} {2,-20} {3,-20}", "Acromántula", "Esfinge", "Boggart", "Blast-Ended Skrewts");  // Nombres
+        string infoRowCharacter = string.Format("{0,-20} {1,-20} {2,-20} {3,-20}", "Ac", "Es", "Bo", "Bl");                                 // Caracteres
+        string infoRowSkill = string.Format("{0,-20} {1,-20} {2,-20} {3,-20}", "Velocidad", "Velocidad", "Velocidad", "Velocidad");                                    // Habilidad
+        string infoRowColdTime = string.Format("{0,-20} {1,-20} {2,-20} {3,-20}", "4", "4", "4", "4");                                          // Tiempo de Enfriamiento
+        string infoRowSpeed = string.Format("{0,-20} {1,-20} {2,-20} {3,-20}", "4", "4", "4", "4");                                             // Velocidad
+
+        Console.WriteLine("NOMBRES \n" + nameRowName);
+        Console.WriteLine("CARACTERES \n" + infoRowCharacter);
+        Console.WriteLine("HABILIDADES \n" + infoRowSkill);
+        Console.WriteLine("TIEMPO DE ENFRIAMIENTO DE LAS HABILIDADES \n" + infoRowColdTime);
+        Console.WriteLine("VELOCIDAD \n" + infoRowSpeed);
     }
 
     // Metodo para acceder a las fichas sin modificarlas
@@ -37,6 +117,11 @@ class Players
     public Tokens[] InfoTokens()
     {
         return _token;
+    }
+    
+    public Tokens InfoPiece(int index)
+    {
+        return _token[index];
     }
 
     // Metodo para seleccionar ficha
@@ -63,8 +148,8 @@ class Players
         return false;    
     }
 
-    // Turno del jugador
-    public void PlayersTurn(Maze maze, Players player, ref bool running)
+    // Turno del jugador*****
+    public void PlayersTurn(Maze maze, Players player1, Players player2, ref bool running)
     {
         int indexPiece = 0;
 
@@ -87,21 +172,21 @@ class Players
 
             Console.WriteLine("Ya puede desplazarse");
 
-            _displacement(player.SelectToken(indexPiece).InfoSpeed(), maze, player.SelectToken(indexPiece), ref running);
+            _displacement(player1.SelectToken(indexPiece).InfoSpeed(), maze, player1.SelectToken(indexPiece), player1, player2, ref running);
         }
     }
 
-    // Desplaza la ficha
-    private static void _displacement(int steps, Maze lab, Tokens piece, ref bool running)
+    // Desplaza la ficha*****
+    private static void _displacement(int steps, Maze lab, Tokens piece1,Players player1, Players player2, ref bool running)
     {   
-        lab._maze[piece._coordX, piece._coordY] = 2;
-        int newX = piece._coordX;
-        int newY = piece._coordY;
+        lab._maze[piece1._coordX, piece1._coordY] = 2;
+        int newX = piece1._coordX;
+        int newY = piece1._coordY;
 
         while(steps != 0 && running)
         {
             // Si llegas al final del juego
-            if(lab.Win(piece._coordX, piece._coordY))               // Si llego al final del laberinto o no
+            if(lab.Win(piece1._coordX, piece1._coordY))               // Si llego al final del laberinto o no
             {
                 Console.WriteLine("Felicidades, Completaste El Laberinto");                
                 running = false;
@@ -112,38 +197,38 @@ class Players
                 // Tecla q toca el jugador en el teclado            
                 ConsoleKey key = Console.ReadKey().Key;
 
-                _readBoard(key, lab, ref newX, ref newY, ref running, ref piece);
+                _readBoard(key, lab, ref newX, ref newY, ref running, ref piece1, player1, player2);
 
                 if(key == ConsoleKey.I) 
                     continue;
 
-                _checkTrap(lab, ref newX, ref newY, ref running, ref piece);
+                _checkTrap(lab, ref newX, ref newY, ref running, ref piece1);
 
                 // Dentro de filas, columnas y si es un camino
                 if (newX >= 0 && newX < lab._maze.GetLength(0) && newY >= 0 && newY < lab._maze.GetLength(1) && 
                 lab._maze[newX, newY] != -1 && lab._maze[newX, newY] != 2)                    
                 {
                     // Actualiza el tablero
-                    lab._maze[piece._coordX, piece._coordY] = 0;        // Vacía la posición actual
-                    lab._maze[newX, newY] = 2;                          // Mueve la ficha
-                    piece._coordX = newX;                               // Actualiza las coordenadas actuales
-                    piece._coordY = newY;
-                    steps --;                                           // Pasos q puede recorer cada ficha
+                    lab._maze[piece1._coordX, piece1._coordY] = 0;                 // Vacía la posición actual
+                    lab._maze[newX, newY] = 2;                                     // Mueve la ficha
+                    piece1._coordX = newX;                                          // Actualiza las coordenadas actuales
+                    piece1._coordY = newY;
+                    steps --;                                                       // Pasos q puede recorer cada ficha
                 }
 
                 else
                 {
                     System.Console.WriteLine("los pasos no son validos");
-                    newX = piece._coordX; newY = piece._coordY;                    
+                    newX = piece1._coordX; newY = piece1._coordY;                    
                 }
 
-                lab.PrintMaze(piece);                   // Imprime el laberinto
+                lab.PrintMaze(player1, player2);                                    // Imprime el laberinto
             }
         }  
     }
     
-    // Lee el teclado
-    public static void _readBoard(ConsoleKey key, Maze lab, ref int newX, ref int newY, ref bool running, ref Tokens piece) 
+    // Lee el teclado*****
+    public static void _readBoard(ConsoleKey key, Maze lab, ref int newX, ref int newY, ref bool running, ref Tokens piece, Players player1, Players player2) 
     {
         //Casos para cada tecla
         switch (key)
@@ -153,7 +238,7 @@ class Players
             case ConsoleKey.LeftArrow:  newY = piece._coordY - 1; break;
             case ConsoleKey.RightArrow: newY = piece._coordY + 1; break;
             case ConsoleKey.Escape: Console.WriteLine("Simulación detenida."); running = false; break;
-            case ConsoleKey.Tab: piece._useBoxObject(lab, ref newX, ref newY, ref piece); break;
+            case ConsoleKey.Tab: piece._useBoxObject(lab, ref newX, ref newY, ref piece, player1, player2); break;
             case ConsoleKey.I: piece.DisplayStatus(); break;
         }
     }
@@ -173,6 +258,18 @@ class Players
             case ConsoleKey.D4: index = 3; break;
         }
     }
+    
+    // 2da Sobrecarga para leer el teclado
+     public void _readBoard(ConsoleKey key, ref Tokens[] tokens)
+    {
+        switch (key)
+        {
+            case ConsoleKey.LeftArrow: Console.WriteLine("Has escogido la faccion de los Magos"); CreateTokensGoodPlayer(ref tokens); break;
+            case ConsoleKey.RightArrow:  Console.WriteLine("Has escogido la faccion de los Monstruos"); CreateTokensBadPlayer(ref tokens); break;
+            default: System.Console.WriteLine("No a tocado la tecla correcta, tiene q tocar o bien flecha izquierda o bien flecha derecha, intentelo otra vez"); break;
+        }
+    }
+
     // Chequea si caiste en una trampa
     public static void _checkTrap(Maze lab, ref int newX, ref int newY, ref bool running, ref Tokens piece)
     {
@@ -188,14 +285,14 @@ class Players
         }
     }
 
-    // Metodo de Caminar en el turno
+    // Metodo de Caminar en el turno*****
     public static void Run(bool run, Maze _maze, Players player1, Players player2)
     {
         while(run)
         {
-            player1.PlayersTurn(_maze, player1, ref run);
+            player1.PlayersTurn(_maze, player1, player2, ref run);
             
-            player2.PlayersTurn(_maze, player2, ref run);
+            player2.PlayersTurn(_maze, player2, player1, ref run);
 
             if(_maze.Win(player1.SelectToken(0)._coordX, player1.SelectToken(0)._coordY))
                 run = false;
