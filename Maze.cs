@@ -93,19 +93,35 @@ class Maze
     private void _setRoad()
     {
         int cont = 0;
-        while(cont < 16)
+        while(cont < 46)
         {
             //posiciones en el centro del mapa
             int x = _random.Next(5, _rows - 5); 
             int y = _random.Next(5, _cols - 5);
 
             //Colocar trampas
-            if(_maze[x, y] == -1)
+            if(_maze[x, y] == -1 && _validRoad(x, y))
             {
-                _maze[x, y] = 0;
+                _maze[x, y] = -3;
                 cont++;
             }
         }
+    }
+    
+    //Para poder generar la mayor cantidad de caminos(no abra un camino al lado de otro abierto)
+
+    private bool _validRoad(int x, int y)
+    {
+        for(int i = 0; i < 2; i++) 
+        {
+            for(int j = 0; j < 2; j++)
+            {
+                //Verifica si se puede colocar trampas
+                if((_maze[x + i, y + j] == -3) || (_maze[x - i, y - j] == -3) || (_maze[x + i, y - j] == -3) || (_maze[x - i, y + j] == -3))
+                    return false;
+            }    
+        }
+        return true;
     }
 
     // Verifica si una celda es válida para colocar un camino
