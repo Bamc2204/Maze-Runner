@@ -24,13 +24,17 @@ class GamePlay
         
         Players player2 = new Players(name2);
 
+        System.Console.WriteLine("\n Hola nuevamente x1");
+
         Maze laberinto = new Maze(player1, player2);
 
         laberinto.PrintMaze(player1, player2);
 
         bool run = player1.StartTurn();
 
-        Players.Run(run, laberinto, player1, player2);
+        System.Console.WriteLine("\n Hola nuevamente x2");
+
+        Players.Run(run, laberinto, player1, player2, player1.InfoTokens(0)._target);
     }
 }   
 

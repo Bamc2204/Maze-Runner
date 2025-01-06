@@ -21,21 +21,25 @@ class Maze
         _player2 = player2;
 
         //Cantidad de filas y columnas generadas aleatoriamente
-        int rows = _random.Next(30, 41); 
-        int cols = _random.Next(30, 41);
+        int rows = _random.Next(40, 51); 
+        int cols = _random.Next(40, 51);
 
         // Asegurarse de que el tamaño sea impar para facilitar la generación del laberinto
         _rows = (rows % 2 == 0) ? rows + 1 : rows;
         _cols = (cols % 2 == 0) ? cols + 1 : cols;
-
+        System.Console.WriteLine("HOLA REPINGAAAAAAAAAAAAA");
         _maze = new int[_rows, _cols];
         _initializeMaze();              //Crea el laberinto pero vacio(con todo paredes);
         _generateMaze(1, 1);            // Comenzar desde la celda (1,1) a construir el laberinto;
+        _setRoad();  //Genera caminos alternativos
         _setEntryExit();                //Crear la entrada/salida del laberinto;
         _setPlayer(player1, player2);   //Genera los jugadores
         _setTraps();                    //Genera las trampas
+        System.Console.WriteLine("SALI REPINGAAAAAAAAAAAAAAAA");
+
     }
 
+    #region Metodos de Generacion del Laberinto
     // Inicializa el laberinto con paredes (1) por defecto
     private void _initializeMaze()
     {
@@ -71,7 +75,6 @@ class Maze
                 _generateMaze(nx, ny);
             }
         }
-        _setRoad();  //Genera caminos alternativos
     }
  
     //Desordenar Array
@@ -95,8 +98,9 @@ class Maze
             //posiciones en el centro del mapa
             int x = _random.Next(5, _rows - 5); 
             int y = _random.Next(5, _cols - 5);
+
             //Colocar trampas
-            if(_maze[x, y] == 1)
+            if(_maze[x, y] == -1)
             {
                 _maze[x, y] = 0;
                 cont++;
@@ -104,44 +108,49 @@ class Maze
         }
     }
 
-    // Verifica si una celda es válida para colocar un camino*******
+    // Verifica si una celda es válida para colocar un camino
     private bool _isValid(int x, int y)
     {
-        return x > 0 && y > 0 && x < _rows - 1 && y < _cols - 1 && _maze[x, y] == 1;
+        return x > 0 && y > 0 && x < _rows - 1 && y < _cols - 1 && _maze[x, y] == -1;
     }
+    #endregion
 
-    // Establece la entrada y salida del laberinto
+    #region Metodos para colocar entradas-salidas del laberinto
+    // Establece la entrada y salida del laberinto**********************************************************
     private void _setEntryExit()
     {
         // Entrada (cerca de la esquina superior izquierda)
         _maze[1, 0] = 0;
-        _maze[_rows - 2, 0] = 0;
-        _maze[1, _cols - 1] = 0;
-        _maze[_rows - 2, _cols - 1] = 0; // Salida (cerca de la esquina inferior derecha)
+        _maze[7, 0] = 0;
+        _maze[13, 0] = 0;
+        _maze[19, 0] = 0; // Salida (cerca de la esquina inferior derecha)
     }
 
     //Informacion de si esta en la salida del Laberinto
-    public bool IsExit(int x, int y)
+    public bool IsExit(int x, int y, bool getTarget)
     {
-        if((x == _rows - 2 && y == _cols - 1) || (x == 1 && y == 0) || (x == _rows - 2 && y == 0) || (x == 1 && y == _cols - 1))
+        if(((x ==  1) || (x == 7) || (x == 13) || (x == 19)) && y == 0 && getTarget)
             return true;
         return false;
     }
+    #endregion
 
-    // Establece el jugador*******
+    #region Metodo para estaclecer jugador
+    // Establece el jugado
     private void _setPlayer(Players player1, Players player2)
     {
         for(int i = 0; i < 4; i++)
         {
-            System.Console.WriteLine("\n Metodo Set Player");
-            System.Console.WriteLine("\n coordenadas X: "+ player1.InfoTokens(i)._coordX + " coordenadas Y: " + player1.InfoTokens(i)._coordY);
+            System.Console.WriteLine("\n HELLO x un numero el cual no se");
 
             // Jugador (cerca de la esquina superior izquierda)
             _maze[player1.InfoTokens(i)._coordX, player1.InfoTokens(i)._coordY] = player1.InfoPiece(i).InfoId(); 
             _maze[player2.InfoTokens(i)._coordX, player2.InfoTokens(i)._coordY] = player2.InfoPiece(i).InfoId();
         }
     }
+    #endregion
 
+    #region Metodos para colocar las trampas
     //Establece las trampas
     private void _setTraps()
     {
@@ -175,8 +184,12 @@ class Maze
         }
         return true;
     }
+    #endregion
 
+    #region Metodos para imprimir el laberinto en consola
     // Muestra el laberinto en la consola
+    
+    /*
     public void PrintMaze(Tokens[] token1, Tokens[] token2)
     {
         Console.Clear(); //Limpia la consola
@@ -192,10 +205,12 @@ class Maze
             Console.WriteLine();
         }
     }
+    */
 
     // Otra manera de imprimir el mapa
     public void PrintMaze(Players player1 , Players player2)
     {
+        System.Console.WriteLine("Si entre");
         Console.Clear(); //Limpia la consola
         for (int x = 0; x < _rows; x++)
         {
@@ -203,22 +218,27 @@ class Maze
             {
                 // Paredes representadas por '██', caminos por espacios, trapas por 'TT' y jugadores por sus respectivos caracteres
                 Console.Write(_maze[x, y] == -1 ? "██" : _maze[x, y] == player1.InfoTokens(0).InfoId() ? player1.InfoTokens(0).InfoCharacter() 
-                : _maze[x, y] == player1.InfoTokens(1).InfoId() ? player1.InfoTokens(1).InfoCharacter() : _maze[x, y] == player1.InfoTokens(2).InfoId() ? player1.InfoTokens(2).InfoCharacter() 
+                : _maze[x, y] == player1.InfoTokens(1).InfoId() ? player1.InfoTokens(1).InfoCharacter() 
+                : _maze[x, y] == player1.InfoTokens(2).InfoId() ? player1.InfoTokens(2).InfoCharacter() 
                 : _maze[x, y] == player1.InfoTokens(3).InfoId() ? player1.InfoTokens(3).InfoCharacter() : _maze[x, y] == -2 ? "TT" : "  ");
                 
             }
             Console.WriteLine();
         }
     }
-
+    #endregion
+    
+    #region Metodo de victoria
     // Condicion de Victoria ******************
-    public bool Win(int x, int y)
+    public bool Win(int x, int y, bool getTarget)
     {
-        if(IsExit(x, y))
+        if(IsExit(x, y, getTarget))
             return true;
         return false;
     }
-
+    #endregion
+    
+    #region Metodos de informacion
     // Informacion de las filas
     public int InfoRows()
     {
@@ -230,4 +250,5 @@ class Maze
     {
         return _cols;
     }
+    #endregion
 }

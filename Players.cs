@@ -5,7 +5,7 @@ class Players
     #region PropiedadesPepe
     private string _name;               // Nombre del jugador
     private bool _myTurn;               // Turno de la ficha
-    private Tokens[] _token;            // Cantidad de fichas (hasta 4) 
+    private Tokens[] _token;            // Cantidad de fichas (hasta 4)
     #endregion
 
     // Constructor del Jugador
@@ -23,11 +23,11 @@ class Players
     {
         Console.WriteLine("Las fichas disponibles son:\n Los magos escogidos por Las 3 Grandes escuelas de Magia y Las Bestias q abundan en el laberinto para matar");
 
-        Console.WriteLine("El 1er jugador sera el q tenga la oportunidad de escoger primero, y el segundo se quedara con la faccion restante");
+        Console.WriteLine("\n El 1er jugador sera el q tenga la oportunidad de escoger primero, y el segundo se quedara con la faccion restante");
 
-        Console.WriteLine("Espero q ambos jugadores se puedan poner de acuerdo antes  de q el juego comience");  
+        Console.WriteLine("\n Espero q ambos jugadores se puedan poner de acuerdo antes  de q el juego comience");  
 
-        Console.WriteLine("Presione la flecha a la izquierda si quiere ser mago y la flecha a la derecha si quiere ser Monstruo");      
+        Console.WriteLine("\n Presione la flecha a la izquierda si quiere ser mago y la flecha a la derecha si quiere ser Monstruo");      
 
         ConsoleKey key = Console.ReadKey().Key;
 
@@ -49,10 +49,7 @@ class Players
 
         tokens[3] = new Tokens("Viktor Krum", 4, "VK", 19, 0, "Velocidad", 4, 8, 4, 4, 6);
 
-        for (int i = 0; i < 4; i++)
-        {
-            System.Console.WriteLine("\n coordenadas X: "+ tokens[i]._coordX + " coordenadas Y: " + tokens[i]._coordY);
-        }
+        System.Console.WriteLine("HOLA");
     }
 
     // Metodo para crear las fichas malas
@@ -149,7 +146,7 @@ class Players
     }
 
     // Turno del jugador*****
-    public void PlayersTurn(Maze maze, Players player1, Players player2, ref bool running)
+    public void PlayersTurn(Maze maze, Players player1, Players player2, ref bool running, bool getTarget)
     {
         int indexPiece = 0;
 
@@ -172,21 +169,22 @@ class Players
 
             Console.WriteLine("Ya puede desplazarse");
 
-            _displacement(player1.SelectToken(indexPiece).InfoSpeed(), maze, player1.SelectToken(indexPiece), player1, player2, ref running);
+            _displacement(player1.SelectToken(indexPiece).InfoSpeed(), maze, player1.SelectToken(indexPiece), player1, player2, ref running, getTarget);
         }
     }
 
     // Desplaza la ficha*****
-    private static void _displacement(int steps, Maze lab, Tokens piece1,Players player1, Players player2, ref bool running)
+    private static void _displacement(int steps, Maze lab, Tokens piece1,Players player1, Players player2, ref bool running, bool getTarget)
     {   
         lab._maze[piece1._coordX, piece1._coordY] = 2;
         int newX = piece1._coordX;
         int newY = piece1._coordY;
 
+
         while(steps != 0 && running)
         {
             // Si llegas al final del juego
-            if(lab.Win(piece1._coordX, piece1._coordY))               // Si llego al final del laberinto o no
+            if(lab.Win(piece1._coordX, piece1._coordY, getTarget))                  // Si llego al final del laberinto o no
             {
                 Console.WriteLine("Felicidades, Completaste El Laberinto");                
                 running = false;
@@ -286,15 +284,15 @@ class Players
     }
 
     // Metodo de Caminar en el turno*****
-    public static void Run(bool run, Maze _maze, Players player1, Players player2)
+    public static void Run(bool run, Maze _maze, Players player1, Players player2, bool getTarget)
     {
         while(run)
         {
-            player1.PlayersTurn(_maze, player1, player2, ref run);
+            player1.PlayersTurn(_maze, player1, player2, ref run, getTarget);
             
-            player2.PlayersTurn(_maze, player2, player1, ref run);
+            player2.PlayersTurn(_maze, player2, player1, ref run, getTarget);
 
-            if(_maze.Win(player1.SelectToken(0)._coordX, player1.SelectToken(0)._coordY))
+            if(_maze.Win(player1.SelectToken(0)._coordX, player1.SelectToken(0)._coordY, getTarget))
                 run = false;
         }
     }	

@@ -14,7 +14,7 @@ class Tokens
     private int _coldTime;                      // Tiempo de enfriamiento de habilidad
     private int _speed;                         // Velocidad para recorrer casillas
     private int[] _box = new int[3];            // Bolsa con objetos
-    private bool _goals = false;                // Objetivo
+    public bool _target = false;                // Objetivo
     #endregion
 
     // Creador de fichas
