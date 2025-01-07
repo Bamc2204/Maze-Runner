@@ -57,15 +57,15 @@ class Players
     {   
         if(player1.InfoIndexFaction() == 1)
         {
-            CreateTokensGoodPlayer(ref player1._token);
-            CreateTokensBadPlayer(ref player2._token);
+            CreateTokensGoodPlayer(ref player1);
+            CreateTokensBadPlayer(ref player2);
             Console.WriteLine("\n El jugador " + player1.InfoName() + " ha escogido la faccion " + player1.InfoFaction());
             Console.WriteLine("\n Y el jugador " + player2.InfoName() + " ha escogido la faccion " + player2.InfoFaction());
         }
         else
         {
-            CreateTokensGoodPlayer(ref player2._token);
-            CreateTokensBadPlayer(ref player1._token);
+            CreateTokensGoodPlayer(ref player2);
+            CreateTokensBadPlayer(ref player1);
             Console.WriteLine("\n El jugador " + player1.InfoName() + " ha escogido la faccion " + player1.InfoFaction());
             Console.WriteLine("\n Y el jugador " + player2.InfoName() + " ha escogido la faccion " + player2.InfoFaction()); 
         }
@@ -76,35 +76,35 @@ class Players
     #region Creacion de Fichas         ////////////////////////////////////////////////////////////////////////////////////////
 
     // Metodo para crear las fichas buenas*******************************************************************************************************************
-    public void CreateTokensGoodPlayer(ref Tokens[] tokens)
+    public void CreateTokensGoodPlayer(ref Players player)
     {
-        tokens[0] = new Tokens("Harry Potter", 1, "HP", 1, 0, "Velocidad", 4, 3, 3, 4, 6);
+        player._token[0] = new Tokens("Harry Potter", 1, "HP", 1, 0, "Velocidad", 4, 3, 3, 4, 6);
 
-        tokens[1] = new Tokens("Cedric Diggory", 2, "CD", 13, 0, "Velocidad", 4, 4, 4, 4, 6);
+        player._token[1] = new Tokens("Cedric Diggory", 2, "CD", 13, 0, "Velocidad", 4, 4, 4, 4, 6);
 
-        tokens[2] = new Tokens("Fleur Delacour", 3, "FD", 25, 0, "Velocidad", 4, 8, 4, 4, 6);
+        player._token[2] = new Tokens("Fleur Delacour", 3, "FD", 25, 0, "Velocidad", 4, 8, 4, 4, 6);
 
-        tokens[3] = new Tokens("Viktor Krum", 4, "VK", 37, 0, "Velocidad", 4, 8, 4, 4, 6);
+        player._token[3] = new Tokens("Viktor Krum", 4, "VK", 37, 0, "Velocidad", 4, 8, 4, 4, 6);
 
         string infoTarget = "Obtener el Caliz de fuego y escapar del laberinto";
 
-        SetTarget(ref infoTarget);
+        player.SetTarget(ref infoTarget);
     }
 
     // Metodo para crear las fichas malas********************************************************************************************************************
-    private void CreateTokensBadPlayer(ref Tokens[] tokens)
+    private void CreateTokensBadPlayer(ref Players player)
     {
-        tokens[0] = new Tokens("Acromántula", 5, "Ac", 7, 43, "Velocidad", 4, 3, 300);
+        player._token[0] = new Tokens("Acromántula", 5, "Ac", 7, 43, "Velocidad", 4, 3, 300);
 
-        tokens[1] = new Tokens("Esfinge", 6, "Es", 19, 43, "Velocidad", 4, 4, 300);
+        player._token[1] = new Tokens("Esfinge", 6, "Es", 19, 43, "Velocidad", 4, 4, 300);
 
-        tokens[2] = new Tokens("Boggart", 7, "Bo", 31, 43, "Velocidad", 4, 8, 300);
+        player._token[2] = new Tokens("Boggart", 7, "Bo", 31, 43, "Velocidad", 4, 8, 300);
 
-        tokens[3] = new Tokens("Blast-Ended Skrewts", 8, "Bl", 43, 43, "Velocidad", 4, 8, 300);
+        player._token[3] = new Tokens("Blast-Ended Skrewts", 8, "Bl", 43, 43, "Velocidad", 4, 8, 300);
 
         string infoTarget = "Asesinar a los 4 campeones y evitar que escapen del laberinto";
 
-        SetTarget(ref infoTarget);
+        player.SetTarget(ref infoTarget);
     }
 
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
