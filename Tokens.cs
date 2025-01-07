@@ -37,13 +37,13 @@ class Tokens
     }
     
     //Sobrecarga de constructor
-    public Tokens(string name, int id, string character, string skill, int coldTime, int speed, int health = 400)
+    public Tokens(string name, int id, string character, int coordX, int coordY, string skill, int coldTime, int speed, int health = 400)
     {
         Random random = new Random();
         _name = name;
         _id = id;
-        _coordX = random.Next(10, 30);
-        _coordY = random.Next(10, 30);
+        _coordX = coordX;
+        _coordY = coordY;
         _character = character;
         _health = health;
         _skill = skill;
@@ -73,7 +73,7 @@ class Tokens
         }
     }
 
-    // Usar objetos bolsa*****
+    // Usar objetos bolsa*****************************************************************
     public void _useBoxObject(Maze lab, ref int newX, ref int newY, ref Tokens piece, Players player1, Players player2)
     {
         //Tecla q toca el jugador en el teclado            
@@ -86,24 +86,24 @@ class Tokens
             {
                 case Objets.healthPotion:
                     _health += 20;
-                    Console.WriteLine($"{_name} usó una poción de salud. Salud actual: {_health}");
+                    Console.WriteLine($"\n {_name} usó una poción de salud. Salud actual: {_health}");
                     break;
                 case Objets.speedPotion:
                     _speed += 4;
-                    Console.WriteLine($"{_name} usó una poción de velocidad. Velocidad actual: {(_speed - 1)}");
+                    Console.WriteLine($"\n {_name} usó una poción de velocidad. Velocidad actual: {(_speed - 1)}");
                     break;
-                case Objets.shield:
-                    Console.WriteLine($"{_name} usó un escudo.");
+                case Objets.shield://********************************************************************
+                    Console.WriteLine($"\n {_name} usó un escudo.");
                     break;
                 case Objets.pick:
                     _beak(lab, ref newX, ref newY, ref piece, player1, player2);
-                    Console.WriteLine($"{_name} va a usar un pico.");
+                    Console.WriteLine($"\n {_name} va a usar un pico.");
                     break;
             }
             _box[index] = 0; // Elimina el objeto de la bolsa
         }
         else
-            System.Console.WriteLine("No hay nada en esa espacio de la bolsa");
+            System.Console.WriteLine("\n No hay nada en esa espacio de la bolsa");
     }
 
     // Metodo de la herramenta pico*****
@@ -130,7 +130,7 @@ class Tokens
 
             else
             {
-                System.Console.WriteLine("los pasos no son validos");
+                System.Console.WriteLine("\n los pasos no son validos");
                 newX = piece._coordX; newY = piece._coordY;                    
             }
 
@@ -178,10 +178,10 @@ class Tokens
     public void DisplayStatus()
     {
         //Informacion del Nombre, Salud, Velocidad, Habilidad, Tiempo de Enfrimiento
-        Console.WriteLine($"Ficha: {_name} | Salud: {_health} | Velocidad: {_speed} | Habilidad: {_skill} | Tiempo de enfriamiento: {_coldTime}"); 
+        Console.WriteLine($"\n Ficha: {_name} | Salud: {_health} | Velocidad: {_speed} | Habilidad: {_skill} | Tiempo de enfriamiento: {_coldTime}"); 
         for(int i = 0; i < _box.Length; i++) 
         {
-            Console.WriteLine($"Objeto {(i+1)}: {(Objets)_box[i]}" );   //Objetos de la bolsa
+            Console.WriteLine($"\n Objeto {(i+1)}: {(Objets)_box[i]}" );   //Objetos de la bolsa
         }
     }
 }

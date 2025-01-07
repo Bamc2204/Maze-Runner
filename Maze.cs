@@ -21,13 +21,12 @@ class Maze
         _player2 = player2;
 
         //Cantidad de filas y columnas generadas aleatoriamente
-        int rows = _random.Next(40, 51); 
-        int cols = _random.Next(40, 51);
+        int rows = _random.Next(45, 56); 
+        int cols = _random.Next(45, 56);
 
         // Asegurarse de que el tamaño sea impar para facilitar la generación del laberinto
         _rows = (rows % 2 == 0) ? rows + 1 : rows;
         _cols = (cols % 2 == 0) ? cols + 1 : cols;
-        System.Console.WriteLine("HOLA REPINGAAAAAAAAAAAAA");
         _maze = new int[_rows, _cols];
         _initializeMaze();              //Crea el laberinto pero vacio(con todo paredes);
         _generateMaze(1, 1);            // Comenzar desde la celda (1,1) a construir el laberinto;
@@ -35,8 +34,6 @@ class Maze
         _setEntryExit();                //Crear la entrada/salida del laberinto;
         _setPlayer(player1, player2);   //Genera los jugadores
         _setTraps();                    //Genera las trampas
-        System.Console.WriteLine("SALI REPINGAAAAAAAAAAAAAAAA");
-
     }
 
     #region Metodos de Generacion del Laberinto
@@ -93,7 +90,7 @@ class Maze
     private void _setRoad()
     {
         int cont = 0;
-        while(cont < 46)
+        while(cont < 81)
         {
             //posiciones en el centro del mapa
             int x = _random.Next(5, _rows - 5); 
@@ -109,7 +106,6 @@ class Maze
     }
     
     //Para poder generar la mayor cantidad de caminos(no abra un camino al lado de otro abierto)
-
     private bool _validRoad(int x, int y)
     {
         for(int i = 0; i < 2; i++) 
@@ -117,7 +113,8 @@ class Maze
             for(int j = 0; j < 2; j++)
             {
                 //Verifica si se puede colocar trampas
-                if((_maze[x + i, y + j] == -3) || (_maze[x - i, y - j] == -3) || (_maze[x + i, y - j] == -3) || (_maze[x - i, y + j] == -3))
+                if((_maze[x + i, y + j] == -3) || (_maze[x - i, y - j] == -3) || (_maze[x + i, y - j] == -3) || (_maze[x - i, y + j] == -3) 
+                || (!((_maze[(x + 1), y] == -1 && _maze[(x - 1), y] == -1) || (_maze[x, (y + 1)] == -1 && _maze[x, (y - 1)] == -1))))
                     return false;
             }    
         }
@@ -236,7 +233,11 @@ class Maze
                 Console.Write(_maze[x, y] == -1 ? "██" : _maze[x, y] == player1.InfoTokens(0).InfoId() ? player1.InfoTokens(0).InfoCharacter() 
                 : _maze[x, y] == player1.InfoTokens(1).InfoId() ? player1.InfoTokens(1).InfoCharacter() 
                 : _maze[x, y] == player1.InfoTokens(2).InfoId() ? player1.InfoTokens(2).InfoCharacter() 
-                : _maze[x, y] == player1.InfoTokens(3).InfoId() ? player1.InfoTokens(3).InfoCharacter() : _maze[x, y] == -2 ? "TT" : "  ");
+                : _maze[x, y] == player1.InfoTokens(3).InfoId() ? player1.InfoTokens(3).InfoCharacter()
+                : _maze[x, y] == player2.InfoTokens(0).InfoId() ? player2.InfoTokens(0).InfoCharacter() 
+                : _maze[x, y] == player2.InfoTokens(1).InfoId() ? player2.InfoTokens(1).InfoCharacter() 
+                : _maze[x, y] == player2.InfoTokens(2).InfoId() ? player2.InfoTokens(2).InfoCharacter() 
+                : _maze[x, y] == player2.InfoTokens(3).InfoId() ? player2.InfoTokens(3).InfoCharacter()  : _maze[x, y] == -2 ? "TT" : "  ");
                 
             }
             Console.WriteLine();

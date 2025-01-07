@@ -5,70 +5,92 @@ class Players
     #region PropiedadesPepe
     private string _name;               // Nombre del jugador
     private bool _myTurn;               // Turno de la ficha
-    private Tokens[] _token;            // Cantidad de fichas (hasta 4)
+    public Tokens[] _token;            // Cantidad de fichas (hasta 4)
+    private int _index = 0;           // Indice para escoger la faccion
+    private string _faction;
+
     #endregion
 
     // Constructor del Jugador
-    public Players(string name)
+    public Players(string name, int indexFaction)
     {
         _name = name;                   //Nombre del jugador
         _myTurn = false;                //Todos los turnos empiezan falso
         _token = new Tokens[4];         //Cantidad de fichas
+        _index = indexFaction;
+        _faction = ((Faction)_index).ToString();
+    }
 
-        _ChooseTokens(ref _token);                //Escoger Fichas
+    enum Faction
+    {
+        MAGOS = 1,
+        MONSTRUOS = 2
     }
 
     // Metodo para escoger las fichas
-    public void _ChooseTokens(ref Tokens[] tokens)
+    public void _ChooseFaction(ref int indexPlayer1, ref int indexPlayer2)
     {
-        Console.WriteLine("Las fichas disponibles son:\n Los magos escogidos por Las 3 Grandes escuelas de Magia y Las Bestias q abundan en el laberinto para matar");
-
-        Console.WriteLine("\n El 1er jugador sera el q tenga la oportunidad de escoger primero, y el segundo se quedara con la faccion restante");
-
-        Console.WriteLine("\n Espero q ambos jugadores se puedan poner de acuerdo antes  de q el juego comience");  
-
-        Console.WriteLine("\n Presione la flecha a la izquierda si quiere ser mago y la flecha a la derecha si quiere ser Monstruo");      
-
-        ConsoleKey key = Console.ReadKey().Key;
-
-        _readBoard(key, ref tokens);
+        if(indexPlayer1 == 1)
+        {
+            indexPlayer2 = 2;
+            _faction = ((Faction)indexPlayer1).ToString();
+        }
+        else
+        {
+            indexPlayer2 = 1;
+            _faction = ((Faction)indexPlayer1).ToString();
+        }  
     }
 
-    // Metodo para crear las fichas buenas*****
+    // metodo para crear las fichas de la facion
+    public void CreateTokensFaction(Players player1, Players player2)
+    {   
+        //_ChooseFaction(player1, player2);                //Escoger Faccion
+        if(player1.InfoIndexFaction() == 1)
+        {
+            CreateTokensGoodPlayer(ref player1._token);
+            CreateTokensBadPlayer(ref player2._token);
+            Console.WriteLine("\n El jugador " + player1.InfoName() + " ha escogido la faccion " + player1.InfoFaction());
+            Console.WriteLine("\n Y el jugador " + player2.InfoName() + " ha escogido la faccion " + player2.InfoFaction());
+        }
+        else
+        {
+            CreateTokensGoodPlayer(ref player2._token);
+            CreateTokensBadPlayer(ref player1._token);
+            Console.WriteLine("\n El jugador " + player1.InfoName() + " ha escogido la faccion " + player1.InfoFaction());
+            Console.WriteLine("\n Y el jugador " + player2.InfoName() + " ha escogido la faccion " + player2.InfoFaction()); 
+        }
+    }
+
+    // Metodo para crear las fichas buenas
     public void CreateTokensGoodPlayer(ref Tokens[] tokens)
     {
-        System.Console.WriteLine("Metodo good player");
-
-        System.Console.WriteLine();
-
         tokens[0] = new Tokens("Harry Potter", 1, "HP", 1, 0, "Velocidad", 4, 3, 3, 4, 6);
 
-        tokens[1] = new Tokens("Cedric Diggory", 2, "CD", 7, 0, "Velocidad", 4, 4, 4, 4, 6);
+        tokens[1] = new Tokens("Cedric Diggory", 2, "CD", 13, 0, "Velocidad", 4, 4, 4, 4, 6);
 
-        tokens[2] = new Tokens("Fleur Delacour", 3, "FD", 13, 0, "Velocidad", 4, 8, 4, 4, 6);
+        tokens[2] = new Tokens("Fleur Delacour", 3, "FD", 25, 0, "Velocidad", 4, 8, 4, 4, 6);
 
-        tokens[3] = new Tokens("Viktor Krum", 4, "VK", 19, 0, "Velocidad", 4, 8, 4, 4, 6);
-
-        System.Console.WriteLine("HOLA");
+        tokens[3] = new Tokens("Viktor Krum", 4, "VK", 37, 0, "Velocidad", 4, 8, 4, 4, 6);
     }
 
     // Metodo para crear las fichas malas
     public void CreateTokensBadPlayer(ref Tokens[] tokens)
     {
-        tokens[0] = new Tokens("Acromántula", 5, "Ac", "Velocidad", 4, 3, 300);
+        tokens[0] = new Tokens("Acromántula", 5, "Ac", 7, 45, "Velocidad", 4, 3, 300);
 
-        tokens[1] = new Tokens("Esfinge", 6, "Es", "Velocidad", 4, 4, 300);
+        tokens[1] = new Tokens("Esfinge", 6, "Es", 19, 45, "Velocidad", 4, 4, 300);
 
-        tokens[2] = new Tokens("Boggart", 7, "Bo", "Velocidad", 4, 8, 300);
+        tokens[2] = new Tokens("Boggart", 7, "Bo", 31, 45, "Velocidad", 4, 8, 300);
 
-        tokens[3] = new Tokens("Blast-Ended Skrewts", 8, "Bl", "Velocidad", 4, 8, 300);
+        tokens[3] = new Tokens("Blast-Ended Skrewts", 8, "Bl", 43, 45, "Velocidad", 4, 8, 300);
     }
 
     // Metodo de Informacionde la faccion buena
     public void InfGoodFaction()
     {
-        Console.WriteLine("Informacion de la faccion:");
-        Console.WriteLine("ELEGIDOS POR LAS 3 GRANDES ESCUELAS DE MAGIA:");
+        Console.WriteLine("\n Informacion de la faccion:");
+        Console.WriteLine("\n ELEGIDOS POR LAS 3 GRANDES ESCUELAS DE MAGIA:");
 
         // Expresa la informacion en forma de tabla
         string nameRowName = string.Format("{0,-20} {1,-20} {2,-20} {3,-20}", "Harry Potter", "Cedric Diggory", "Fleur Delacour", "Viktor Krum");   // Nombres
@@ -77,18 +99,18 @@ class Players
         string infoRowColdTime = string.Format("{0,-20} {1,-20} {2,-20} {3,-20}", "4", "4", "4", "4");                                              // Tiempo de Enfriamiento
         string infoRowSpeed = string.Format("{0,-20} {1,-20} {2,-20} {3,-20}", "4", "4", "4", "4");                                                 // Velocidad
 
-        Console.WriteLine("NOMBRES \n" + nameRowName);
-        Console.WriteLine("CARACTERES \n" + infoRowCharacter);
-        Console.WriteLine("HABILIDADES \n" + infoRowSkill);
-        Console.WriteLine("TIEMPO DE ENFRIAMIENTO DE LAS HABILIDADES \n" + infoRowColdTime);
-        Console.WriteLine("VELOCIDAD \n" + infoRowSpeed);
+        Console.WriteLine("\n NOMBRES \n" + nameRowName);
+        Console.WriteLine("\n CARACTERES \n" + infoRowCharacter);
+        Console.WriteLine("\n HABILIDADES \n" + infoRowSkill);
+        Console.WriteLine("\n TIEMPO DE ENFRIAMIENTO DE LAS HABILIDADES \n" + infoRowColdTime);
+        Console.WriteLine("\n VELOCIDAD \n" + infoRowSpeed);
     }
 
     // Metodo de Informacionde la faccion buena
     public void InfBadFaction()
     {
-        Console.WriteLine("Informacion de la faccion:");
-        Console.WriteLine("MONSTRUOS QUE VAGAN POR EL LABERINTO:");
+        Console.WriteLine("\n Informacion de la faccion:");
+        Console.WriteLine("\n MONSTRUOS QUE VAGAN POR EL LABERINTO:");
 
         // Expresa la informacion en forma de tabla
         string nameRowName = string.Format("{0,-20} {1,-20} {2,-20} {3,-20}", "Acromántula", "Esfinge", "Boggart", "Blast-Ended Skrewts");  // Nombres
@@ -97,17 +119,17 @@ class Players
         string infoRowColdTime = string.Format("{0,-20} {1,-20} {2,-20} {3,-20}", "4", "4", "4", "4");                                          // Tiempo de Enfriamiento
         string infoRowSpeed = string.Format("{0,-20} {1,-20} {2,-20} {3,-20}", "4", "4", "4", "4");                                             // Velocidad
 
-        Console.WriteLine("NOMBRES \n" + nameRowName);
-        Console.WriteLine("CARACTERES \n" + infoRowCharacter);
-        Console.WriteLine("HABILIDADES \n" + infoRowSkill);
-        Console.WriteLine("TIEMPO DE ENFRIAMIENTO DE LAS HABILIDADES \n" + infoRowColdTime);
-        Console.WriteLine("VELOCIDAD \n" + infoRowSpeed);
+        Console.WriteLine("\n NOMBRES \n" + nameRowName);
+        Console.WriteLine("\n CARACTERES \n" + infoRowCharacter);
+        Console.WriteLine("\n HABILIDADES \n" + infoRowSkill);
+        Console.WriteLine("\n TIEMPO DE ENFRIAMIENTO DE LAS HABILIDADES \n" + infoRowColdTime);
+        Console.WriteLine("\n VELOCIDAD \n" + infoRowSpeed);
     }
 
     // Metodo para acceder a las fichas sin modificarlas
-    public Tokens InfoTokens(int index)
+    public Tokens InfoTokens(int _index)
     {
-        return _token[index];
+        return _token[_index];
     }
 
     // Metodo de sobrecarga para acceder a las fichas sin modificarlas
@@ -116,15 +138,15 @@ class Players
         return _token;
     }
     
-    public Tokens InfoPiece(int index)
+    public Tokens InfoPiece(int _index)
     {
-        return _token[index];
+        return _token[_index];
     }
 
     // Metodo para seleccionar ficha
-    public Tokens SelectToken(int index) 
+    public Tokens SelectToken(int _index) 
     {
-        return _token[index];    
+        return _token[_index];    
     }
 
     // Informacion del turno del jugador
@@ -146,13 +168,13 @@ class Players
     }
 
     // Turno del jugador*****
-    public void PlayersTurn(Maze maze, Players player1, Players player2, ref bool running, bool getTarget)
+    public void PlayersTurn(Maze maze, Players player1, Players player2, ref bool running,ref bool getTarget)
     {
         int indexPiece = 0;
 
         while(running)
         {    
-            Console.WriteLine("Inroduzca cual de sus fichas va a coger (del 1 al 4)");
+            Console.WriteLine("\n Inroduzca cual de sus fichas va a coger (del 1 al 4)");
 
             ConsoleKey key = Console.ReadKey().Key;
 
@@ -160,21 +182,21 @@ class Players
             if (!(key == ConsoleKey.NumPad1 || key == ConsoleKey.NumPad2 || key == ConsoleKey.NumPad3 || key == ConsoleKey.NumPad4 ||
             key == ConsoleKey.D1 || key == ConsoleKey.D2 || key == ConsoleKey.D3 || key == ConsoleKey.D4))
             {
-                Console.WriteLine("Esa ficha no exite, tiene q escoger una ficha del 1-4, inténtelo de nuevo " + key);
+                Console.WriteLine("\n Esa ficha no exite, tiene q escoger una ficha del 1-4, inténtelo de nuevo " + key);
 
                 continue;
             }
 
             _readBoard(key, ref indexPiece, ref running);
 
-            Console.WriteLine("Ya puede desplazarse");
+            Console.WriteLine("\n Ya puede desplazarse");
 
-            _displacement(player1.SelectToken(indexPiece).InfoSpeed(), maze, player1.SelectToken(indexPiece), player1, player2, ref running, getTarget);
+            _displacement(player1.SelectToken(indexPiece).InfoSpeed(), maze, player1.SelectToken(indexPiece), player1, player2, ref running, ref getTarget);
         }
     }
 
     // Desplaza la ficha*****
-    private static void _displacement(int steps, Maze lab, Tokens piece1,Players player1, Players player2, ref bool running, bool getTarget)
+    private static void _displacement(int steps, Maze lab, Tokens piece1,Players player1, Players player2, ref bool running,ref bool getTarget)
     {   
         lab._maze[piece1._coordX, piece1._coordY] = 2;
         int newX = piece1._coordX;
@@ -186,7 +208,7 @@ class Players
             // Si llegas al final del juego
             if(lab.Win(piece1._coordX, piece1._coordY, getTarget))                  // Si llego al final del laberinto o no
             {
-                Console.WriteLine("Felicidades, Completaste El Laberinto");                
+                Console.WriteLine("\n Felicidades, Completaste El Laberinto");                
                 running = false;
             }
                 
@@ -216,7 +238,7 @@ class Players
 
                 else
                 {
-                    System.Console.WriteLine("los pasos no son validos");
+                    System.Console.WriteLine("\n Los pasos no son validos");
                     newX = piece1._coordX; newY = piece1._coordY;                    
                 }
 
@@ -235,36 +257,35 @@ class Players
             case ConsoleKey.DownArrow:  newX = piece._coordX + 1; break;
             case ConsoleKey.LeftArrow:  newY = piece._coordY - 1; break;
             case ConsoleKey.RightArrow: newY = piece._coordY + 1; break;
-            case ConsoleKey.Escape: Console.WriteLine("Simulación detenida."); running = false; break;
+            case ConsoleKey.Escape: Console.WriteLine("\n Simulación detenida."); running = false; break;
             case ConsoleKey.Tab: piece._useBoxObject(lab, ref newX, ref newY, ref piece, player1, player2); break;
-            case ConsoleKey.I: piece.DisplayStatus(); break;
+            case ConsoleKey.I: Console.WriteLine("\n " + player1.InfoIndexFaction() + "\n"); piece.DisplayStatus(); break;
         }
     }
 
     // Sobrecarga para leer el teclado
-    public static void _readBoard(ConsoleKey key, ref int index, ref bool running)
+    public static void _readBoard(ConsoleKey key, ref int _index, ref bool running)
     {
         switch (key)
         {
-            case ConsoleKey.NumPad1: index = 0; break;
-            case ConsoleKey.NumPad2: index = 1; break;
-            case ConsoleKey.NumPad3: index = 2; break;
-            case ConsoleKey.NumPad4: index = 3; break;
-            case ConsoleKey.D1: index = 0; break;
-            case ConsoleKey.D2: index = 1; break;
-            case ConsoleKey.D3: index = 2; break;
-            case ConsoleKey.D4: index = 3; break;
+            case ConsoleKey.NumPad1: _index = 0; break;
+            case ConsoleKey.NumPad2: _index = 1; break;
+            case ConsoleKey.NumPad3: _index = 2; break;
+            case ConsoleKey.NumPad4: _index = 3; break;
+            case ConsoleKey.D1: _index = 0; break;
+            case ConsoleKey.D2: _index = 1; break;
+            case ConsoleKey.D3: _index = 2; break;
+            case ConsoleKey.D4: _index = 3; break;
         }
     }
     
     // 2da Sobrecarga para leer el teclado
-     public void _readBoard(ConsoleKey key, ref Tokens[] tokens)
+     public static void _readBoard(ConsoleKey key,ref int _index)
     {
         switch (key)
         {
-            case ConsoleKey.LeftArrow: Console.WriteLine("Has escogido la faccion de los Magos"); CreateTokensGoodPlayer(ref tokens); break;
-            case ConsoleKey.RightArrow:  Console.WriteLine("Has escogido la faccion de los Monstruos"); CreateTokensBadPlayer(ref tokens); break;
-            default: System.Console.WriteLine("No a tocado la tecla correcta, tiene q tocar o bien flecha izquierda o bien flecha derecha, intentelo otra vez"); break;
+            case ConsoleKey.LeftArrow: Console.WriteLine("\n Has escogido la faccion de los Magos"); _index = 1; break;
+            case ConsoleKey.RightArrow:  Console.WriteLine("\n Has escogido la faccion de los Monstruos"); _index = 2; break;
         }
     }
 
@@ -274,26 +295,43 @@ class Players
         if(lab._maze[newX, newY] == -2) //Verificacion de trapas
         {
             piece.RemoveHealth(20);
-            System.Console.WriteLine("Has caido en una trampa y has perdido 20 puntos de vidas");
+            System.Console.WriteLine("\n Has caido en una trampa y has perdido 20 puntos de vidas");
             if(piece.InfoHealth() == 0)
             {   
                 running = false;
-                System.Console.WriteLine("Has muerto");
+                System.Console.WriteLine("\n Has muerto");
             }
         }
     }
 
     // Metodo de Caminar en el turno*****
-    public static void Run(bool run, Maze _maze, Players player1, Players player2, bool getTarget)
+    public static void Run(ref bool run, Maze _maze, Players player1, Players player2,ref bool getTarget)
     {
         while(run)
         {
-            player1.PlayersTurn(_maze, player1, player2, ref run, getTarget);
+            player1.PlayersTurn(_maze, player1, player2, ref run, ref getTarget);
             
-            player2.PlayersTurn(_maze, player2, player1, ref run, getTarget);
+            player2.PlayersTurn(_maze, player2, player1, ref run, ref getTarget);
 
             if(_maze.Win(player1.SelectToken(0)._coordX, player1.SelectToken(0)._coordY, getTarget))
                 run = false;
         }
     }	
+
+    public int InfoIndexFaction()
+    {
+        return _index;
+    }
+
+    // Informacion del nombre del jugador
+    public string InfoName()
+    {
+        return _name;
+    }
+
+    public string InfoFaction()
+    {
+        return _faction;
+    }
+
 }
