@@ -2,14 +2,18 @@ using System;
 
 class Players
 {
-    #region PropiedadesPepe
+    #region Propiedades del Jugador         ////////////////////////////////////////////////////////////////////////////////////////
     private string _name;               // Nombre del jugador
     private bool _myTurn;               // Turno de la ficha
-    public Tokens[] _token;            // Cantidad de fichas (hasta 4)
-    private int _index = 0;           // Indice para escoger la faccion
-    private string _faction;
+    public Tokens[] _token;             // Cantidad de fichas (hasta 4)
+    private int _index = 0;             // Indice para escoger la faccion
+    private string _faction;            // Faccion del jugador
 
-    #endregion
+    private string _InfoTarget;         // Objetivo del jugador
+
+    #endregion          ////////////////////////////////////////////////////////////////////////////////////////
+
+    #region Constructor del Jugador         ////////////////////////////////////////////////////////////////////////////////////////
 
     // Constructor del Jugador
     public Players(string name, int indexFaction)
@@ -21,6 +25,11 @@ class Players
         _faction = ((Faction)_index).ToString();
     }
 
+    #endregion          ////////////////////////////////////////////////////////////////////////////////////////
+
+    #region Faccion         ////////////////////////////////////////////////////////////////////////////////////////
+    
+    // Enumeracion de las facciones
     enum Faction
     {
         MAGOS = 1,
@@ -62,6 +71,10 @@ class Players
         }
     }
 
+    #endregion          ////////////////////////////////////////////////////////////////////////////////////////
+
+    #region Creacion de Fichas         ////////////////////////////////////////////////////////////////////////////////////////
+
     // Metodo para crear las fichas buenas
     public void CreateTokensGoodPlayer(ref Tokens[] tokens)
     {
@@ -72,10 +85,12 @@ class Players
         tokens[2] = new Tokens("Fleur Delacour", 3, "FD", 25, 0, "Velocidad", 4, 8, 4, 4, 6);
 
         tokens[3] = new Tokens("Viktor Krum", 4, "VK", 37, 0, "Velocidad", 4, 8, 4, 4, 6);
+
+        SetTarget("Obtener el Caliz de fuego y escapar del laberinto");
     }
 
     // Metodo para crear las fichas malas
-    public void CreateTokensBadPlayer(ref Tokens[] tokens)
+    private void CreateTokensBadPlayer(ref Tokens[] tokens)
     {
         tokens[0] = new Tokens("Acromántula", 5, "Ac", 7, 45, "Velocidad", 4, 3, 300);
 
@@ -84,76 +99,32 @@ class Players
         tokens[2] = new Tokens("Boggart", 7, "Bo", 31, 45, "Velocidad", 4, 8, 300);
 
         tokens[3] = new Tokens("Blast-Ended Skrewts", 8, "Bl", 43, 45, "Velocidad", 4, 8, 300);
+
+        SetTarget("Asesinar a los 4 campeones y evitar que escapen del laberinto");
     }
 
-    // Metodo de Informacionde la faccion buena
-    public void InfGoodFaction()
-    {
-        Console.WriteLine("\n Informacion de la faccion:");
-        Console.WriteLine("\n ELEGIDOS POR LAS 3 GRANDES ESCUELAS DE MAGIA:");
-
-        // Expresa la informacion en forma de tabla
-        string nameRowName = string.Format("{0,-20} {1,-20} {2,-20} {3,-20}", "Harry Potter", "Cedric Diggory", "Fleur Delacour", "Viktor Krum");   // Nombres
-        string infoRowCharacter = string.Format("{0,-20} {1,-20} {2,-20} {3,-20}", "HP", "CD", "FD", "VK");                                         // Caracteres
-        string infoRowSkill = string.Format("{0,-20} {1,-20} {2,-20} {3,-20}", "Velocidad", "Velocidad", "Velocidad", "Velocidad");                 // Habilidad
-        string infoRowColdTime = string.Format("{0,-20} {1,-20} {2,-20} {3,-20}", "4", "4", "4", "4");                                              // Tiempo de Enfriamiento
-        string infoRowSpeed = string.Format("{0,-20} {1,-20} {2,-20} {3,-20}", "4", "4", "4", "4");                                                 // Velocidad
-
-        Console.WriteLine("\n NOMBRES \n" + nameRowName);
-        Console.WriteLine("\n CARACTERES \n" + infoRowCharacter);
-        Console.WriteLine("\n HABILIDADES \n" + infoRowSkill);
-        Console.WriteLine("\n TIEMPO DE ENFRIAMIENTO DE LAS HABILIDADES \n" + infoRowColdTime);
-        Console.WriteLine("\n VELOCIDAD \n" + infoRowSpeed);
-    }
-
-    // Metodo de Informacionde la faccion buena
-    public void InfBadFaction()
-    {
-        Console.WriteLine("\n Informacion de la faccion:");
-        Console.WriteLine("\n MONSTRUOS QUE VAGAN POR EL LABERINTO:");
-
-        // Expresa la informacion en forma de tabla
-        string nameRowName = string.Format("{0,-20} {1,-20} {2,-20} {3,-20}", "Acromántula", "Esfinge", "Boggart", "Blast-Ended Skrewts");  // Nombres
-        string infoRowCharacter = string.Format("{0,-20} {1,-20} {2,-20} {3,-20}", "Ac", "Es", "Bo", "Bl");                                 // Caracteres
-        string infoRowSkill = string.Format("{0,-20} {1,-20} {2,-20} {3,-20}", "Velocidad", "Velocidad", "Velocidad", "Velocidad");                                    // Habilidad
-        string infoRowColdTime = string.Format("{0,-20} {1,-20} {2,-20} {3,-20}", "4", "4", "4", "4");                                          // Tiempo de Enfriamiento
-        string infoRowSpeed = string.Format("{0,-20} {1,-20} {2,-20} {3,-20}", "4", "4", "4", "4");                                             // Velocidad
-
-        Console.WriteLine("\n NOMBRES \n" + nameRowName);
-        Console.WriteLine("\n CARACTERES \n" + infoRowCharacter);
-        Console.WriteLine("\n HABILIDADES \n" + infoRowSkill);
-        Console.WriteLine("\n TIEMPO DE ENFRIAMIENTO DE LAS HABILIDADES \n" + infoRowColdTime);
-        Console.WriteLine("\n VELOCIDAD \n" + infoRowSpeed);
-    }
-
-    // Metodo para acceder a las fichas sin modificarlas
-    public Tokens InfoTokens(int _index)
-    {
-        return _token[_index];
-    }
-
-    // Metodo de sobrecarga para acceder a las fichas sin modificarlas
-    public Tokens[] InfoTokens()
-    {
-        return _token;
-    }
+    #endregion          ////////////////////////////////////////////////////////////////////////////////////////
     
-    public Tokens InfoPiece(int _index)
+    #region Objetivo         ////////////////////////////////////////////////////////////////////////////////////////
+    // Metodo para asignar el objetivo
+    public void SetTarget(string infoTarget)
     {
-        return _token[_index];
+        _InfoTarget = infoTarget;
     }
 
-    // Metodo para seleccionar ficha
-    public Tokens SelectToken(int _index) 
+    //Verifica se logro el objetivo 
+    public bool _checkTargetPlayers(Players player)
     {
-        return _token[_index];    
+        if(!((player.InfoTokens(0)._target) && (player.InfoTokens(1)._target) && (player.InfoTokens(2)._target) && (player.InfoTokens(3)._target)))
+        {
+            return true;
+        }
+        return false;
     }
 
-    // Informacion del turno del jugador
-    public bool InfoTurn()
-    {
-        return _myTurn;
-    }
+    #endregion          ////////////////////////////////////////////////////////////////////////////////////////
+
+    #region Metodos de Turnos           ////////////////////////////////////////////////////////////////////////////////////////
 
     // Metodo para iniciar el turno del jugador
     public bool StartTurn()
@@ -194,6 +165,10 @@ class Players
             _displacement(player1.SelectToken(indexPiece).InfoSpeed(), maze, player1.SelectToken(indexPiece), player1, player2, ref running, ref getTarget);
         }
     }
+
+    #endregion          ////////////////////////////////////////////////////////////////////////////////////////
+
+    #region Metodos de Desplazamiento           ////////////////////////////////////////////////////////////////////////////////////////
 
     // Desplaza la ficha*****
     private static void _displacement(int steps, Maze lab, Tokens piece1,Players player1, Players player2, ref bool running,ref bool getTarget)
@@ -247,6 +222,24 @@ class Players
         }  
     }
     
+    // Metodo de Caminar en el turno*****
+    public static void Run(ref bool run, Maze _maze, Players player1, Players player2,ref bool getTarget)
+    {
+        while(run)
+        {
+            player1.PlayersTurn(_maze, player1, player2, ref run, ref getTarget);
+            
+            player2.PlayersTurn(_maze, player2, player1, ref run, ref getTarget);
+
+            if(_maze.Win(player1.SelectToken(0)._coordX, player1.SelectToken(0)._coordY, getTarget))
+                run = false;
+        }
+    }	
+
+    #endregion          ////////////////////////////////////////////////////////////////////////////////////////
+    
+    #region Metodos de Lectura del Teclado          ////////////////////////////////////////////////////////////////////////////////////////
+
     // Lee el teclado*****
     public static void _readBoard(ConsoleKey key, Maze lab, ref int newX, ref int newY, ref bool running, ref Tokens piece, Players player1, Players player2) 
     {
@@ -259,7 +252,8 @@ class Players
             case ConsoleKey.RightArrow: newY = piece._coordY + 1; break;
             case ConsoleKey.Escape: Console.WriteLine("\n Simulación detenida."); running = false; break;
             case ConsoleKey.Tab: piece._useBoxObject(lab, ref newX, ref newY, ref piece, player1, player2); break;
-            case ConsoleKey.I: Console.WriteLine("\n " + player1.InfoIndexFaction() + "\n"); piece.DisplayStatus(); break;
+            case ConsoleKey.I: Console.WriteLine("\n " + player1.InfoIndexFaction() + "\n" + "OBETIVO: " + player1.InfoTarget()); piece.DisplayStatus(); break;
+            case ConsoleKey.E: if(player1.InfoIndexFaction() == 1) player1.InfoGoodFaction(); else player1.InfoBadFaction(); break;
         }
     }
 
@@ -289,12 +283,16 @@ class Players
         }
     }
 
+    #endregion          ////////////////////////////////////////////////////////////////////////////////////////
+
+    #region Metodo para Verificar las trampas           ////////////////////////////////////////////////////////////////////////////////////////
+    
     // Chequea si caiste en una trampa
     public static void _checkTrap(Maze lab, ref int newX, ref int newY, ref bool running, ref Tokens piece)
     {
         if(lab._maze[newX, newY] == -2) //Verificacion de trapas
         {
-            piece.RemoveHealth(20);
+            piece.RemoveHealth(20, piece._activeShield);
             System.Console.WriteLine("\n Has caido en una trampa y has perdido 20 puntos de vidas");
             if(piece.InfoHealth() == 0)
             {   
@@ -304,23 +302,85 @@ class Players
         }
     }
 
-    // Metodo de Caminar en el turno*****
-    public static void Run(ref bool run, Maze _maze, Players player1, Players player2,ref bool getTarget)
+    #endregion          ////////////////////////////////////////////////////////////////////////////////////////
+    
+    #region Metodo para Selecionar Fichas         ////////////////////////////////////////////////////////////////////////////////////////
+    // Metodo para seleccionar ficha
+    public Tokens SelectToken(int _index) 
     {
-        while(run)
-        {
-            player1.PlayersTurn(_maze, player1, player2, ref run, ref getTarget);
-            
-            player2.PlayersTurn(_maze, player2, player1, ref run, ref getTarget);
+        return _token[_index];    
+    }
 
-            if(_maze.Win(player1.SelectToken(0)._coordX, player1.SelectToken(0)._coordY, getTarget))
-                run = false;
-        }
-    }	
+    #endregion          ////////////////////////////////////////////////////////////////////////////////////////
+
+    #region Metodos de Informacion           ////////////////////////////////////////////////////////////////////////////////////////
 
     public int InfoIndexFaction()
     {
         return _index;
+    }
+
+        // Metodo de Informacionde la faccion buena
+    public void InfoGoodFaction()
+    {
+        Console.WriteLine("\n Informacion de la faccion:");
+        Console.WriteLine("\n ELEGIDOS POR LAS 3 GRANDES ESCUELAS DE MAGIA:");
+
+        // Expresa la informacion en forma de tabla
+        string nameRowName = string.Format("{0,-20} {1,-20} {2,-20} {3,-20}", "Harry Potter", "Cedric Diggory", "Fleur Delacour", "Viktor Krum");   // Nombres
+        string infoRowCharacter = string.Format("{0,-20} {1,-20} {2,-20} {3,-20}", "HP", "CD", "FD", "VK");                                         // Caracteres
+        string infoRowSkill = string.Format("{0,-20} {1,-20} {2,-20} {3,-20}", "Velocidad", "Velocidad", "Velocidad", "Velocidad");                 // Habilidad
+        string infoRowColdTime = string.Format("{0,-20} {1,-20} {2,-20} {3,-20}", "4", "4", "4", "4");                                              // Tiempo de Enfriamiento
+        string infoRowSpeed = string.Format("{0,-20} {1,-20} {2,-20} {3,-20}", "4", "4", "4", "4");                                                 // Velocidad
+
+        Console.WriteLine("\n NOMBRES \n" + nameRowName);
+        Console.WriteLine("\n CARACTERES \n" + infoRowCharacter);
+        Console.WriteLine("\n HABILIDADES \n" + infoRowSkill);
+        Console.WriteLine("\n TIEMPO DE ENFRIAMIENTO DE LAS HABILIDADES \n" + infoRowColdTime);
+        Console.WriteLine("\n VELOCIDAD \n" + infoRowSpeed);
+    }
+
+    // Metodo de Informacionde la faccion buena
+    public void InfoBadFaction()
+    {
+        Console.WriteLine("\n Informacion de la faccion:");
+        Console.WriteLine("\n MONSTRUOS QUE VAGAN POR EL LABERINTO:");
+
+        // Expresa la informacion en forma de tabla
+        string nameRowName = string.Format("{0,-20} {1,-20} {2,-20} {3,-20}", "Acromántula", "Esfinge", "Boggart", "Blast-Ended Skrewts");  // Nombres
+        string infoRowCharacter = string.Format("{0,-20} {1,-20} {2,-20} {3,-20}", "Ac", "Es", "Bo", "Bl");                                 // Caracteres
+        string infoRowSkill = string.Format("{0,-20} {1,-20} {2,-20} {3,-20}", "Velocidad", "Velocidad", "Velocidad", "Velocidad");                                    // Habilidad
+        string infoRowColdTime = string.Format("{0,-20} {1,-20} {2,-20} {3,-20}", "4", "4", "4", "4");                                          // Tiempo de Enfriamiento
+        string infoRowSpeed = string.Format("{0,-20} {1,-20} {2,-20} {3,-20}", "4", "4", "4", "4");                                             // Velocidad
+
+        Console.WriteLine("\n NOMBRES \n" + nameRowName);
+        Console.WriteLine("\n CARACTERES \n" + infoRowCharacter);
+        Console.WriteLine("\n HABILIDADES \n" + infoRowSkill);
+        Console.WriteLine("\n TIEMPO DE ENFRIAMIENTO DE LAS HABILIDADES \n" + infoRowColdTime);
+        Console.WriteLine("\n VELOCIDAD \n" + infoRowSpeed);
+    }
+
+    // Metodo para acceder a las fichas sin modificarlas
+    public Tokens InfoTokens(int _index)
+    {
+        return _token[_index];
+    }
+
+    // Metodo de sobrecarga para acceder a las fichas sin modificarlas
+    public Tokens[] InfoTokens()
+    {
+        return _token;
+    }
+    
+    public Tokens InfoPiece(int _index)
+    {
+        return _token[_index];
+    }
+
+    // Informacion del turno del jugador
+    public bool InfoTurn()
+    {
+        return _myTurn;
     }
 
     // Informacion del nombre del jugador
@@ -333,5 +393,12 @@ class Players
     {
         return _faction;
     }
+
+    public string InfoTarget()
+    {
+        return _InfoTarget;
+    }
+
+    #endregion          ////////////////////////////////////////////////////////////////////////////////////////
 
 }

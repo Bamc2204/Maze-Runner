@@ -2,7 +2,7 @@ using System;
 
 class Maze
 {
-    #region Propiedades del Laberinto
+    #region Propiedades del Laberinto           ////////////////////////////////////////////////////////////////////////////////////////
     private Random _random = new Random();  //Generador de numeros aleatorios
     private int _rows, _cols;       //Filas y columnas
     public int[,] _maze;            //Laberinto
@@ -11,9 +11,10 @@ class Maze
     // Direcciones posibles (arriba, derecha, abajo, izquierda)
     private static readonly int[] DirX = { 0, 1, 0, -1 };
     private static readonly int[] DirY = { -1, 0, 1, 0 };
-    #endregion
 
-    // Constructor
+    #endregion          ////////////////////////////////////////////////////////////////////////////////////////
+
+    #region Constructor         //////////////////////////////////////////////////////////////////////////////////////////
     public Maze(Players player1, Players player2)
     {
         // Jugadores
@@ -36,7 +37,9 @@ class Maze
         _setTraps();                    //Genera las trampas
     }
 
-    #region Metodos de Generacion del Laberinto
+    #endregion          ////////////////////////////////////////////////////////////////////////////////////////
+
+    #region Metodos de Generacion del Laberinto         ////////////////////////////////////////////////////////////////////////////////////////
     // Inicializa el laberinto con paredes (1) por defecto
     private void _initializeMaze()
     {
@@ -127,9 +130,10 @@ class Maze
     {
         return x > 0 && y > 0 && x < _rows - 1 && y < _cols - 1 && _maze[x, y] == -1;
     }
-    #endregion
+    
+    #endregion          ////////////////////////////////////////////////////////////////////////////////////////
 
-    #region Metodos para colocar entradas-salidas del laberinto
+    #region Metodos para colocar entradas-salidas del laberinto        //////////////////////////////////////////////////////////////////////////////////////////
     // Establece la entrada y salida del laberinto**********************************************************
     private void _setEntryExit()
     {
@@ -147,9 +151,10 @@ class Maze
             return true;
         return false;
     }
-    #endregion
+    
+    #endregion          ////////////////////////////////////////////////////////////////////////////////////////
 
-    #region Metodo para estaclecer jugador
+    #region Metodo para estaclecer jugador          //////////////////////////////////////////////////////////////////////////////////////////
     // Establece el jugado
     private void _setPlayer(Players player1, Players player2)
     {
@@ -162,9 +167,10 @@ class Maze
             _maze[player2.InfoTokens(i)._coordX, player2.InfoTokens(i)._coordY] = player2.InfoPiece(i).InfoId();
         }
     }
-    #endregion
+    
+    #endregion          ////////////////////////////////////////////////////////////////////////////////////////
 
-    #region Metodos para colocar las trampas
+    #region Metodos para colocar las trampas            //////////////////////////////////////////////////////////////////////////////////////////
     //Establece las trampas
     private void _setTraps()
     {
@@ -198,9 +204,10 @@ class Maze
         }
         return true;
     }
-    #endregion
+    
+    #endregion          ////////////////////////////////////////////////////////////////////////////////////////
 
-    #region Metodos para imprimir el laberinto en consola
+    #region Metodos para imprimir el laberinto en consola           //////////////////////////////////////////////////////////////////////////////////////////
     // Muestra el laberinto en la consola
     
     /*
@@ -244,9 +251,10 @@ class Maze
             Console.WriteLine();
         }
     }
-    #endregion
     
-    #region Metodo de victoria
+    #endregion          ////////////////////////////////////////////////////////////////////////////////////////
+    
+    #region Metodo de victoria          //////////////////////////////////////////////////////////////////////////////////////////
     // Condicion de Victoria ******************
     public bool Win(int x, int y, bool getTarget)
     {
@@ -254,9 +262,10 @@ class Maze
             return true;
         return false;
     }
-    #endregion
     
-    #region Metodos de informacion
+    #endregion          ////////////////////////////////////////////////////////////////////////////////////////
+    
+    #region Metodos de informacion          //////////////////////////////////////////////////////////////////////////////////////////
     // Informacion de las filas
     public int InfoRows()
     {
@@ -268,5 +277,6 @@ class Maze
     {
         return _cols;
     }
-    #endregion
+    
+    #endregion          ////////////////////////////////////////////////////////////////////////////////////////
 }

@@ -87,7 +87,7 @@ class GamePlay
 
         bool run2 = player2.EndTurn();
 
-        while(!((player1.InfoTokens(0)._target) && (player2.InfoTokens(0)._target) ))
+        while(!((player1.InfoTokens(0)._target) && (player2.InfoTokens(0)._target)))
         {
             if(!(player1.InfoTokens(0)._target) && run1)
             {
@@ -106,6 +106,7 @@ class GamePlay
                 run1 = player2.StartTurn();
             }
         }
+    
     }
 }   
 
