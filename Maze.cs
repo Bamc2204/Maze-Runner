@@ -114,7 +114,8 @@ class Maze
             {
                 //Verifica si se puede colocar trampas
                 if((_maze[x + i, y + j] == -3) || (_maze[x - i, y - j] == -3) || (_maze[x + i, y - j] == -3) || (_maze[x - i, y + j] == -3) 
-                || (!((_maze[(x + 1), y] == -1 && _maze[(x - 1), y] == -1) || (_maze[x, (y + 1)] == -1 && _maze[x, (y - 1)] == -1))))
+                || (!((_maze[(x + 1), y] == -1 && _maze[(x - 1), y] == -1) || (_maze[x, (y + 1)] == -1 && _maze[x, (y - 1)] == -1)) 
+                || ((_maze[(x + 1), y] == -1 && _maze[(x - 1), y] == -1) && (_maze[x, (y + 1)] == -1 && _maze[x, (y - 1)] == -1))))
                     return false;
             }    
         }

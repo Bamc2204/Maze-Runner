@@ -22,6 +22,8 @@ class GamePlay
 
         ConsoleKey Next = Console.ReadKey().Key;
 
+        Console.Clear();
+
         System.Console.WriteLine(" ** Historia **");     // Lore del juego *********************************************************************************
 
         Console.WriteLine("\n PRESIONE UNA TECLA PARA CONTINUAR");
