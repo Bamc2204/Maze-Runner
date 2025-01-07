@@ -83,30 +83,15 @@ class GamePlay
 
         lab.PrintMaze(player1, player2);
         
-        bool run1 = player1.StartTurn();
+        bool run1 = true;
 
-        bool run2 = player2.EndTurn();
+        bool run2 = false;
 
-        while(!((player1.InfoTokens(0)._target) && (player2.InfoTokens(0)._target)))
-        {
-            if(!(player1.InfoTokens(0)._target) && run1)
-            {
-                Players.Run(ref run1, lab, player1, player2, ref player1.InfoTokens(0)._target);
+        bool running = true;
 
-                run1 = player1.EndTurn();
+        Players.PlayersTurn(lab, player1, player2, ref run1, ref run2, ref running);
 
-                run2 = player2.StartTurn();
-            }
-            else if(!(player2.InfoTokens(0)._target) && run2)
-            {
-                Players.Run(ref run1, lab, player1, player2, ref player2.InfoTokens(0)._target);
-
-                run2 = player1.EndTurn();
-
-                run1 = player2.StartTurn();
-            }
-        }
-    
+        Console.WriteLine("El juego ha terminado, gracias por jugar");
     }
 }   
 

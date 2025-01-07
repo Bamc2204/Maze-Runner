@@ -208,27 +208,8 @@ class Maze
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
 
     #region Metodos para imprimir el laberinto en consola           //////////////////////////////////////////////////////////////////////////////////////////
-    // Muestra el laberinto en la consola
-    
-    /*
-    public void PrintMaze(Tokens[] token1, Tokens[] token2)
-    {
-        Console.Clear(); //Limpia la consola
-        for (int x = 0; x < _rows; x++)
-        {
-            for (int y = 0; y < _cols; y++)
-            {
-                // Paredes representadas por '██', caminos por espacios, trapas por 'TT' y jugadores por sus respectivos caracteres
-                Console.Write(_maze[x, y] == -1 ? "██" : _maze[x, y] == token1[0].InfoId() ? token1[0].InfoCharacter() 
-                : _maze[x, y] == token1[1].InfoId() ? token1[1].InfoCharacter() : _maze[x, y] == token1[2].InfoId() ? token1[2].InfoCharacter() 
-                : _maze[x, y] == token1[3].InfoId() ? token1[3].InfoCharacter() : _maze[x, y] == -2 ? "TT" : "  "); 
-            }
-            Console.WriteLine();
-        }
-    }
-    */
 
-    // Otra manera de imprimir el mapa
+    // Metodo de imprimir el mapa
     public void PrintMaze(Players player1 , Players player2)
     {
         System.Console.WriteLine("Si entre");
@@ -280,3 +261,22 @@ class Maze
     
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
 }
+
+    /*
+    // Muestra el laberinto en la consola
+    public void PrintMaze(Tokens[] token1, Tokens[] token2)
+    {
+        Console.Clear(); //Limpia la consola
+        for (int x = 0; x < _rows; x++)
+        {
+            for (int y = 0; y < _cols; y++)
+            {
+                // Paredes representadas por '██', caminos por espacios, trapas por 'TT' y jugadores por sus respectivos caracteres
+                Console.Write(_maze[x, y] == -1 ? "██" : _maze[x, y] == token1[0].InfoId() ? token1[0].InfoCharacter() 
+                : _maze[x, y] == token1[1].InfoId() ? token1[1].InfoCharacter() : _maze[x, y] == token1[2].InfoId() ? token1[2].InfoCharacter() 
+                : _maze[x, y] == token1[3].InfoId() ? token1[3].InfoCharacter() : _maze[x, y] == -2 ? "TT" : "  "); 
+            }
+            Console.WriteLine();
+        }
+    }
+    */

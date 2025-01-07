@@ -139,7 +139,7 @@ class Players
     }
 
     // Turno del jugador*****
-    public void PlayersTurn(Maze maze, Players player1, Players player2, ref bool running,ref bool getTarget)
+    public static void PlayersTurn(Maze maze, Players player1, Players player2, ref bool run1, ref bool run2, ref bool running)
     {
         int indexPiece = 0;
 
@@ -162,18 +162,60 @@ class Players
 
             Console.WriteLine("\n Ya puede desplazarse");
 
-            _displacement(player1.SelectToken(indexPiece).InfoSpeed(), maze, player1.SelectToken(indexPiece), player1, player2, ref running, ref getTarget);
+            if(!((player1.InfoTokens(indexPiece)._target) && (player2.InfoTokens(indexPiece)._target)))
+            {
+                if(!(player1.InfoTokens(indexPiece)._target) && run1)
+                {
+                    
+                    _displacement(player1.SelectToken(indexPiece).InfoSpeed(), maze, player1.SelectToken(indexPiece), player1, player2, ref running, ref player1.InfoTokens(indexPiece)._target);
+
+                    run1 = player1.EndTurn();
+
+                    run2 = player2.StartTurn();
+                }
+                else if(!(player2.InfoTokens(indexPiece)._target) && run2)
+                {
+                    Console.WriteLine("\n Inroduzca cual de sus fichas va a coger (del 1 al 4)");
+
+                    key = Console.ReadKey().Key;
+
+                    //Verifica q no escoja otro numero q no sea el de las fichas
+                    if (!(key == ConsoleKey.NumPad1 || key == ConsoleKey.NumPad2 || key == ConsoleKey.NumPad3 || key == ConsoleKey.NumPad4 ||
+                    key == ConsoleKey.D1 || key == ConsoleKey.D2 || key == ConsoleKey.D3 || key == ConsoleKey.D4))
+                    {
+                        Console.WriteLine("\n Esa ficha no exite, tiene q escoger una ficha del 1-4, inténtelo de nuevo " + key);
+
+                        continue;
+                    }
+
+                    _readBoard(key, ref indexPiece, ref running);
+
+                    Console.WriteLine("\n Ya puede desplazarse");
+
+                    _displacement(player2.SelectToken(indexPiece).InfoSpeed(), maze, player2.SelectToken(indexPiece), player2, player2, ref running, ref player2.InfoTokens(indexPiece)._target);
+
+                    run2 = player1.EndTurn();
+
+                    run1 = player2.StartTurn();
+                    
+                }
+            }
+            //Aqui se verifica si se logro el objetivo
+            else
+            {
+                running = false;
+            }
         }
     }
 
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
 
-    #region Metodos de Desplazamiento           ////////////////////////////////////////////////////////////////////////////////////////
+    #region Metodo de Desplazamiento           ////////////////////////////////////////////////////////////////////////////////////////
 
     // Desplaza la ficha*****
     private static void _displacement(int steps, Maze lab, Tokens piece1,Players player1, Players player2, ref bool running,ref bool getTarget)
     {   
-        lab._maze[piece1._coordX, piece1._coordY] = 2;
+        lab._maze[piece1._coordX, piece1._coordY] = piece1.InfoId();                 // Pone la ficha en el tablero
         int newX = piece1._coordX;
         int newY = piece1._coordY;
 
@@ -217,25 +259,14 @@ class Players
                     newX = piece1._coordX; newY = piece1._coordY;                    
                 }
 
+                Console.WriteLine("\n PRESIONE UNA TECLA PARA PASAR TURNO");
+                key = Console.ReadKey().Key;
+
                 lab.PrintMaze(player1, player2);                                    // Imprime el laberinto
             }
         }  
     }
     
-    // Metodo de Caminar en el turno*****
-    public static void Run(ref bool run, Maze _maze, Players player1, Players player2,ref bool getTarget)
-    {
-        while(run)
-        {
-            player1.PlayersTurn(_maze, player1, player2, ref run, ref getTarget);
-            
-            player2.PlayersTurn(_maze, player2, player1, ref run, ref getTarget);
-
-            if(_maze.Win(player1.SelectToken(0)._coordX, player1.SelectToken(0)._coordY, getTarget))
-                run = false;
-        }
-    }	
-
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
     
     #region Metodos de Lectura del Teclado          ////////////////////////////////////////////////////////////////////////////////////////
@@ -247,13 +278,21 @@ class Players
         switch (key)
         {
             case ConsoleKey.UpArrow:    newX = piece._coordX - 1; break;
+
             case ConsoleKey.DownArrow:  newX = piece._coordX + 1; break;
+
             case ConsoleKey.LeftArrow:  newY = piece._coordY - 1; break;
+
             case ConsoleKey.RightArrow: newY = piece._coordY + 1; break;
+
             case ConsoleKey.Escape: Console.WriteLine("\n Simulación detenida."); running = false; break;
+
             case ConsoleKey.Tab: piece._useBoxObject(lab, ref newX, ref newY, ref piece, player1, player2); break;
+
             case ConsoleKey.I: Console.WriteLine("\n " + player1.InfoIndexFaction() + "\n" + "OBETIVO: " + player1.InfoTarget()); piece.DisplayStatus(); break;
-            case ConsoleKey.E: if(player1.InfoIndexFaction() == 1) player1.InfoGoodFaction(); else player1.InfoBadFaction(); break;
+
+            case ConsoleKey.E: if(player1.InfoIndexFaction() == 1) player1.InfoGoodFaction(); else player1.InfoBadFaction(); 
+            Console.WriteLine("EL OBJETIVO DE LA FACCION: " + player1.InfoTarget()); break;
         }
     }
 
@@ -402,3 +441,19 @@ class Players
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
 
 }
+
+/*
+    // Metodo de Caminar en el turno*****
+    public static void Run(ref bool run, Maze _maze, Players player1, Players player2,ref bool getTarget)
+    {
+        while(run)
+        {
+            player1.PlayersTurn(_maze, player1, player2, ref run, ref getTarget);
+            
+            player2.PlayersTurn(_maze, player2, player1, ref run, ref getTarget);
+
+            if(_maze.Win(player1.SelectToken(0)._coordX, player1.SelectToken(0)._coordY, getTarget))
+                run = false;
+        }
+    }	
+    */
