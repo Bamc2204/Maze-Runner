@@ -3,6 +3,7 @@ using System;
 class Players
 {
     #region Propiedades del Jugador         ////////////////////////////////////////////////////////////////////////////////////////
+    
     private string _name;               // Nombre del jugador
     private bool _myTurn;               // Turno de la ficha
     public Tokens[] _token;             // Cantidad de fichas (hasta 4)
@@ -54,7 +55,6 @@ class Players
     // metodo para crear las fichas de la facion
     public void CreateTokensFaction(Players player1, Players player2)
     {   
-        //_ChooseFaction(player1, player2);                //Escoger Faccion
         if(player1.InfoIndexFaction() == 1)
         {
             CreateTokensGoodPlayer(ref player1._token);
@@ -75,7 +75,7 @@ class Players
 
     #region Creacion de Fichas         ////////////////////////////////////////////////////////////////////////////////////////
 
-    // Metodo para crear las fichas buenas
+    // Metodo para crear las fichas buenas*******************************************************************************************************************
     public void CreateTokensGoodPlayer(ref Tokens[] tokens)
     {
         tokens[0] = new Tokens("Harry Potter", 1, "HP", 1, 0, "Velocidad", 4, 3, 3, 4, 6);
@@ -86,28 +86,33 @@ class Players
 
         tokens[3] = new Tokens("Viktor Krum", 4, "VK", 37, 0, "Velocidad", 4, 8, 4, 4, 6);
 
-        SetTarget("Obtener el Caliz de fuego y escapar del laberinto");
+        string infoTarget = "Obtener el Caliz de fuego y escapar del laberinto";
+
+        SetTarget(ref infoTarget);
     }
 
-    // Metodo para crear las fichas malas
+    // Metodo para crear las fichas malas********************************************************************************************************************
     private void CreateTokensBadPlayer(ref Tokens[] tokens)
     {
-        tokens[0] = new Tokens("Acromántula", 5, "Ac", 7, 45, "Velocidad", 4, 3, 300);
+        tokens[0] = new Tokens("Acromántula", 5, "Ac", 7, 43, "Velocidad", 4, 3, 300);
 
-        tokens[1] = new Tokens("Esfinge", 6, "Es", 19, 45, "Velocidad", 4, 4, 300);
+        tokens[1] = new Tokens("Esfinge", 6, "Es", 19, 43, "Velocidad", 4, 4, 300);
 
-        tokens[2] = new Tokens("Boggart", 7, "Bo", 31, 45, "Velocidad", 4, 8, 300);
+        tokens[2] = new Tokens("Boggart", 7, "Bo", 31, 43, "Velocidad", 4, 8, 300);
 
-        tokens[3] = new Tokens("Blast-Ended Skrewts", 8, "Bl", 43, 45, "Velocidad", 4, 8, 300);
+        tokens[3] = new Tokens("Blast-Ended Skrewts", 8, "Bl", 43, 43, "Velocidad", 4, 8, 300);
 
-        SetTarget("Asesinar a los 4 campeones y evitar que escapen del laberinto");
+        string infoTarget = "Asesinar a los 4 campeones y evitar que escapen del laberinto";
+
+        SetTarget(ref infoTarget);
     }
 
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
     
     #region Objetivo         ////////////////////////////////////////////////////////////////////////////////////////
-    // Metodo para asignar el objetivo
-    public void SetTarget(string infoTarget)
+    
+    // Metodo para asignar el objetivo***********************************************************************************************************************
+    public void SetTarget(ref string infoTarget)
     {
         _InfoTarget = infoTarget;
     }
@@ -175,24 +180,8 @@ class Players
                 }
                 else if(!(player2.InfoTokens(indexPiece)._target) && run2)
                 {
-                    Console.WriteLine("\n Inroduzca cual de sus fichas va a coger (del 1 al 4)");
 
-                    key = Console.ReadKey().Key;
-
-                    //Verifica q no escoja otro numero q no sea el de las fichas
-                    if (!(key == ConsoleKey.NumPad1 || key == ConsoleKey.NumPad2 || key == ConsoleKey.NumPad3 || key == ConsoleKey.NumPad4 ||
-                    key == ConsoleKey.D1 || key == ConsoleKey.D2 || key == ConsoleKey.D3 || key == ConsoleKey.D4))
-                    {
-                        Console.WriteLine("\n Esa ficha no exite, tiene q escoger una ficha del 1-4, inténtelo de nuevo " + key);
-
-                        continue;
-                    }
-
-                    _readBoard(key, ref indexPiece, ref running);
-
-                    Console.WriteLine("\n Ya puede desplazarse");
-
-                    _displacement(player2.SelectToken(indexPiece).InfoSpeed(), maze, player2.SelectToken(indexPiece), player2, player2, ref running, ref player2.InfoTokens(indexPiece)._target);
+                    _displacement(player2.SelectToken(indexPiece).InfoSpeed(), maze, player2.SelectToken(indexPiece), player2, player1, ref running, ref player2.InfoTokens(indexPiece)._target);
 
                     run2 = player1.EndTurn();
 
@@ -212,7 +201,7 @@ class Players
 
     #region Metodo de Desplazamiento           ////////////////////////////////////////////////////////////////////////////////////////
 
-    // Desplaza la ficha*****
+    // Desplaza la ficha
     private static void _displacement(int steps, Maze lab, Tokens piece1,Players player1, Players player2, ref bool running,ref bool getTarget)
     {   
         lab._maze[piece1._coordX, piece1._coordY] = piece1.InfoId();                 // Pone la ficha en el tablero
@@ -236,7 +225,7 @@ class Players
 
                 _readBoard(key, lab, ref newX, ref newY, ref running, ref piece1, player1, player2);
 
-                if(key == ConsoleKey.I) 
+                if(key == ConsoleKey.I || key == ConsoleKey.E || key == ConsoleKey.Tab || key == ConsoleKey.Escape) 
                     continue;
 
                 _checkTrap(lab, ref newX, ref newY, ref running, ref piece1);
@@ -247,7 +236,7 @@ class Players
                 {
                     // Actualiza el tablero
                     lab._maze[piece1._coordX, piece1._coordY] = 0;                 // Vacía la posición actual
-                    lab._maze[newX, newY] = 2;                                     // Mueve la ficha
+                    lab._maze[newX, newY] = piece1.InfoId();                                     // Mueve la ficha
                     piece1._coordX = newX;                                          // Actualiza las coordenadas actuales
                     piece1._coordY = newY;
                     steps --;                                                       // Pasos q puede recorer cada ficha
@@ -256,11 +245,11 @@ class Players
                 else
                 {
                     System.Console.WriteLine("\n Los pasos no son validos");
-                    newX = piece1._coordX; newY = piece1._coordY;                    
+                    newX = piece1._coordX; newY = piece1._coordY;   
+                    
+                    Console.WriteLine("\n PRESIONE UNA TECLA PARA CONTINUAR"); 
+                    key = Console.ReadKey().Key;                 
                 }
-
-                Console.WriteLine("\n PRESIONE UNA TECLA PARA PASAR TURNO");
-                key = Console.ReadKey().Key;
 
                 lab.PrintMaze(player1, player2);                                    // Imprime el laberinto
             }
@@ -285,14 +274,14 @@ class Players
 
             case ConsoleKey.RightArrow: newY = piece._coordY + 1; break;
 
-            case ConsoleKey.Escape: Console.WriteLine("\n Simulación detenida."); running = false; break;
+            case ConsoleKey.Escape: Console.WriteLine("\n Simulación detenida."); running = false ; break;
 
             case ConsoleKey.Tab: piece._useBoxObject(lab, ref newX, ref newY, ref piece, player1, player2); break;
 
-            case ConsoleKey.I: Console.WriteLine("\n " + player1.InfoIndexFaction() + "\n" + "OBETIVO: " + player1.InfoTarget()); piece.DisplayStatus(); break;
+            case ConsoleKey.I: Console.WriteLine("\n " + player1.InfoFaction() + "\n" + " \n OBETIVO: " + player1.InfoTarget()); piece.DisplayStatus(); break;
 
             case ConsoleKey.E: if(player1.InfoIndexFaction() == 1) player1.InfoGoodFaction(); else player1.InfoBadFaction(); 
-            Console.WriteLine("EL OBJETIVO DE LA FACCION: " + player1.InfoTarget()); break;
+            Console.WriteLine("\n EL OBJETIVO DE LA FACCION: " + player1.InfoTarget()); break;
         }
     }
 
@@ -332,18 +321,39 @@ class Players
         if(lab._maze[newX, newY] == -2) //Verificacion de trapas
         {
             piece.RemoveHealth(20, piece._activeShield);
-            System.Console.WriteLine("\n Has caido en una trampa y has perdido 20 puntos de vidas");
+            Console.WriteLine("\n Has caido en una trampa y has perdido 20 puntos de vidas");
             if(piece.InfoHealth() == 0)
             {   
                 running = false;
                 System.Console.WriteLine("\n Has muerto");
             }
         }
+        else if(lab._maze[newX, newY] == -3)
+        {
+            if(piece.InfoSpeed() == 1)
+            {
+                Console.WriteLine("\n Has caido muchas veces en trampas de velocidad, ya no puedes moverte");
+                return;
+            }
+            piece.SlowDown(-1);
+            Console.WriteLine("\n Has caido en una trampa y has perdido 2 puntos de velocidad");
+        }
+        else if(lab._maze[newX, newY] == -4)
+        {
+            if(piece.InfoDamage() <= 0)
+            {
+                Console.WriteLine("\n Has caido muchas veces en trampas de daño, estas muy debil para inflingir daño");
+                return;
+            }
+            piece.RemoveDamage(-30);
+            Console.WriteLine("\n Has caido en una trampa y has perdido 30 puntos de daño, ahora haces menos daño");
+        }
     }
 
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
     
     #region Metodo para Selecionar Fichas         ////////////////////////////////////////////////////////////////////////////////////////
+    
     // Metodo para seleccionar ficha
     public Tokens SelectToken(int _index) 
     {
@@ -372,11 +382,11 @@ class Players
         string infoRowColdTime = string.Format("{0,-20} {1,-20} {2,-20} {3,-20}", "4", "4", "4", "4");                                              // Tiempo de Enfriamiento
         string infoRowSpeed = string.Format("{0,-20} {1,-20} {2,-20} {3,-20}", "4", "4", "4", "4");                                                 // Velocidad
 
-        Console.WriteLine("\n NOMBRES \n" + nameRowName);
-        Console.WriteLine("\n CARACTERES \n" + infoRowCharacter);
-        Console.WriteLine("\n HABILIDADES \n" + infoRowSkill);
-        Console.WriteLine("\n TIEMPO DE ENFRIAMIENTO DE LAS HABILIDADES \n" + infoRowColdTime);
-        Console.WriteLine("\n VELOCIDAD \n" + infoRowSpeed);
+        Console.WriteLine("\n ***///NOMBRES///*** \n" + nameRowName);
+        Console.WriteLine("\n ***///CARACTERES///*** \n" + infoRowCharacter);
+        Console.WriteLine("\n ***///HABILIDADES///*** \n" + infoRowSkill);
+        Console.WriteLine("\n ***///TIEMPO DE ENFRIAMIENTO DE LAS HABILIDADES///*** \n" + infoRowColdTime);
+        Console.WriteLine("\n ***///VELOCIDAD///*** \n" + infoRowSpeed);
     }
 
     // Metodo de Informacionde la faccion buena

@@ -9,6 +9,7 @@ class Tokens
     public int _coordY;                         // Coordenada Y
     private string _character;                  // Caracter de la ficha
     private int _health;                        // Salud
+    private int _damage;                  // Daño
     private string _skill;                      // Habilidad
     private bool _skillActivation = true;       // Verificador de Habilidad
     private int _coldTime;                      // Tiempo de enfriamiento de habilidad
@@ -24,15 +25,15 @@ class Tokens
 
     // Creador de fichas
     public Tokens(string name, int id, string character, int coordX, int coordY, string skill, int coldTime, int speed, 
-    int obj1, int obj2, int obj3, int health = 100)
+    int obj1, int obj2, int obj3, int damage = 50, int health = 100)
     {
-        Random random = new Random();
         _name = name;
         _id = id;
         _coordX = coordX;
         _coordY = coordY;
         _character = character;
         _health = health;
+        _damage = damage;
         _skill = skill;
         _coldTime = coldTime;
         _speed = speed;
@@ -138,6 +139,12 @@ class Tokens
         _speed += add;
     }
 
+    // Metodo para quitar velocidad
+    public void SlowDown(int remove)
+    {
+        _speed -= remove;
+    }
+   
     // Metodo escudo
     public void Shield(ref bool activeShield)
     {
@@ -191,6 +198,11 @@ class Tokens
         }while(false);
     }
     
+    // Metodo para quitar fuerza
+    public void RemoveDamage(int remove)
+    {
+        _damage -= remove;
+    }
 
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -208,18 +220,23 @@ class Tokens
         return _character;
     }
 
-    // informacion de la vida
+    // Informacion de la vida
     public int InfoHealth()
     {
         return _health;
     }
 
-    // informacion de la velocidad
+    // Informacion del daño
+    public int InfoDamage()
+    {
+        return _damage;
+    }
+
+    // Informacion de la velocidad
     public int InfoSpeed()
     {
         return _speed;
     }
-
 
     // Metodo para mostrar todo soble la ficha
     public void DisplayStatus()

@@ -71,6 +71,8 @@ class GamePlay
         
         Players player2 = new Players(name2, indexPlayer2);
 
+        player2._ChooseFaction(ref indexPlayer1, ref indexPlayer2);
+
         player1.CreateTokensFaction(player1, player2);
         
         Console.WriteLine("\n PRECIONE UNA TECLA PARA COMENZAR A JUGAR");
@@ -89,7 +91,12 @@ class GamePlay
 
         bool running = true;
 
-        Players.PlayersTurn(lab, player1, player2, ref run1, ref run2, ref running);
+        if(player1.InfoFaction() == "MAGOS")
+            Players.PlayersTurn(lab, player1, player2, ref run1, ref run2, ref running);
+            
+        else
+            Players.PlayersTurn(lab, player2, player1, ref run1, ref run2, ref running);
+
 
         Console.WriteLine("El juego ha terminado, gracias por jugar");
     }

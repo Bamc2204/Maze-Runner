@@ -3,6 +3,7 @@ using System;
 class Maze
 {
     #region Propiedades del Laberinto           ////////////////////////////////////////////////////////////////////////////////////////
+
     private Random _random = new Random();  //Generador de numeros aleatorios
     private int _rows, _cols;       //Filas y columnas
     public int[,] _maze;            //Laberinto
@@ -15,6 +16,8 @@ class Maze
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
 
     #region Constructor         //////////////////////////////////////////////////////////////////////////////////////////
+    
+    // Constructor de la clase Maze
     public Maze(Players player1, Players player2)
     {
         // Jugadores
@@ -34,12 +37,15 @@ class Maze
         _setRoad();  //Genera caminos alternativos
         _setEntryExit();                //Crear la entrada/salida del laberinto;
         _setPlayer(player1, player2);   //Genera los jugadores
-        _setTraps();                    //Genera las trampas
+        _setTraps(-2);                    //Genera las trampas
+        _setTraps(-3);                    //Genera las trampas
+        _setTraps(-4);                    //Genera las trampas
     }
 
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
 
     #region Metodos de Generacion del Laberinto         ////////////////////////////////////////////////////////////////////////////////////////
+   
     // Inicializa el laberinto con paredes (1) por defecto
     private void _initializeMaze()
     {
@@ -102,7 +108,7 @@ class Maze
             //Colocar trampas
             if(_maze[x, y] == -1 && _validRoad(x, y))
             {
-                _maze[x, y] = -3;
+                _maze[x, y] = -5;
                 cont++;
             }
         }
@@ -116,7 +122,7 @@ class Maze
             for(int j = 0; j < 2; j++)
             {
                 //Verifica si se puede colocar trampas
-                if((_maze[x + i, y + j] == -3) || (_maze[x - i, y - j] == -3) || (_maze[x + i, y - j] == -3) || (_maze[x - i, y + j] == -3) 
+                if((_maze[x + i, y + j] == -5) || (_maze[x - i, y - j] == -5) || (_maze[x + i, y - j] == -5) || (_maze[x - i, y + j] == -5) 
                 || (!((_maze[(x + 1), y] == -1 && _maze[(x - 1), y] == -1) || (_maze[x, (y + 1)] == -1 && _maze[x, (y - 1)] == -1)) 
                 || ((_maze[(x + 1), y] == -1 && _maze[(x - 1), y] == -1) && (_maze[x, (y + 1)] == -1 && _maze[x, (y - 1)] == -1))))
                     return false;
@@ -134,6 +140,7 @@ class Maze
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
 
     #region Metodos para colocar entradas-salidas del laberinto        //////////////////////////////////////////////////////////////////////////////////////////
+   
     // Establece la entrada y salida del laberinto**********************************************************
     private void _setEntryExit()
     {
@@ -155,13 +162,12 @@ class Maze
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
 
     #region Metodo para estaclecer jugador          //////////////////////////////////////////////////////////////////////////////////////////
+    
     // Establece el jugado
     private void _setPlayer(Players player1, Players player2)
     {
         for(int i = 0; i < 4; i++)
         {
-            System.Console.WriteLine("\n HELLO x un numero el cual no se");
-
             // Jugador (cerca de la esquina superior izquierda)
             _maze[player1.InfoTokens(i)._coordX, player1.InfoTokens(i)._coordY] = player1.InfoPiece(i).InfoId(); 
             _maze[player2.InfoTokens(i)._coordX, player2.InfoTokens(i)._coordY] = player2.InfoPiece(i).InfoId();
@@ -170,12 +176,21 @@ class Maze
     
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
 
-    #region Metodos para colocar las trampas            //////////////////////////////////////////////////////////////////////////////////////////
+    #region Metodos para generar las trampas            //////////////////////////////////////////////////////////////////////////////////////////
+    
+    //Tipos de trampas
+    enum KindTrap
+    {
+        T1 = -2,
+        T2 = -3,
+        T3 = -4
+    }
+
     //Establece las trampas
-    private void _setTraps()
+    private void _setTraps( int kindTrap)
     {
         int cont = 0;
-        while(cont < 16)
+        while(cont < 6)
         {
             //posiciones en el centro del mapa
             int x = _random.Next(5, _rows - 5); 
@@ -183,11 +198,12 @@ class Maze
             //Colocar trampas
             if(_validTrap(x, y))
             {
-                _maze[x, y] = -2;
+                _maze[x, y] = kindTrap;
                 cont++;
             }
         }
     }
+
 
     // Verifica la posicion de la trampa
     private bool _validTrap(int x, int y)
@@ -197,7 +213,9 @@ class Maze
             for(int j = 0; j < 3; j++)
             {
                 //Verifica si se puede colocar trampas
-                if((_maze[x + i, y + j] == -2) || (_maze[x - i, y - j] == -2) || (_maze[x + i, y - j] == -2) || (_maze[x - i, y + j] == -2) 
+                if(((_maze[x + i, y + j] == -2) || (_maze[x - i, y - j] == -2) || (_maze[x + i, y - j] == -2) || (_maze[x - i, y + j] == -2))
+                || ((_maze[x + i, y + j] == -3) || (_maze[x - i, y - j] == -3) || (_maze[x + i, y - j] == -3) || (_maze[x - i, y + j] == -3))
+                || ((_maze[x + i, y + j] == -4) || (_maze[x - i, y - j] == -4) || (_maze[x + i, y - j] == -4) || (_maze[x - i, y + j] == -4))
                 || (!((_maze[(x+1), y] == 0 && _maze[(x-1), y] == 0) || (_maze[x, (y+1)] == 0 && _maze[x, (y-1)] == 0))))
                     return false;
             }    
@@ -226,7 +244,8 @@ class Maze
                 : _maze[x, y] == player2.InfoTokens(0).InfoId() ? player2.InfoTokens(0).InfoCharacter() 
                 : _maze[x, y] == player2.InfoTokens(1).InfoId() ? player2.InfoTokens(1).InfoCharacter() 
                 : _maze[x, y] == player2.InfoTokens(2).InfoId() ? player2.InfoTokens(2).InfoCharacter() 
-                : _maze[x, y] == player2.InfoTokens(3).InfoId() ? player2.InfoTokens(3).InfoCharacter()  : _maze[x, y] == -2 ? "TT" : "  ");
+                : _maze[x, y] == player2.InfoTokens(3).InfoId() ? player2.InfoTokens(3).InfoCharacter()  
+                : _maze[x, y] == -2 ? "T1" : _maze[x, y] == -3 ? "T2" : _maze[x, y] == -4 ? "T3" : "  ");
                 
             }
             Console.WriteLine();
@@ -236,6 +255,7 @@ class Maze
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
     
     #region Metodo de victoria          //////////////////////////////////////////////////////////////////////////////////////////
+    
     // Condicion de Victoria ******************
     public bool Win(int x, int y, bool getTarget)
     {
@@ -247,6 +267,7 @@ class Maze
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
     
     #region Metodos de informacion          //////////////////////////////////////////////////////////////////////////////////////////
+    
     // Informacion de las filas
     public int InfoRows()
     {
@@ -260,6 +281,7 @@ class Maze
     }
     
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
+
 }
 
     /*
