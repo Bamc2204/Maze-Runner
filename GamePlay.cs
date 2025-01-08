@@ -83,19 +83,15 @@ class GamePlay
 
         Maze lab = new Maze(player1, player2);
 
-        lab.PrintMaze(player1, player2);
+        Maze.PrintMaze(player1, player2);
         
-        bool run1 = true;
-
-        bool run2 = false;
-
         bool running = true;
 
         if(player1.InfoFaction() == "MAGOS")
-            Players.PlayersTurn(lab, player1, player2, ref run1, ref run2, ref running);
+            Players.PlayersTurn(lab, player1, player2, ref running);
             
         else
-            Players.PlayersTurn(lab, player2, player1, ref run1, ref run2, ref running);
+            Players.PlayersTurn(lab, player2, player1, ref running);
 
 
         Console.WriteLine("El juego ha terminado, gracias por jugar");

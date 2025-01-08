@@ -8,14 +8,15 @@ class Tokens
     public int _coordX;                         // Coordenada X
     public int _coordY;                         // Coordenada Y
     private string _character;                  // Caracter de la ficha
-    private int _health;                        // Salud
-    private int _damage;                  // Daño
+    public int _health;                         // Salud
+    private int _damage;                        // Daño
+    private int _distAttack;                    // Distacia de ataque
     private string _skill;                      // Habilidad
     private bool _skillActivation = true;       // Verificador de Habilidad
     private int _coldTime;                      // Tiempo de enfriamiento de habilidad
     private int _speed;                         // Velocidad para recorrer casillas
     private int[] _box = new int[3];            // Bolsa con objetos
-    public bool _activeShield = false;         // Escudo activo
+    public bool _activeShield = false;          // Escudo activo
     private int _shield = 0;                    // Escudo
     public bool _target = false;                // Objetivo
 
@@ -25,7 +26,7 @@ class Tokens
 
     // Creador de fichas
     public Tokens(string name, int id, string character, int coordX, int coordY, string skill, int coldTime, int speed, 
-    int obj1, int obj2, int obj3, int damage = 50, int health = 100)
+    int obj1, int obj2, int obj3, int damage = 50, int distAttack = 4, int health = 100)
     {
         _name = name;
         _id = id;
@@ -34,6 +35,7 @@ class Tokens
         _character = character;
         _health = health;
         _damage = damage;
+        _distAttack = distAttack;
         _skill = skill;
         _coldTime = coldTime;
         _speed = speed;
@@ -43,7 +45,7 @@ class Tokens
     }
     
     //Sobrecarga de constructor
-    public Tokens(string name, int id, string character, int coordX, int coordY, string skill, int coldTime, int speed, int health = 400)
+    public Tokens(string name, int id, string character, int coordX, int coordY, string skill, int coldTime, int speed, int damage, int distAttack, int health = 400)
     {
         Random random = new Random();
         _name = name;
@@ -52,6 +54,8 @@ class Tokens
         _coordY = coordY;
         _character = character;
         _health = health;
+        _damage = damage;
+        _distAttack = distAttack;
         _skill = skill;
         _coldTime = coldTime;
         _speed = speed;
@@ -133,6 +137,12 @@ class Tokens
             _health -= remove;
     }
 
+    // Sobre carga del Metodo para quitar salud
+    public void RemoveHealth(int remove)
+    {
+        _health -= remove;
+    }
+
     // Metodo para agregar velocidad
     public void AddSpeed(int add)
     {
@@ -179,11 +189,11 @@ class Tokens
             Players._readBoard(key, lab, ref newX, ref newY, ref running, ref piece, player1, player2);
 
             // Dentro de filas, columnas y si es un camino
-            if (newX >= 0 && newX < lab._maze.GetLength(0) && newY >= 0 && newY < lab._maze.GetLength(1))                    
+            if (newX >= 0 && newX < Maze._maze.GetLength(0) && newY >= 0 && newY < Maze._maze.GetLength(1))                    
             {
                 // Actualiza el tablero
-                lab._maze[piece._coordX, piece._coordY] = 0;        // Vacía la posición actual
-                lab._maze[newX, newY] = 2;                          // Mueve la ficha
+                Maze._maze[piece._coordX, piece._coordY] = 0;        // Vacía la posición actual
+                Maze._maze[newX, newY] = 2;                          // Mueve la ficha
                 piece._coordX = newX;                               // Actualiza las coordenadas actuales
                 piece._coordY = newY;
             }
@@ -194,7 +204,7 @@ class Tokens
                 newX = piece._coordX; newY = piece._coordY;                    
             }
 
-            lab.PrintMaze(player1,  player2);//Imprime el laberinto
+            Maze.PrintMaze(player1,  player2);//Imprime el laberinto
         }while(false);
     }
     
@@ -203,6 +213,19 @@ class Tokens
     {
         _damage -= remove;
     }
+
+    //Metodo para q los Magos ataquen(Atacan a distancia)
+    public void Attack(Tokens token, ref Players BadPlayer, int damage)
+    {
+        ConsoleKey key = Console.ReadKey().Key;
+        if(key != ConsoleKey.UpArrow && key != ConsoleKey.DownArrow && key != ConsoleKey.LeftArrow && key != ConsoleKey.RightArrow)
+        {
+            Console.WriteLine("No ha atacado");
+            return;
+        }
+
+        Players._readBoard(key, token, ref BadPlayer, damage);
+    } 
 
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -214,6 +237,13 @@ class Tokens
         return _id;
     }
 
+    // Informacion del Nombre
+    public string InfoName()
+    
+    {
+        return _name;
+    }
+    
     // Informacion del caracter de la ficha
     public string InfoCharacter()
     {
@@ -230,6 +260,12 @@ class Tokens
     public int InfoDamage()
     {
         return _damage;
+    }
+
+    //Informacion de la Distancia de Ataque
+    public int InfoDistAttack()
+    {
+        return _distAttack;
     }
 
     // Informacion de la velocidad

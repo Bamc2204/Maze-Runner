@@ -5,8 +5,8 @@ class Maze
     #region Propiedades del Laberinto           ////////////////////////////////////////////////////////////////////////////////////////
 
     private Random _random = new Random();  //Generador de numeros aleatorios
-    private int _rows, _cols;       //Filas y columnas
-    public int[,] _maze;            //Laberinto
+    private static int _rows = 51, _cols = 51;       //Filas y columnas
+    public static int[,] _maze = new int [_rows, _cols];            //Laberinto
     private Players _player1, _player2; //Jugadores
 
     // Direcciones posibles (arriba, derecha, abajo, izquierda)
@@ -25,13 +25,14 @@ class Maze
         _player2 = player2;
 
         //Cantidad de filas y columnas generadas aleatoriamente
-        int rows = _random.Next(45, 56); 
-        int cols = _random.Next(45, 56);
+        //int rows = _random.Next(45, 56); 
+        //int cols = _random.Next(45, 56);
 
         // Asegurarse de que el tamaño sea impar para facilitar la generación del laberinto
-        _rows = (rows % 2 == 0) ? rows + 1 : rows;
-        _cols = (cols % 2 == 0) ? cols + 1 : cols;
-        _maze = new int[_rows, _cols];
+        //_rows = (rows % 2 == 0) ? rows + 1 : rows;
+        //_cols = (cols % 2 == 0) ? cols + 1 : cols;
+        //_maze = new int[_rows, _cols];
+
         _initializeMaze();              //Crea el laberinto pero vacio(con todo paredes);
         _generateMaze(1, 1);            // Comenzar desde la celda (1,1) a construir el laberinto;
         _setRoad();  //Genera caminos alternativos
@@ -228,7 +229,7 @@ class Maze
     #region Metodos para imprimir el laberinto en consola           //////////////////////////////////////////////////////////////////////////////////////////
 
     // Metodo de imprimir el mapa
-    public void PrintMaze(Players player1 , Players player2)
+    public static void PrintMaze(Players player1 , Players player2)
     {
         System.Console.WriteLine("Si entre");
         Console.Clear(); //Limpia la consola
@@ -267,6 +268,12 @@ class Maze
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
     
     #region Metodos de informacion          //////////////////////////////////////////////////////////////////////////////////////////
+    
+    // Informacion del  laberinto
+    public static int[,] InfoMaze()
+    {
+        return _maze;
+    } 
     
     // Informacion de las filas
     public int InfoRows()
