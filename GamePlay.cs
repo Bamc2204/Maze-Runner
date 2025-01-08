@@ -71,7 +71,7 @@ class GamePlay
         
         Players player2 = new Players(name2, indexPlayer2);
 
-        player2._ChooseFaction(ref indexPlayer1, ref indexPlayer2);
+        player2._ChooseFaction(ref indexPlayer2, ref indexPlayer1);
 
         player1.CreateTokensFaction(player1, player2);
         

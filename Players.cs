@@ -5,7 +5,7 @@ class Players
     #region Propiedades del Jugador         ////////////////////////////////////////////////////////////////////////////////////////
     
     private string _name;               // Nombre del jugador
-    private bool _myTurn = true;               // Turno de la ficha
+    private bool _myTurn = false;               // Turno de la ficha
     public Tokens[] _token;             // Cantidad de fichas (hasta 4)
     private int _index = 0;             // Indice para escoger la faccion
     private string _faction;            // Faccion del jugador
@@ -143,10 +143,12 @@ class Players
         _myTurn = false;    
     }
 
-    // Turno del jugador*****
+    // Turno del jugador
     public static void PlayersTurn(Maze maze, Players player1, Players player2, ref bool running)
     {
         int indexPiece = 0;
+
+        Console.WriteLine("LA FACCION DE LOS MAGOS COMIENZA 1RO");
 
         while(running)
         {    
@@ -165,29 +167,42 @@ class Players
 
             _readBoard(key, ref indexPiece, ref running);
 
+            Console.WriteLine("\n Presione una tecla para iniciar a desplazarce");
+
+            key = Console.ReadKey().Key;
+
             Console.WriteLine("\n Ya puede desplazarse");
+
+            if(player1.InfoTurn() == false)
+            {
+                Console.WriteLine("\n Ha escogido a " + player1.InfoTokens(indexPiece).InfoName());
+                player1.StartTurn();
+                player2.EndTurn();
+            } 
+            else
+            {
+                Console.WriteLine("\n Ha escogido a " + player2.InfoTokens(indexPiece).InfoName());
+                player2.StartTurn();
+                player1.EndTurn();    
+            }
+
+
+            Console.WriteLine(player1.InfoTurn());
+
+            Console.WriteLine(player2.InfoTurn());
 
             if(!((player1.InfoTokens(indexPiece)._target) && (player2.InfoTokens(indexPiece)._target)))
             {
-                if(!(player1.InfoTokens(indexPiece)._target) && player1.InfoTurn())
+                if(player1.InfoTurn())
                 {
-                    
                     _displacement(player1.SelectToken(indexPiece).InfoSpeed(), maze, player1.SelectToken(indexPiece), player1, player2, ref running, ref player1.InfoTokens(indexPiece)._target);
-
-                    player1.EndTurn();
-
-                    player2.StartTurn();
                 }
-                else if(!(player2.InfoTokens(indexPiece)._target) && player2.InfoTurn())
+                else if(player2.InfoTurn())
                 {
-
                     _displacement(player2.SelectToken(indexPiece).InfoSpeed(), maze, player2.SelectToken(indexPiece), player2, player1, ref running, ref player2.InfoTokens(indexPiece)._target);
-
-                    player1.EndTurn();
-
-                    player2.StartTurn();
-                    
                 }
+                Console.WriteLine("\n PRESIONE UNA TECLA PARA CAMBIAR DE TURNO \n");
+                key = Console.ReadKey().Key;
             }
             //Aqui se verifica si se logro el objetivo
             else
@@ -202,7 +217,7 @@ class Players
     #region Metodo de Desplazamiento           ////////////////////////////////////////////////////////////////////////////////////////
 
     // Desplaza la ficha
-    private static void _displacement(int steps, Maze maze, Tokens piece1,Players player1, Players player2, ref bool running,ref bool getTarget)
+    private static void _displacement(int steps, Maze maze, Tokens piece1, Players player1, Players player2, ref bool running,ref bool getTarget)
     {   
         Maze._maze[piece1._coordX, piece1._coordY] = piece1.InfoId();                 // Pone la ficha en el tablero
         int newX = piece1._coordX;
@@ -244,7 +259,7 @@ class Players
 
                 else
                 {
-                    System.Console.WriteLine("\n Los pasos no son validos");
+                    Console.WriteLine("\n Los pasos no son validos");
                     newX = piece1._coordX; newY = piece1._coordY;   
                     
                     Console.WriteLine("\n PRESIONE UNA TECLA PARA CONTINUAR"); 
@@ -470,7 +485,7 @@ class Players
             if(piece.InfoHealth() == 0)
             {   
                 running = false;
-                System.Console.WriteLine("\n Has muerto");
+                Console.WriteLine("\n Has muerto");
             }
         }
         else if(Maze._maze[newX, newY] == -3)
