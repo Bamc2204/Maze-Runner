@@ -155,7 +155,7 @@ class Tokens
         _speed -= remove;
     }
    
-    // Metodo escudo
+    // Metodo Escudo
     public void Shield(ref bool activeShield)
     {
         if(!activeShield)
@@ -176,7 +176,7 @@ class Tokens
         }
     }
 
-    // Metodo de la herramenta pico
+    // Metodo Pico
     private void _beak(Maze lab, ref int newX, ref int newY, ref Tokens piece, Players player1, Players player2)  
     {
         newX = piece._coordX;
@@ -214,7 +214,7 @@ class Tokens
         _damage -= remove;
     }
 
-    //Metodo para q los Magos ataquen(Atacan a distancia)
+    //Metodo Atacar
     public void Attack(Tokens token, ref Players player, int damage)
     {
         Console.WriteLine("\n En q direccion piensa atacar, presione una flecha para ver la direccion \n");
@@ -222,7 +222,7 @@ class Tokens
         ConsoleKey key = Console.ReadKey().Key;
         
         for(int i = 0; i < 4; i++)
-            Console.WriteLine("\n " + player.InfoTokens(i).InfoHealth());
+            Console.WriteLine("\n " + player._tokens[i].InfoHealth());
 
         if(key != ConsoleKey.UpArrow && key != ConsoleKey.DownArrow && key != ConsoleKey.LeftArrow && key != ConsoleKey.RightArrow)
         {
@@ -233,7 +233,7 @@ class Tokens
         Players._readBoard(key, token, ref player, damage);
 
         for(int i = 0; i < 4; i++)
-            Console.WriteLine("\n " + player.InfoTokens(i).InfoHealth());
+            Console.WriteLine("\n " + player._tokens[i].InfoHealth());
     } 
 
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////

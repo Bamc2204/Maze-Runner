@@ -33,14 +33,15 @@ class Maze
         //_cols = (cols % 2 == 0) ? cols + 1 : cols;
         //_maze = new int[_rows, _cols];
 
-        _initializeMaze();              //Crea el laberinto pero vacio(con todo paredes);
-        _generateMaze(1, 1);            // Comenzar desde la celda (1,1) a construir el laberinto;
-        _setRoad();  //Genera caminos alternativos
-        _setEntryExit();                //Crear la entrada/salida del laberinto;
-        _setPlayer(player1, player2);   //Genera los jugadores
-        _setTraps(-2);                    //Genera las trampas
-        _setTraps(-3);                    //Genera las trampas
-        _setTraps(-4);                    //Genera las trampas
+        _initializeMaze();                  //Crea el laberinto pero vacio(con todo paredes);
+        _generateMaze(1, 1);                // Comenzar desde la celda (1,1) a construir el laberinto;
+        _setRoad();                         //Genera caminos alternativos
+        _setEntryExit();                    //Crear la entrada/salida del laberinto;
+        _setPlayer(player1);                //Genera los 1ros jugadores
+        _setPlayer(player2);                //Genera los 2dos jugadores
+        _setTraps(-2);                      //Genera las trampas
+        _setTraps(-3);                      //Genera las trampas
+        _setTraps(-4);                      //Genera las trampas
     }
 
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
@@ -165,13 +166,13 @@ class Maze
     #region Metodo para estaclecer jugador          //////////////////////////////////////////////////////////////////////////////////////////
     
     // Establece el jugado
-    private void _setPlayer(Players player1, Players player2)
+    private void _setPlayer(Players player)
     {
-        for(int i = 0; i < 4; i++)
+        for(int i = 0; i < player._tokens.Length; i++)
         {
             // Jugador (cerca de la esquina superior izquierda)
-            _maze[player1.InfoTokens(i)._coordX, player1.InfoTokens(i)._coordY] = player1.InfoPiece(i).InfoId(); 
-            _maze[player2.InfoTokens(i)._coordX, player2.InfoTokens(i)._coordY] = player2.InfoPiece(i).InfoId();
+            _maze[player._tokens[i]._coordX, player._tokens[i]._coordY] = player._tokens[i].InfoId(); 
+            
         }
     }
     
@@ -281,7 +282,7 @@ class Maze
 
     #region Metodos para imprimir el laberinto en consola           //////////////////////////////////////////////////////////////////////////////////////////
 
-    // Metodo de imprimir el mapa
+    // Metodo de imprimir el mapa *********************************** Cuando una ficha muere esta es eliminada del array de fichas del jugador lo q provoca q la cantidad de fichas no sea siempre la misma
     public static void PrintMaze(Players player1 , Players player2)
     {
         System.Console.WriteLine("Si entre");
@@ -291,14 +292,14 @@ class Maze
             for (int y = 0; y < _cols; y++)
             {
                 // Paredes representadas por '██', caminos por espacios, trapas por 'TT' y jugadores por sus respectivos caracteres
-                Console.Write(_maze[x, y] == -1 ? "██" : _maze[x, y] == player1.InfoTokens(0).InfoId() ? player1.InfoTokens(0).InfoCharacter() 
-                : _maze[x, y] == player1.InfoTokens(1).InfoId() ? player1.InfoTokens(1).InfoCharacter() 
-                : _maze[x, y] == player1.InfoTokens(2).InfoId() ? player1.InfoTokens(2).InfoCharacter() 
-                : _maze[x, y] == player1.InfoTokens(3).InfoId() ? player1.InfoTokens(3).InfoCharacter()
-                : _maze[x, y] == player2.InfoTokens(0).InfoId() ? player2.InfoTokens(0).InfoCharacter() 
-                : _maze[x, y] == player2.InfoTokens(1).InfoId() ? player2.InfoTokens(1).InfoCharacter() 
-                : _maze[x, y] == player2.InfoTokens(2).InfoId() ? player2.InfoTokens(2).InfoCharacter() 
-                : _maze[x, y] == player2.InfoTokens(3).InfoId() ? player2.InfoTokens(3).InfoCharacter()  
+                Console.Write(_maze[x, y] == -1 ? "██" : _maze[x, y] == player1._tokens[0].InfoId() ? player1._tokens[0].InfoCharacter() 
+                : _maze[x, y] == player1._tokens[1].InfoId() ? player1._tokens[1].InfoCharacter() 
+                : _maze[x, y] == player1._tokens[2].InfoId() ? player1._tokens[2].InfoCharacter() 
+                : _maze[x, y] == player1._tokens[3].InfoId() ? player1._tokens[3].InfoCharacter()
+                : _maze[x, y] == player2._tokens[0].InfoId() ? player2._tokens[0].InfoCharacter() 
+                : _maze[x, y] == player2._tokens[1].InfoId() ? player2._tokens[1].InfoCharacter() 
+                : _maze[x, y] == player2._tokens[2].InfoId() ? player2._tokens[2].InfoCharacter() 
+                : _maze[x, y] == player2._tokens[3].InfoId() ? player2._tokens[3].InfoCharacter()  
                 : _maze[x, y] == -2 ? "T1" : _maze[x, y] == -3 ? "T2" : _maze[x, y] == -4 ? "T3" : "  ");
                 
             }
