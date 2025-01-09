@@ -226,6 +226,59 @@ class Maze
     
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
 
+    #region Metodo verificador de pared             //////////////////////////////////////////////////////////////////////////////////////////
+
+    // Metodo para verificar si hay pared, retorna false si hay alguna pared en las direccion introducida y true si no hay pared
+    public static bool CheckWall(int direction, int totalCheckBox, Tokens token)
+    {
+        switch(direction)
+        {
+            case 1: // Arriba
+            
+            for (int i = 0; i < totalCheckBox; i++)
+            {
+                if(Maze._maze[token._coordX + i, token._coordY] == -1)
+                    return false;
+            }
+
+            break;
+        
+            case 2: // Abajo
+            
+            for (int i = 0; i < totalCheckBox; i++)
+            {
+                if(Maze._maze[token._coordX - i, token._coordY] == -1)
+                    return false;
+            }
+
+            break;
+
+            case 3: // Izquierda
+            
+            for (int i = 0; i < totalCheckBox; i++)
+            {
+                if(Maze._maze[token._coordX, token._coordY - i] == -1)
+                    return false;
+            }
+
+            break;
+
+            case 4: // Derecha
+            
+            for (int i = 0; i < totalCheckBox; i++)
+            {
+                if(Maze._maze[token._coordX, token._coordY + i] == -1)
+                    return false;
+            }
+
+            break;
+        }
+
+        return true;
+    }
+
+    #endregion              //////////////////////////////////////////////////////////////////////////////////////////
+
     #region Metodos para imprimir el laberinto en consola           //////////////////////////////////////////////////////////////////////////////////////////
 
     // Metodo de imprimir el mapa

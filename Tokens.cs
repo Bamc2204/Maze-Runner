@@ -215,16 +215,25 @@ class Tokens
     }
 
     //Metodo para q los Magos ataquen(Atacan a distancia)
-    public void Attack(Tokens token, ref Players BadPlayer, int damage)
+    public void Attack(Tokens token, ref Players player, int damage)
     {
+        Console.WriteLine("\n En q direccion piensa atacar, presione una flecha para ver la direccion \n");
+        
         ConsoleKey key = Console.ReadKey().Key;
+        
+        for(int i = 0; i < 4; i++)
+            Console.WriteLine("\n " + player.InfoTokens(i).InfoHealth());
+
         if(key != ConsoleKey.UpArrow && key != ConsoleKey.DownArrow && key != ConsoleKey.LeftArrow && key != ConsoleKey.RightArrow)
         {
             Console.WriteLine("No ha atacado");
             return;
         }
 
-        Players._readBoard(key, token, ref BadPlayer, damage);
+        Players._readBoard(key, token, ref player, damage);
+
+        for(int i = 0; i < 4; i++)
+            Console.WriteLine("\n " + player.InfoTokens(i).InfoHealth());
     } 
 
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
@@ -278,7 +287,7 @@ class Tokens
     public void DisplayStatus()
     {
         //Informacion del Nombre, Salud, Velocidad, Habilidad, Tiempo de Enfrimiento
-        Console.WriteLine($"\n Ficha: {_name} | Salud: {_health} | Velocidad: {_speed} | Habilidad: {_skill} | Tiempo de enfriamiento: {_coldTime}"); 
+        Console.WriteLine($"\n Ficha: {_name} | Daño: {_damage} | Salud: {_health} | Velocidad: {_speed} | Habilidad: {_skill} | Tiempo de enfriamiento: {_coldTime}"); 
         for(int i = 0; i < _box.Length; i++) 
         {
             Console.WriteLine($"\n Objeto {(i + 1)}: {(Objets)_box[i]}" );   //Objetos de la bolsa
@@ -286,4 +295,5 @@ class Tokens
     }
     
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
+
 }

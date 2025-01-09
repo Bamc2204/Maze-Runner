@@ -297,7 +297,7 @@ class Players
 
             case ConsoleKey.E: if(player1.InfoIndexFaction() == 1) player1.InfoGoodFaction(); else player1.InfoBadFaction(); Console.WriteLine("\n EL OBJETIVO DE LA FACCION: " + player1.InfoTarget()); break;
 
-            case ConsoleKey.Q: piece.Attack(piece, ref player2, piece.InfoDamage()); break;
+            case ConsoleKey.Q: Console.WriteLine("La ficha va a atacar"); piece.Attack(piece, ref player2, piece.InfoDamage()); break;
         }
     }
 
@@ -327,35 +327,37 @@ class Players
         }
     }
 
-    // 3ra Sobrecarga para leer el teclado
+    // 3ra Sobrecarga para leer el teclado***************************************************************** Puede q no se acceda como es debido a las propiedades de algunos objetos ***PROBAR Q FUNCIONA***
     public static void _readBoard(ConsoleKey key, Tokens token, ref Players player, int damage)
     {
         if(player.InfoIndexFaction() == 1)
         {  
             switch(key)
             {
-                case ConsoleKey.UpArrow: 
-                for(int i = 1; i < 4; i++)
+                case ConsoleKey.UpArrow: // Arriba
+                for(int i = 1; i < token.InfoDistAttack(); i++)
                 {
                     for(int j = 0; j < 4; j++)
                     {
-                        if(Maze._maze[(token._coordX + i), token._coordY] == player.InfoTokens(j).InfoId())
+                        if(Maze._maze[(token._coordX + i), token._coordY] == player.InfoTokens(j).InfoId() && Maze.CheckWall(1, 4, token))
                         {
                             player.InfoTokens(j).RemoveHealth(damage);
                             Console.WriteLine("Le has quitado " + damage + " puntos de vida a " + " " + player.InfoTokens(j).InfoName());
                             player.EndTurn();
                             break;
                         }
+                        
                     }
                 }
+                Console.WriteLine("No se infligió daño en ninguna ficha ya q habia una pared de por medio o directamente no habia nada a lo q se pudiera atacar");
                 break;
 
-                case ConsoleKey.DownArrow:
-                for(int i = 1; i < 4; i++)
+                case ConsoleKey.DownArrow: // Abajo
+                for(int i = 1; i < token.InfoDistAttack(); i++)
                 {
                     for(int j = 0; j < 4; j++)
                     {
-                        if(Maze._maze[(token._coordX - i), token._coordY] == player.InfoTokens(j).InfoId())
+                        if(Maze._maze[(token._coordX - i), token._coordY] == player.InfoTokens(j).InfoId() && Maze.CheckWall(2, 4, token))
                         {
                             player.InfoTokens(j).RemoveHealth(damage);
                             Console.WriteLine("Le has quitado " + damage + " puntos de vida a " + " " + player.InfoTokens(j).InfoName());
@@ -364,14 +366,15 @@ class Players
                         }
                     }
                 }
+                Console.WriteLine("No se infligió daño en ninguna ficha ya q habia una pared de por medio o directamente no habia nada a lo q se pudiera atacar");
                 break;
 
-                case ConsoleKey.LeftArrow:
-                for(int i = 1; i < 4; i++)
+                case ConsoleKey.LeftArrow: // Izquierda
+                for(int i = 1; i < token.InfoDistAttack(); i++)
                 {
                     for(int j = 0; j < 4; j++)
                     {
-                        if(Maze._maze[token._coordX , (token._coordY - 1)] == player.InfoTokens(j).InfoId())
+                        if(Maze._maze[token._coordX , (token._coordY - 1)] == player.InfoTokens(j).InfoId() && Maze.CheckWall(3, 4, token))
                         {
                             player.InfoTokens(j).RemoveHealth(damage);
                             Console.WriteLine("Le has quitado " + damage + " puntos de vida a " + " " + player.InfoTokens(j).InfoName());
@@ -380,14 +383,15 @@ class Players
                         }
                     }
                 }
+                Console.WriteLine("No se infligió daño en ninguna ficha ya q habia una pared de por medio o directamente no habia nada a lo q se pudiera atacar");
                 break;
 
-                case ConsoleKey.RightArrow:
-                for(int i = 1; i < 4; i++)
+                case ConsoleKey.RightArrow: // Derecha
+                for(int i = 1; i < token.InfoDistAttack(); i++)
                 {
                     for(int j = 0; j < 4; j++)
                     {
-                        if(Maze._maze[token._coordX , (token._coordY + 1)] == player.InfoTokens(j).InfoId())
+                        if(Maze._maze[token._coordX , (token._coordY + 1)] == player.InfoTokens(j).InfoId() && Maze.CheckWall(4, 4, token))
                         {
                             player.InfoTokens(j).RemoveHealth(damage);
                             Console.WriteLine("Le has quitado " + damage + " puntos de vida a " + " " + player.InfoTokens(j).InfoName());
@@ -396,6 +400,7 @@ class Players
                         }
                     }
                 }
+                Console.WriteLine("No se infligió daño en ninguna ficha ya q habia una pared de por medio o directamente no habia nada a lo q se pudiera atacar");
                 break;
             }
         }
@@ -409,7 +414,7 @@ class Players
                 {
                     for(int j = 0; j < 4; j++)
                     {
-                        if(Maze._maze[(token._coordX + i), token._coordY] == player.InfoTokens(j).InfoId())
+                        if(Maze._maze[(token._coordX + i), token._coordY] == player.InfoTokens(j).InfoId() && Maze.CheckWall(1, token.InfoDistAttack(), token))
                         {
                             player.InfoTokens(j).RemoveHealth(damage);
                             Console.WriteLine("Le has quitado " + damage + " puntos de vida a " + " " + player.InfoTokens(j).InfoName());
@@ -418,6 +423,7 @@ class Players
                         }
                     }
                 }
+                Console.WriteLine("No se infligió daño en ninguna ficha ya q habia una pared de por medio o directamente no habia nada a lo q se pudiera atacar");
                 break;
 
                 case ConsoleKey.DownArrow:
@@ -425,7 +431,7 @@ class Players
                 {
                     for(int j = 0; j < 4; j++)
                     {
-                        if(Maze._maze[(token._coordX - i), token._coordY] == player.InfoTokens(j).InfoId())
+                        if(Maze._maze[(token._coordX - i), token._coordY] == player.InfoTokens(j).InfoId() && Maze.CheckWall(2, token.InfoDistAttack(), token))
                         {
                             player.InfoTokens(j).RemoveHealth(damage);
                             Console.WriteLine("Le has quitado " + damage + " puntos de vida a " + " " + player.InfoTokens(j).InfoName());
@@ -434,6 +440,7 @@ class Players
                         }
                     }
                 }
+                Console.WriteLine("No se infligió daño en ninguna ficha ya q habia una pared de por medio o directamente no habia nada a lo q se pudiera atacar");
                 break;
 
                 case ConsoleKey.LeftArrow:
@@ -441,7 +448,7 @@ class Players
                 {
                     for(int j = 0; j < 4; j++)
                     {
-                        if(Maze._maze[token._coordX , (token._coordY - 1)] == player.InfoTokens(j).InfoId())
+                        if(Maze._maze[token._coordX , (token._coordY - 1)] == player.InfoTokens(j).InfoId() && Maze.CheckWall(3, token.InfoDistAttack(), token))
                         {
                             player.InfoTokens(j).RemoveHealth(damage);
                             Console.WriteLine("Le has quitado " + damage + " puntos de vida a " + " " + player.InfoTokens(j).InfoName());
@@ -450,6 +457,7 @@ class Players
                         }
                     }
                 }
+                Console.WriteLine("No se infligió daño en ninguna ficha ya q habia una pared de por medio o directamente no habia nada a lo q se pudiera atacar");
                 break;
 
                 case ConsoleKey.RightArrow:
@@ -457,7 +465,7 @@ class Players
                 {
                     for(int j = 0; j < 4; j++)
                     {
-                        if(Maze._maze[token._coordX , (token._coordY + 1)] == player.InfoTokens(j).InfoId())
+                        if(Maze._maze[token._coordX , (token._coordY + 1)] == player.InfoTokens(j).InfoId() && Maze.CheckWall(4, token.InfoDistAttack(), token))
                         {
                             player.InfoTokens(j).RemoveHealth(damage);
                             Console.WriteLine("Le has quitado " + damage + " puntos de vida a " + " " + player.InfoTokens(j).InfoName());
@@ -466,13 +474,14 @@ class Players
                         }
                     }
                 }
+                Console.WriteLine("No se infligió daño en ninguna ficha ya q habia una pared de por medio o directamente no habia nada a lo q se pudiera atacar");
                 break;
             }
         }
     }
 
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
-
+     
     #region Metodo para Verificar las trampas           ////////////////////////////////////////////////////////////////////////////////////////
     
     // Chequea si caiste en una trampa
