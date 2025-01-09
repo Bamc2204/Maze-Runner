@@ -109,9 +109,9 @@ class Players
     // Metodo para eliminar la ficha de la posicion i del array de fichas del jugador
     public void DeleteToken(ref Players player, int index)
     {
-        Tokens[] token = new Tokens [3];
+        Tokens[] token = new Tokens [player._tokens.Length - 1];
         
-        for(int i = 0; i < 3; i++)
+        for(int i = 0; i < token.Length; i++)
         {
             if(i < index)
                 token[i] = player._tokens[i];
@@ -183,6 +183,7 @@ class Players
 
             Console.WriteLine("\n Ya puede desplazarse");
 
+            // Se inicializan los turnos
             if(player1.InfoTurn() == false)
             {
                 player1.StartTurn();
@@ -194,13 +195,10 @@ class Players
                 player1.EndTurn();    
             }
 
-
-            Console.WriteLine(player1.InfoTurn());
-
-            Console.WriteLine(player2.InfoTurn());
-
+            // Se verifica q el objetivo no se haya cumplido aun para poder deplazarse
             if(!((player1._tokens[indexPiece]._target) && (player2._tokens[indexPiece]._target)))
             {
+                // Se verifica de quien es el turno
                 if(player1.InfoTurn())
                 {
                     _displacement(player1._tokens[indexPiece].InfoSpeed(), maze, player1._tokens[indexPiece], player1, player2, ref running, ref player1._tokens[indexPiece]._target);
@@ -210,7 +208,6 @@ class Players
                     _displacement(player2._tokens[indexPiece].InfoSpeed(), maze, player2._tokens[indexPiece], player2, player1, ref running, ref player2._tokens[indexPiece]._target);
                 }
             }
-            //Aqui se verifica si se logro el objetivo
             else
             {
                 running = false;

@@ -116,20 +116,48 @@ class Maze
         }
     }
     
-    //Para poder generar la mayor cantidad de caminos(no abra un camino al lado de otro abierto)
+    //  Verifica q se puedan establecer esos caminos
     private bool _validRoad(int x, int y)
     {
         for(int i = 0; i < 2; i++) 
         {
             for(int j = 0; j < 2; j++)
             {
-                //Verifica si se puede colocar trampas
-                if((_maze[x + i, y + j] == -5) || (_maze[x - i, y - j] == -5) || (_maze[x + i, y - j] == -5) || (_maze[x - i, y + j] == -5) 
-                || (!((_maze[(x + 1), y] == -1 && _maze[(x - 1), y] == -1) || (_maze[x, (y + 1)] == -1 && _maze[x, (y - 1)] == -1)) 
-                || ((_maze[(x + 1), y] == -1 && _maze[(x - 1), y] == -1) && (_maze[x, (y + 1)] == -1 && _maze[x, (y - 1)] == -1))))
+                // Verifica si se puede colocar trampas
+                bool trapNearby = 
+                    _maze[x + i, y + j] == -5 ||
+                    _maze[x - i, y - j] == -5 ||
+                    _maze[x + i, y - j] == -5 ||
+                    _maze[x - i, y + j] == -5;
+
+                bool surroundedByWalls =
+                    (_maze[x + 1, y] == -1 && _maze[x - 1, y] == -1) &&
+                    (_maze[x, y + 1] == -1 && _maze[x, y - 1] == -1);
+
+                bool invalidPlacement =
+                    !((_maze[x + 1, y] == -1 && _maze[x - 1, y] == -1) || 
+                    (_maze[x, y + 1] == -1 && _maze[x, y - 1] == -1));
+
+                if (trapNearby || invalidPlacement || surroundedByWalls)
+                {
                     return false;
+                }                             
             }    
         }
+        return true;
+    }
+
+    //  Metodo de verificacion para establecer esos caminos en el laberinto nuevo
+    private bool _validRoadForNewMaze(int x, int y)
+    {
+        bool firstLayer = _validRoad(x, y);
+
+        // Verifica si la posición actual (x, y) no contiene una ficha
+        bool positionOccupiedByToken = _maze[x, y] >= 1 && _maze[x, y] <= 8;
+
+        if( firstLayer || positionOccupiedByToken)
+            return false;
+
         return true;
     }
 
@@ -139,6 +167,12 @@ class Maze
         return x > 0 && y > 0 && x < _rows - 1 && y < _cols - 1 && _maze[x, y] == -1;
     }
     
+    // Genera el laberinto cada cierto tiempo de forma dinamica ******************************************************
+    public void GenerateNewMaze()
+    {
+        
+    }
+
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
 
     #region Metodos para colocar entradas-salidas del laberinto        //////////////////////////////////////////////////////////////////////////////////////////
@@ -206,7 +240,6 @@ class Maze
         }
     }
 
-
     // Verifica la posicion de la trampa
     private bool _validTrap(int x, int y)
     {
@@ -222,6 +255,20 @@ class Maze
                     return false;
             }    
         }
+        return true;
+    }
+    
+    // Verifica la posicion de la trampa en el nevo laberinto
+    private bool _validTrapForNewMaze(int x, int y)
+    {
+        bool firstLayer = _validTrap(x, y);
+        
+        // Verifica si la posición actual (x, y) no contiene una ficha
+        bool positionOccupiedByToken = _maze[x, y] >= 1 && _maze[x, y] <= 8;
+
+        if( firstLayer || positionOccupiedByToken)
+            return false;
+
         return true;
     }
     
@@ -282,31 +329,54 @@ class Maze
 
     #region Metodos para imprimir el laberinto en consola           //////////////////////////////////////////////////////////////////////////////////////////
 
-    // Metodo de imprimir el mapa *********************************** Cuando una ficha muere esta es eliminada del array de fichas del jugador lo q provoca q la cantidad de fichas no sea siempre la misma
-    public static void PrintMaze(Players player1 , Players player2)
+    // Metodo de imprimir el mapa
+    public static void PrintMaze(Players player1, Players player2)
     {
-        System.Console.WriteLine("Si entre");
-        Console.Clear(); //Limpia la consola
+        Console.Clear(); // Limpia la consola
+
         for (int x = 0; x < _rows; x++)
         {
             for (int y = 0; y < _cols; y++)
             {
-                // Paredes representadas por '██', caminos por espacios, trapas por 'TT' y jugadores por sus respectivos caracteres
-                Console.Write(_maze[x, y] == -1 ? "██" : _maze[x, y] == player1._tokens[0].InfoId() ? player1._tokens[0].InfoCharacter() 
-                : _maze[x, y] == player1._tokens[1].InfoId() ? player1._tokens[1].InfoCharacter() 
-                : _maze[x, y] == player1._tokens[2].InfoId() ? player1._tokens[2].InfoCharacter() 
-                : _maze[x, y] == player1._tokens[3].InfoId() ? player1._tokens[3].InfoCharacter()
-                : _maze[x, y] == player2._tokens[0].InfoId() ? player2._tokens[0].InfoCharacter() 
-                : _maze[x, y] == player2._tokens[1].InfoId() ? player2._tokens[1].InfoCharacter() 
-                : _maze[x, y] == player2._tokens[2].InfoId() ? player2._tokens[2].InfoCharacter() 
-                : _maze[x, y] == player2._tokens[3].InfoId() ? player2._tokens[3].InfoCharacter()  
-                : _maze[x, y] == -2 ? "T1" : _maze[x, y] == -3 ? "T2" : _maze[x, y] == -4 ? "T3" : "  ");
-                
+                // Comprueba si hay alguna ficha del Player1 en esta posición
+                bool printedToken = false;
+                for (int i = 0; i < player1._tokens.Length; i++)
+                {
+                    if (_maze[x, y] == player1._tokens[i].InfoId())
+                    {
+                        Console.Write(player1._tokens[i].InfoCharacter());
+                        printedToken = true;
+                        break;
+                    }
+                }
+
+                // Comprobamos si hay alguna ficha de Player2 en esta posición
+                if (!printedToken)
+                {
+                    for (int i = 0; i < player2._tokens.Length; i++)
+                    {
+                        if (_maze[x, y] == player2._tokens[i].InfoId())
+                        {
+                            Console.Write(player2._tokens[i].InfoCharacter());
+                            printedToken = true;
+                            break;
+                        }
+                    }
+                }
+
+                // Si no hay fichas en la posicion x,y del laberinto entonces imprimimos el contenido normal del laberinto
+                    Console.Write(
+                        _maze[x, y] == -1 ? "██" : // Pared
+                        _maze[x, y] == -2 ? "T1" : // Trampa tipo 1
+                        _maze[x, y] == -3 ? "T2" : // Trampa tipo 2
+                        _maze[x, y] == -4 ? "T3" : // Trampa tipo 3
+                        "  "                        // Camino vacío
+                    );
             }
             Console.WriteLine();
         }
     }
-    
+  
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
     
     #region Metodo de victoria          //////////////////////////////////////////////////////////////////////////////////////////
