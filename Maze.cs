@@ -192,7 +192,6 @@ class Maze
     // NOTA: SI ALGUNA FICHA PASA POR LA POSICION DE UNO DE ESTOS OBJETOS Y NO LO TOMA, ESTE OBJETO DESAPARECERA DEL MAPA AUTOMATICAMENTE
     private void _setObject()
     {
-        Tokens token = new Tokens();
         int cont = 0;
         for (int i = -11; i < -6; i++)
         {

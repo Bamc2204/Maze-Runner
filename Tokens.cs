@@ -60,9 +60,6 @@ class Tokens
         _coldTime = coldTime;
         _speed = speed;
     }
-    
-    // Sobrecarga de tokens para acceder a las propiedades de la clase
-    public Tokens(){}
 
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
 
