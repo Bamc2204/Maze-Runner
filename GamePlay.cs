@@ -4,99 +4,152 @@ class GamePlay
 {
     public static void Main(string[] args)
     {
+        // Limpiar consola y mostrar título del juego
         Console.Clear();
+        PrintGameTitle();
 
-        Console.WriteLine("BIENVENIDO AL JUEGO DEL LABERINTO, ESPERO QUE SE DIVIERTA");
+        // Mensaje de bienvenida
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.WriteLine("\n¡Bienvenido al juego del laberinto mágico! ¿Listo para esta aventura?");
+        Console.ResetColor();
 
-        Console.WriteLine("\n Cual es su nombre jugador 1?");
-
+        // Solicitar nombres de los jugadores
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.WriteLine("\nJugador 1, por favor ingresa tu nombre:");
         string name1 = Console.ReadLine()!;
+        Console.WriteLine($"\n¡Hola, {name1}!");
 
-        Console.WriteLine("\n Ya tengo tu nombre " + name1);
-
-        Console.WriteLine("\n Cual es su nombre jugador 2?");
-
+        Console.WriteLine("\nJugador 2, por favor ingresa tu nombre:");
         string name2 = Console.ReadLine()!;
+        Console.WriteLine($"\n¡Hola, {name2}!");
+        Console.ResetColor();
 
-        Console.WriteLine("\n Ya tengo tu nombre " + name2); 
+        // Pausa antes de continuar
+        Console.ForegroundColor = ConsoleColor.DarkGray;
+        Pause("\nPresiona cualquier tecla para continuar...");
+        Console.ResetColor();
 
-        Console.WriteLine("\n PRESIONE UNA TECLA PARA CONTINUAR");
+        // Historia del juego
+        Console.Clear();
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("********//////// HISTORIA ////////********");
+        Console.WriteLine("\nEn el misterioso laberinto del Torneo de los Tres Magos, los competidores deben usar magia, "
+            + "estrategia y valentía para superar trampas mortales y monstruos aterradores. "
+            + "Pero esta vez, no estás solo. ¡Compite contra otro jugador para alcanzar la gloria!");
+        Console.ResetColor();
 
-        ConsoleKey Next = Console.ReadKey().Key;
+        // Pausa antes de continuar
+        Console.ForegroundColor = ConsoleColor.DarkGray;
+        Pause("\nPresiona cualquier tecla para continuar...");
+        Console.ResetColor();
 
+        // Explicación inicial
+        Console.Clear();
+        Console.ForegroundColor = ConsoleColor.Blue;
+        Console.WriteLine("\nLAS FICHAS DISPONIBLES SON:");
+        Console.WriteLine("\nLos *MAGOS* escogidos por el Caliz de Fuego y los *MONSTRUOS* que rondan el laberinto esperando algo que puedan devorar.");
+        Console.WriteLine("\nEl ***1er JUGADOR*** seleccionará primero su facción, y el ***2do JUGADOR*** tomará la restante.");
+        Console.WriteLine("\n¡Pónganse de acuerdo antes de escoger!");
+        Console.ResetColor();
+
+        // Pausa antes de continuar
+        Console.ForegroundColor = ConsoleColor.DarkGray;
+        Pause("\nPresiona cualquier tecla para continuar...");
+        Console.ResetColor();
+
+        // Selección de facciones
         Console.Clear();
 
-        System.Console.WriteLine(" ********////////HISTORIA////////********");     // Lore del juego *********************************************************************************
+        Console.ForegroundColor = ConsoleColor.DarkCyan;
+        Console.WriteLine("\nJugador 1, presiona la ***FLECHA IZQUIERDA*** para ser un *MAGO* o la ***FLECHA DERECHA*** para ser un *MONSTRUO*.");
+        Console.ResetColor();
 
-        Console.WriteLine("\n PRESIONE UNA TECLA PARA CONTINUAR");
+        int indexPlayer1 = 0, indexPlayer2 = 0;
 
-        Next = Console.ReadKey().Key;
-
-        Console.Clear();
-
-        Console.WriteLine("\n LAS FICHAS DISPONIBLES SON:");
-
-        Console.WriteLine("\n Los *MAGOS* escogidos por Las 3 Grandes Escuelas de Magia y Los *MONSTRUOS* que divagan por laberinto esperando algo que puedan matar");
-
-        Console.WriteLine("\n El ***///1er JUGADOR///*** sera el que tenga la oportunidad de escoger primero, y el ***///2do JUGADOR///*** se quedará con la faccion restante");
-
-        Console.WriteLine("\n Espero que ambos jugadores se puedan poner de acuerdo entre ambos antes de escoger");
-
-        Console.WriteLine("\n PRESIONE UNA TECLA PARA CONTINUAR");
-
-        Next = Console.ReadKey().Key;
-
-        Console.Clear();
- 
-        Console.WriteLine("\n Presione la ***///FLECHA IZQUIERDA///*** si quiere ser *MAGO* o la ***///FLECHA DERECHA///*** si quiere ser *MONSTRUO*");    
-
-        int indexPlayer1 = 0;
-
-        int indexPlayer2 = 0;
-        
-        //Lee el teclado
-        while(true)
+        while (true)
         {
             ConsoleKey key = Console.ReadKey().Key;
-
-            if(key == ConsoleKey.LeftArrow || key == ConsoleKey.RightArrow)
+            if (key == ConsoleKey.LeftArrow || key == ConsoleKey.RightArrow)
             {
                 Players._readBoard(key, ref indexPlayer1);
                 break;
             }
-            Console.WriteLine("\n No a tocado la tecla correcta, tiene que tocar o bien flecha izquierda o bien flecha derecha, intentelo otra vez");
+            Console.WriteLine("\nPor favor, presiona solo FLECHA IZQUIERDA o FLECHA DERECHA. Inténtalo otra vez.");
         }
 
         Players player1 = new Players(name1, indexPlayer1);
-
         player1._ChooseFaction(ref indexPlayer1, ref indexPlayer2);
-        
-        Players player2 = new Players(name2, indexPlayer2);
 
+        Players player2 = new Players(name2, indexPlayer2);
         player2._ChooseFaction(ref indexPlayer2, ref indexPlayer1);
 
+        // Crear fichas para los jugadores
         player1.CreateTokensFaction(player1, player2);
-        
-        Console.WriteLine("\n PRECIONE UNA TECLA PARA COMENZAR A JUGAR");
 
-        Next = Console.ReadKey().Key;
+        // Pausa antes de continuar
+        Console.ForegroundColor = ConsoleColor.DarkGray;
+        Pause("\nPresiona cualquier tecla para comenzar el juego...");
+        Console.ResetColor();
 
         Console.Clear();
 
+        // Crear el laberinto y comenzar el juego
         Maze lab = new Maze(player1, player2);
-
         Maze.PrintMaze(player1, player2);
-        
+
         bool running = true;
-
-        if(player1.InfoFaction() == "MAGOS")
+        if (player1.InfoFaction() == "MAGOS")
+        {
             Players.PlayersTurn(lab, player1, player2, ref running);
-            
+        }
         else
+        {
             Players.PlayersTurn(lab, player2, player1, ref running);
+        }
 
+        // Finalizar el juego
+        Console.Clear();
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.WriteLine("\n*** GRACIAS POR JUGAR ***");
+        Console.WriteLine("Espero que hayas disfrutado de esta aventura mágica.");
+        Console.ResetColor();
+    }
 
-        Console.WriteLine("\n GGRACIAS POR JUGAR, ESPERO QUE SE HAYAN DIVERTIDO");
+    private static void PrintGameTitle()
+    {
+       // Array de colores disponibles
+        ConsoleColor[] colors = { ConsoleColor.Red, ConsoleColor.Green, ConsoleColor.Blue, ConsoleColor.Yellow, ConsoleColor.Cyan, ConsoleColor.Magenta };
+
+        foreach (var color in colors)
+        {
+            Console.ForegroundColor = color;  // Cambia el color del texto
+            Console.Clear(); // Limpiar consola antes de imprimir
+            Console.WriteLine(@" 
+            ╔═╗╦    ╔╦╗╔═╗╦═╗╔╗╔╔═╗╔═╗  ╔╦╗╔═╗╦    ╦  ╔═╗╔╗ ╔═╗╦═╗╦╔╗╔╔╦╗╔═╗  ╔╦╗╔═╗╔═╗╦╔═╗╔═╗
+            ║╣ ║     ║ ║ ║╠╦╝║║║║╣ ║ ║   ║║║╣ ║    ║  ╠═╣╠╩╗║╣ ╠╦╝║║║║ ║ ║ ║  ║║║╠═╣║ ╦║║  ║ ║
+            ╚═╝╩═╝   ╩ ╚═╝╩╚═╝╚╝╚═╝╚═╝  ═╩╝╚═╝╩═╝  ╩═╝╩ ╩╚═╝╚═╝╩╚═╩╝╚╝ ╩ ╚═╝  ╩ ╩╩ ╩╚═╝╩╚═╝╚═╝
+            ");
+            Console.ResetColor();
+            System.Threading.Thread.Sleep(500);  // Pequeño retraso para mostrar el cambio de color
+        }
+        Console.ForegroundColor = ConsoleColor.Magenta;
+        Console.WriteLine(@" 
+                            EL LABERINTO DE MAGOS Y MONSTRUOS 
+                 Inspirado en el mítico laberinto del Torneo del Caliz de Fuego
+        ");
+        Console.ResetColor();
+
+        // Pausa antes de continuar
+        Console.ForegroundColor = ConsoleColor.DarkGray;
+        Pause("\nPresiona cualquier tecla para continuar...");
+        Console.ResetColor();
+    }
+
+    private static void Pause(string message)
+    {
+        Console.WriteLine(message);
+        Console.ReadKey();
     }
 
 }
+

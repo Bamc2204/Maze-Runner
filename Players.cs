@@ -85,7 +85,7 @@ class Players
 
         player._tokens[3] = new Tokens("Viktor Krum", 4, "💪", 37, 0, "Velocidad", 4, 8, 4, 4, 6);
 
-        string infoTarget = "Obtener el Caliz de fuego y escapar del laberinto";
+        string infoTarget = "Obtener la COPA y escapar del laberinto";
 
         player.SetTarget(ref infoTarget);
     }
@@ -101,7 +101,7 @@ class Players
 
         player._tokens[3] = new Tokens("Blast-Ended Skrewts", 8, "🦂", 43, 43, "Velocidad", 4, 8, 60, 5, 300);
 
-        string infoTarget = "Asesinar a los 4 campeones y evitar que escapen del laberinto";
+        string infoTarget = "Asesinar a los 4 elegidos y evitar que escapen del laberinto";
 
         player.SetTarget(ref infoTarget);
     }
