@@ -61,17 +61,21 @@ class Tokens
         _speed = speed;
     }
     
+    // Sobrecarga de tokens para acceder a las propiedades de la clase
+    public Tokens(){}
+
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
 
     #region Metodos de la Bolsa           ////////////////////////////////////////////////////////////////////////////////////////
 
     // Objetos Bolsa
-    enum Objets
+    public enum Objects
     {
-        healthPotion = 3,
-        speedPotion = 4,
-        shield = 5,
-        pick = 6
+        healthPotion = -7,
+        speedPotion = -8,
+        shield = -9,
+        broom = -10,
+        pick = -11,
     }
 
     // Usar objetos bolsa*****************************************************************
@@ -84,19 +88,19 @@ class Tokens
 
         if(index >= 0 && index < 3 && _box[index] != 0)
         {
-            Objets objeto = (Objets)_box[index];//Objeto de la bolsa
+            Objects objeto = (Objects)_box[index];//Objeto de la bolsa
             switch (objeto)
             {
-                case Objets.healthPotion: AddHealth(50); Console.WriteLine($"\n {_name} usó una poción de salud. Salud actual: {_health}"); _box[index] = 0; 
+                case Objects.healthPotion: AddHealth(50); Console.WriteLine($"\n {_name} usó una poción de salud. Salud actual: {_health}"); _box[index] = 0; 
                     break;
                 
-                case Objets.speedPotion: AddSpeed(4); Console.WriteLine($"\n {_name} usó una poción de velocidad. Velocidad actual: {(_speed - 1)}"); 
+                case Objects.speedPotion: AddSpeed(4); Console.WriteLine($"\n {_name} usó una poción de velocidad. Velocidad actual: {(_speed - 1)}"); 
                     _box[index] = 0;    break;
                 
-                case Objets.shield: Console.Write($"\n {_name}, "); Shield(ref piece._activeShield); 
+                case Objects.shield: Console.Write($"\n {_name}, "); Shield(ref piece._activeShield); 
                     break;
                 
-                case Objets.pick: _beak(lab, ref newX, ref newY, ref piece, player1, player2); Console.WriteLine($"\n {_name} va a usar un pico.");
+                case Objects.pick: _beak(lab, ref newX, ref newY, ref piece, player1, player2); Console.WriteLine($"\n {_name} va a usar un pico.");
                     Console.WriteLine("Se ha roto el pico"); _box[index] = 0;break;
             }
              // Elimina el objeto de la bolsa
@@ -106,7 +110,7 @@ class Tokens
     }
 
     // Recoger recursos
-    private void _collect(Objets objet) 
+    private void _collect(Objects objet) 
     {
         for(int i = 0; i < _box.Length; i++) 
         {
@@ -292,7 +296,7 @@ class Tokens
         Console.WriteLine($"\n ***///OBJETOS///***"); 
         for(int i = 0; i < _box.Length; i++) 
         {
-            Console.WriteLine($"\n Objeto #{(i + 1)}: {(Objets)_box[i]}");  //Objetos de la bolsa
+            Console.WriteLine($"\n Objeto #{(i + 1)}: {(Objects)_box[i]}");  //Objetos de la bolsa
         }
     }
     

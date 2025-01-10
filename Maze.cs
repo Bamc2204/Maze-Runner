@@ -4,10 +4,12 @@ class Maze
 {
     #region Propiedades del Laberinto           ////////////////////////////////////////////////////////////////////////////////////////
 
-    private Random _random = new Random();  //Generador de numeros aleatorios
-    private static int _rows = 51, _cols = 51;       //Filas y columnas
+    private Random _random = new Random();                          //Generador de numeros aleatorios
+    private static int _rows = 51, _cols = 51;                      //Filas y columnas
     public static int[,] _maze = new int [_rows, _cols];            //Laberinto
-    private Players _player1, _player2; //Jugadores
+    private Players _player1, _player2;                             //Jugadores
+
+    private int _cupX, _cupY;                                       //Coordenadas de la copa
 
     // Direcciones posibles (arriba, derecha, abajo, izquierda)
     private static readonly int[] DirX = { 0, 1, 0, -1 };
@@ -33,15 +35,17 @@ class Maze
         //_cols = (cols % 2 == 0) ? cols + 1 : cols;
         //_maze = new int[_rows, _cols];
 
-        _initializeMaze();                  //Crea el laberinto pero vacio(con todo paredes);
+        _initializeMaze();                  // Crea el laberinto pero vacio(con todo paredes);
         _generateMaze(1, 1);                // Comenzar desde la celda (1,1) a construir el laberinto;
-        _setRoad();                         //Genera caminos alternativos
+        _setRoad();                         // Genera caminos alternativos
         //_setEntryExit();                    //Crear la entrada/salida del laberinto;
-        _setPlayer(player1);                //Genera los 1ros jugadores
-        _setPlayer(player2);                //Genera los 2dos jugadores
-        _setTraps(-2);                      //Genera las trampas
-        _setTraps(-3);                      //Genera las trampas
-        _setTraps(-4);                      //Genera las trampas
+        _setPlayer(player1);                // Genera los 1ros jugadores
+        _setPlayer(player2);                // Genera los 2dos jugadores
+        _setTraps(-2);                      // Genera las trampas
+        _setTraps(-3);                      // Genera las trampas
+        _setTraps(-4);                      // Genera las trampas
+        _setCup();                          // Genera la COPA
+        _setObject();
     }
 
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
@@ -97,25 +101,146 @@ class Maze
         return a;
     }
 
+    //Crea una Mascara Booleana para guardar las ocurrencias del laberinto
+    private bool[,] BooleanMask()
+    {
+        bool[,] booleanMask = new bool[_rows, _cols];
+        for (int i = 0; i < _rows; i++)
+        {
+            for (int j = 0; j < _cols; j++)
+            {
+                if(_maze[i, j] != 0 && _maze[i, j] != -1 && _maze[i, j] != -6)
+                    booleanMask[i, j] = true;
+                else
+                    booleanMask[i, j] = false;
+            }
+        }
+        return booleanMask;
+    }
+
+    // Genera el laberinto cada cierto tiempo de forma dinamica ******************************************************
+    public void GenerateNewMaze()
+    {
+
+
+
+        _setRoad();                         //  Generar Caminos Alternativos
+        _setCup();                          // Genera la COPA
+    }
+
+    #endregion          ////////////////////////////////////////////////////////////////////////////////////////
+
+    #region Metodo de Colocacion        //////////////////////////////////////////////////////////////////////////////////////////
+        
+    //Tipos de trampas
+    enum typeTrap
+    {
+        T1 = -2,
+        T2 = -3,
+        T3 = -4
+    }
+
+    //Establece las trampas
+    private void _setTraps( int typeTrap)
+    {
+        int cont = 0;
+        while(cont < 9)
+        {
+            //posiciones en el centro del mapa
+            int x = _random.Next(5, _rows - 5); 
+            int y = _random.Next(5, _cols - 5);
+            //Colocar trampas
+            if(_validTrap(x, y))
+            {
+                _maze[x, y] = typeTrap;
+                cont++;
+            }
+        }
+    }
+
     // Establece caminos alternativos
     private void _setRoad()
     {
         int cont = 0;
-        while(cont < 101)
+        while(cont < 50)
         {
             //posiciones en el centro del mapa
             int x = _random.Next(5, _rows - 5); 
             int y = _random.Next(5, _cols - 5);
 
             //Colocar trampas
-            if(_maze[x, y] == -1 && _validRoad(x, y))
+            if(_validRoad(x, y))
             {
                 _maze[x, y] = -5;
                 cont++;
             }
         }
     }
+
+    // Establece el jugado
+    private void _setPlayer(Players player)
+    {
+        for(int i = 0; i < player._tokens.Length; i++)
+        {
+            // Jugador (cerca de la esquina superior izquierda)
+            _maze[player._tokens[i]._coordX, player._tokens[i]._coordY] = player._tokens[i].InfoId(); 
+            
+        }
+    }
     
+    // Establece los objetos en el mapa   
+    // NOTA: SI ALGUNA FICHA PASA POR LA POSICION DE UNO DE ESTOS OBJETOS Y NO LO TOMA, ESTE OBJETO DESAPARECERA DEL MAPA AUTOMATICAMENTE
+    private void _setObject()
+    {
+        Tokens token = new Tokens();
+        int cont = 0;
+        for (int i = -11; i < -6; i++)
+        {
+            while (cont < 2)
+            {
+                int x = _random.Next(1,40);
+                int y = _random.Next(20,45);
+                if(_maze[x, y] == 0)
+                {
+                    _maze[x, y] = i;
+                    cont++;
+                }
+            }
+            cont = 0;
+        }
+    }
+
+    // Coloca la Copa en el Mapa
+    private void _setCup()
+    {
+        _cupX = _random.Next(8, 40);
+        _cupY = _random.Next(34, 40);
+        if(!_checkTokenInThisPosition(_cupX, _cupY))
+            _maze[_cupX,_cupY] = -6;
+    }
+   
+    // Establece la entrada y salida del laberinto**********************************************************
+    private void _setEntryExit()
+    {
+        // Entrada (cerca de la esquina superior izquierda)
+        _maze[1, 0] = 0;
+        _maze[7, 0] = 0;
+        _maze[13, 0] = 0;
+        _maze[19, 0] = 0; // Salida (cerca de la esquina inferior derecha)
+    }
+
+    #endregion          ////////////////////////////////////////////////////////////////////////////////////////
+
+    #region Metodo de Verificacion          //////////////////////////////////////////////////////////////////////////////////////////
+
+    // Verifica si es la salida del Laberinto
+    public bool IsExit(int x, int y, bool getTarget)
+    {
+        if(((x ==  1) || (x == 7) || (x == 13) || (x == 19)) && y == 0 && getTarget)
+            return true;
+        return false;
+    }
+     
     //  Verifica q se puedan establecer esos caminos
     private bool _validRoad(int x, int y)
     {
@@ -123,13 +248,6 @@ class Maze
         {
             for(int j = 0; j < 2; j++)
             {
-                // Verifica si se puede colocar trampas
-                bool trapNearby = 
-                    _maze[x + i, y + j] == -5 ||
-                    _maze[x - i, y - j] == -5 ||
-                    _maze[x + i, y - j] == -5 ||
-                    _maze[x - i, y + j] == -5;
-
                 bool surroundedByWalls =
                     (_maze[x + 1, y] == -1 && _maze[x - 1, y] == -1) &&
                     (_maze[x, y + 1] == -1 && _maze[x, y - 1] == -1);
@@ -138,7 +256,10 @@ class Maze
                     !((_maze[x + 1, y] == -1 && _maze[x - 1, y] == -1) || 
                     (_maze[x, y + 1] == -1 && _maze[x, y - 1] == -1));
 
-                if (trapNearby || invalidPlacement || surroundedByWalls)
+                bool isWall = _maze[x, y] == -1;
+
+
+                if (invalidPlacement || surroundedByWalls || !isWall)
                 {
                     return false;
                 }                             
@@ -166,115 +287,6 @@ class Maze
     {
         return x > 0 && y > 0 && x < _rows - 1 && y < _cols - 1 && _maze[x, y] == -1;
     }
-    
-    // Genera el laberinto cada cierto tiempo de forma dinamica ******************************************************
-    public void GenerateNewMaze()
-    {
-        
-    }
-
-    #endregion          ////////////////////////////////////////////////////////////////////////////////////////
-
-    #region Metodos para colocar entradas-salidas del laberinto        //////////////////////////////////////////////////////////////////////////////////////////
-   
-    // Establece la entrada y salida del laberinto**********************************************************
-    private void _setEntryExit()
-    {
-        // Entrada (cerca de la esquina superior izquierda)
-        _maze[1, 0] = 0;
-        _maze[7, 0] = 0;
-        _maze[13, 0] = 0;
-        _maze[19, 0] = 0; // Salida (cerca de la esquina inferior derecha)
-    }
-
-    //Informacion de si esta en la salida del Laberinto
-    public bool IsExit(int x, int y, bool getTarget)
-    {
-        if(((x ==  1) || (x == 7) || (x == 13) || (x == 19)) && y == 0 && getTarget)
-            return true;
-        return false;
-    }
-    
-    #endregion          ////////////////////////////////////////////////////////////////////////////////////////
-
-    #region Metodo para estaclecer jugador          //////////////////////////////////////////////////////////////////////////////////////////
-    
-    // Establece el jugado
-    private void _setPlayer(Players player)
-    {
-        for(int i = 0; i < player._tokens.Length; i++)
-        {
-            // Jugador (cerca de la esquina superior izquierda)
-            _maze[player._tokens[i]._coordX, player._tokens[i]._coordY] = player._tokens[i].InfoId(); 
-            
-        }
-    }
-    
-    #endregion          ////////////////////////////////////////////////////////////////////////////////////////
-
-    #region Metodos para generar las trampas            //////////////////////////////////////////////////////////////////////////////////////////
-    
-    //Tipos de trampas
-    enum KindTrap
-    {
-        T1 = -2,
-        T2 = -3,
-        T3 = -4
-    }
-
-    //Establece las trampas
-    private void _setTraps( int kindTrap)
-    {
-        int cont = 0;
-        while(cont < 9)
-        {
-            //posiciones en el centro del mapa
-            int x = _random.Next(5, _rows - 5); 
-            int y = _random.Next(5, _cols - 5);
-            //Colocar trampas
-            if(_validTrap(x, y))
-            {
-                _maze[x, y] = kindTrap;
-                cont++;
-            }
-        }
-    }
-
-    // Verifica la posicion de la trampa
-    private bool _validTrap(int x, int y)
-    {
-        for(int i = 0; i < 3; i++) 
-        {
-            for(int j = 0; j < 3; j++)
-            {
-                //Verifica si se puede colocar trampas
-                if(((_maze[x + i, y + j] == -2) || (_maze[x - i, y - j] == -2) || (_maze[x + i, y - j] == -2) || (_maze[x - i, y + j] == -2))
-                || ((_maze[x + i, y + j] == -3) || (_maze[x - i, y - j] == -3) || (_maze[x + i, y - j] == -3) || (_maze[x - i, y + j] == -3))
-                || ((_maze[x + i, y + j] == -4) || (_maze[x - i, y - j] == -4) || (_maze[x + i, y - j] == -4) || (_maze[x - i, y + j] == -4))
-                || (!((_maze[(x+1), y] == 0 && _maze[(x-1), y] == 0) || (_maze[x, (y+1)] == 0 && _maze[x, (y-1)] == 0))))
-                    return false;
-            }    
-        }
-        return true;
-    }
-    
-    // Verifica la posicion de la trampa en el nevo laberinto
-    private bool _validTrapForNewMaze(int x, int y)
-    {
-        bool firstLayer = _validTrap(x, y);
-        
-        // Verifica si la posición actual (x, y) no contiene una ficha
-        bool positionOccupiedByToken = _maze[x, y] >= 1 && _maze[x, y] <= 8;
-
-        if( firstLayer || positionOccupiedByToken)
-            return false;
-
-        return true;
-    }
-    
-    #endregion          ////////////////////////////////////////////////////////////////////////////////////////
-
-    #region Metodo verificador de pared             //////////////////////////////////////////////////////////////////////////////////////////
 
     // Metodo para verificar si hay pared, retorna false si hay alguna pared en las direccion introducida y true si no hay pared
     public static bool CheckWall(int direction, int totalCheckBox, Tokens token)
@@ -325,6 +337,56 @@ class Maze
         return true;
     }
 
+    // Verifica la posicion de la trampa
+    private bool _validTrap(int x, int y)
+    {
+        for(int i = 0; i < 3; i++) 
+        {
+            for(int j = 0; j < 3; j++)
+            {
+                // Verifica q las trampas no esten cerca
+                bool trapsAway =
+                (_maze[x + i, y + j] == -2) || (_maze[x - i, y - j] == -2) || (_maze[x + i, y - j] == -2) || (_maze[x - i, y + j] == -2) || 
+                (_maze[x + i, y + j] == -3) || (_maze[x - i, y - j] == -3) || (_maze[x + i, y - j] == -3) || (_maze[x - i, y + j] == -3) || 
+                (_maze[x + i, y + j] == -4) || (_maze[x - i, y - j] == -4) || (_maze[x + i, y - j] == -4) || (_maze[x - i, y + j] == -4);
+
+                // Verifica de q hayan paredes adyacense para colocar las trampas
+                bool adjacentRoads = !((_maze[(x+1), y] == 0 && _maze[(x-1), y] == 0) || (_maze[x, (y+1)] == 0 && _maze[x, (y-1)] == 0));
+
+                //Verifica si se puede colocar trampas
+                if(trapsAway || !adjacentRoads || _checkTokenInThisPosition(x, y))
+                    return false;
+            }    
+        }
+        return true;
+    }
+
+    // Verifica q en esa posicion haya una ficha o no
+    private bool _checkTokenInThisPosition(int x, int y)
+    {
+        for (int i = 1; i < 9; i++)
+        {
+            if(_maze[x, y] == i)
+                return true;
+        }
+        return false;
+    }
+    
+    // Verifica la posicion de la trampa en el nevo laberinto
+    private bool _validTrapForNewMaze(int x, int y)
+    {
+        bool firstLayer = _validTrap(x, y);
+        
+        // Verifica si la posición actual (x, y) no contiene una ficha
+        bool positionOccupiedByToken = _maze[x, y] >= 1 && _maze[x, y] <= 8;
+
+        if( firstLayer || positionOccupiedByToken)
+            return false;
+
+        return true;
+    }
+    
+
     #endregion              //////////////////////////////////////////////////////////////////////////////////////////
 
     #region Metodos para imprimir el laberinto en consola           //////////////////////////////////////////////////////////////////////////////////////////
@@ -373,6 +435,12 @@ class Maze
                         _maze[x, y] == -2 ? "☠️" : // Trampa tipo 1
                         _maze[x, y] == -3 ? "❄️" : // Trampa tipo 2
                         _maze[x, y] == -4 ? "💥" : // Trampa tipo 3
+                        _maze[x, y] == -6 ? "🏆" : // COPA
+                        _maze[x, y] == -7 ? "🧬" : // Posion de vida
+                        _maze[x, y] == -8 ? "🏃" : // Posion de velocidad
+                        _maze[x, y] == -9 ? "⛏️" : // Pico Magico
+                        _maze[x, y] == -10 ? "🧹" : // Escoba
+                        _maze[x, y] == -11 ? "🛡️" : // Escudo
                         "  "                        // Camino vacío
                     );
                 }
@@ -416,5 +484,22 @@ class Maze
     }
     
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
+
+/*      LEYENDA DE LABERINTO            //////////////////////////////////////////////////////////////////////////////////////////
+        -1 = PARED
+        -2 = TRAMPA 1
+        -3 = TRAMPA 2
+        -4 = TRAMPA 3
+        -5 = CAMINOS OCULTOS
+        -6 = COPA
+        -7 = Posion de vida 
+        -8 = Posion de velocidad
+        -9 = Pico
+        -10 = Escoba
+        -11 = Escudo
+        0 = CAMINO
+        1 - 4 = PERSONAJES DEL JUGADOR 1
+        5 - 8 = PERSONAJES DEL JUGADOR 2
+*/
 
 }

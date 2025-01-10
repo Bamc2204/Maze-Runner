@@ -13,6 +13,23 @@ class GamePlay
         Console.WriteLine("\n¡Bienvenido al juego del laberinto mágico! ¿Listo para esta aventura?");
         Console.ResetColor();
 
+        //  Modo de juego multijugador
+        MultiPlayer();
+    
+        // Finalizar el juego
+        Console.Clear();
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.WriteLine("G");
+        Console.WriteLine("Espero que hayas disfrutado de esta aventura mágica.");
+        Console.WriteLine("\n GRACIAS POR JUGAR \n");
+        Console.ResetColor();
+
+    }
+
+    //Multijugador
+    private static void MultiPlayer()
+    {
+        
         // Solicitar nombres de los jugadores
         Console.ForegroundColor = ConsoleColor.Cyan;
         Console.WriteLine("\nJugador 1, por favor ingresa tu nombre:");
@@ -107,14 +124,9 @@ class GamePlay
             Players.PlayersTurn(lab, player2, player1, ref running);
         }
 
-        // Finalizar el juego
-        Console.Clear();
-        Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.WriteLine("\n*** GRACIAS POR JUGAR ***");
-        Console.WriteLine("Espero que hayas disfrutado de esta aventura mágica.");
-        Console.ResetColor();
     }
 
+    // Crea el titulo de juego
     private static void PrintGameTitle()
     {
        // Array de colores disponibles
@@ -125,17 +137,17 @@ class GamePlay
             Console.ForegroundColor = color;  // Cambia el color del texto
             Console.Clear(); // Limpiar consola antes de imprimir
             Console.WriteLine(@" 
-            ╔═╗╦    ╔╦╗╔═╗╦═╗╔╗╔╔═╗╔═╗  ╔╦╗╔═╗╦    ╦  ╔═╗╔╗ ╔═╗╦═╗╦╔╗╔╔╦╗╔═╗  ╔╦╗╔═╗╔═╗╦╔═╗╔═╗
-            ║╣ ║     ║ ║ ║╠╦╝║║║║╣ ║ ║   ║║║╣ ║    ║  ╠═╣╠╩╗║╣ ╠╦╝║║║║ ║ ║ ║  ║║║╠═╣║ ╦║║  ║ ║
-            ╚═╝╩═╝   ╩ ╚═╝╩╚═╝╚╝╚═╝╚═╝  ═╩╝╚═╝╩═╝  ╩═╝╩ ╩╚═╝╚═╝╩╚═╩╝╚╝ ╩ ╚═╝  ╩ ╩╩ ╩╚═╝╩╚═╝╚═╝
+                ╔═╗╦    ╔╦╗╔═╗╦═╗╔╗╔╔═╗╔═╗  ╔╦╗╔═╗╦    ╦  ╔═╗╔╗ ╔═╗╦═╗╦╔╗╔╔╦╗╔═╗  ╔╦╗╔═╗╔═╗╦╔═╗╔═╗
+                ║╣ ║     ║ ║ ║╠╦╝║║║║╣ ║ ║   ║║║╣ ║    ║  ╠═╣╠╩╗║╣ ╠╦╝║║║║ ║ ║ ║  ║║║╠═╣║ ╦║║  ║ ║
+                ╚═╝╩═╝   ╩ ╚═╝╩╚═╝╚╝╚═╝╚═╝  ═╩╝╚═╝╩═╝  ╩═╝╩ ╩╚═╝╚═╝╩╚═╩╝╚╝ ╩ ╚═╝  ╩ ╩╩ ╩╚═╝╩╚═╝╚═╝
             ");
             Console.ResetColor();
             System.Threading.Thread.Sleep(500);  // Pequeño retraso para mostrar el cambio de color
         }
         Console.ForegroundColor = ConsoleColor.Magenta;
         Console.WriteLine(@" 
-                            EL LABERINTO DE MAGOS Y MONSTRUOS 
-                 Inspirado en el mítico laberinto del Torneo del Caliz de Fuego
+                                         EL LABERINTO DE MAGOS Y MONSTRUOS 
+          Inspirado en el mítico laberinto del Torneo del Caliz de Fuego de la famosa saga de HARRY POTTER
         ");
         Console.ResetColor();
 
@@ -145,7 +157,8 @@ class GamePlay
         Console.ResetColor();
     }
 
-    private static void Pause(string message)
+    // Hace las pausas necesarias en el juego
+    public static void Pause(string message)
     {
         Console.WriteLine(message);
         Console.ReadKey();
