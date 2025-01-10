@@ -4,6 +4,8 @@ class GamePlay
 {
     public static void Main(string[] args)
     {
+        Console.Clear();
+
         Console.WriteLine("BIENVENIDO AL JUEGO DEL LABERINTO, ESPERO QUE SE DIVIERTA");
 
         Console.WriteLine("\n Cual es su nombre jugador 1?");
@@ -24,7 +26,7 @@ class GamePlay
 
         Console.Clear();
 
-        System.Console.WriteLine(" ** Historia **");     // Lore del juego *********************************************************************************
+        System.Console.WriteLine(" ********////////HISTORIA////////********");     // Lore del juego *********************************************************************************
 
         Console.WriteLine("\n PRESIONE UNA TECLA PARA CONTINUAR");
 
@@ -32,7 +34,7 @@ class GamePlay
 
         Console.Clear();
 
-        Console.WriteLine("\n Las fichas disponibles son:");
+        Console.WriteLine("\n LAS FICHAS DISPONIBLES SON:");
 
         Console.WriteLine("\n Los *MAGOS* escogidos por Las 3 Grandes Escuelas de Magia y Los *MONSTRUOS* que divagan por laberinto esperando algo que puedan matar");
 
@@ -94,7 +96,7 @@ class GamePlay
             Players.PlayersTurn(lab, player2, player1, ref running);
 
 
-        Console.WriteLine("El juego ha terminado, gracias por jugar");
+        Console.WriteLine("\n GGRACIAS POR JUGAR, ESPERO QUE SE HAYAN DIVERTIDO");
     }
-}   
 
+}

@@ -17,7 +17,7 @@ class Maze
 
     #region Constructor         //////////////////////////////////////////////////////////////////////////////////////////
     
-    // Constructor de la clase Maze
+    // Constructor de la clase Maze ***** eliminar comentarios
     public Maze(Players player1, Players player2)
     {
         // Jugadores
@@ -36,7 +36,7 @@ class Maze
         _initializeMaze();                  //Crea el laberinto pero vacio(con todo paredes);
         _generateMaze(1, 1);                // Comenzar desde la celda (1,1) a construir el laberinto;
         _setRoad();                         //Genera caminos alternativos
-        _setEntryExit();                    //Crear la entrada/salida del laberinto;
+        //_setEntryExit();                    //Crear la entrada/salida del laberinto;
         _setPlayer(player1);                //Genera los 1ros jugadores
         _setPlayer(player2);                //Genera los 2dos jugadores
         _setTraps(-2);                      //Genera las trampas
@@ -101,7 +101,7 @@ class Maze
     private void _setRoad()
     {
         int cont = 0;
-        while(cont < 81)
+        while(cont < 101)
         {
             //posiciones en el centro del mapa
             int x = _random.Next(5, _rows - 5); 
@@ -226,7 +226,7 @@ class Maze
     private void _setTraps( int kindTrap)
     {
         int cont = 0;
-        while(cont < 6)
+        while(cont < 9)
         {
             //posiciones en el centro del mapa
             int x = _random.Next(5, _rows - 5); 
@@ -328,7 +328,7 @@ class Maze
     #endregion              //////////////////////////////////////////////////////////////////////////////////////////
 
     #region Metodos para imprimir el laberinto en consola           //////////////////////////////////////////////////////////////////////////////////////////
-
+    
     // Metodo de imprimir el mapa
     public static void PrintMaze(Players player1, Players player2)
     {
@@ -340,15 +340,16 @@ class Maze
             {
                 // Comprueba si hay alguna ficha del Player1 en esta posición
                 bool printedToken = false;
-                for (int i = 0; i < player1._tokens.Length; i++)
-                {
-                    if (_maze[x, y] == player1._tokens[i].InfoId())
+
+                    for (int i = 0; i < player1._tokens.Length; i++)
                     {
-                        Console.Write(player1._tokens[i].InfoCharacter());
-                        printedToken = true;
-                        break;
+                        if (_maze[x, y] == player1._tokens[i].InfoId())
+                        {
+                            Console.Write(player1._tokens[i].InfoCharacter());
+                            printedToken = true;
+                            break;
+                        }
                     }
-                }
 
                 // Comprobamos si hay alguna ficha de Player2 en esta posición
                 if (!printedToken)
@@ -364,19 +365,22 @@ class Maze
                     }
                 }
 
-                // Si no hay fichas en la posicion x,y del laberinto entonces imprimimos el contenido normal del laberinto
+                if (!printedToken)
+                {
+                    // Si no hay fichas en la posicion x,y del laberinto entonces imprimimos el contenido normal del laberinto
                     Console.Write(
-                        _maze[x, y] == -1 ? "██" : // Pared
-                        _maze[x, y] == -2 ? "T1" : // Trampa tipo 1
-                        _maze[x, y] == -3 ? "T2" : // Trampa tipo 2
-                        _maze[x, y] == -4 ? "T3" : // Trampa tipo 3
+                        _maze[x, y] == -1 ? "🌿" : // Pared
+                        _maze[x, y] == -2 ? "☠️" : // Trampa tipo 1
+                        _maze[x, y] == -3 ? "❄️" : // Trampa tipo 2
+                        _maze[x, y] == -4 ? "💥" : // Trampa tipo 3
                         "  "                        // Camino vacío
                     );
+                }
             }
             Console.WriteLine();
         }
     }
-  
+     
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
     
     #region Metodo de victoria          //////////////////////////////////////////////////////////////////////////////////////////
@@ -414,22 +418,3 @@ class Maze
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
 
 }
-
-    /*
-    // Muestra el laberinto en la consola
-    public void PrintMaze(Tokens[] token1, Tokens[] token2)
-    {
-        Console.Clear(); //Limpia la consola
-        for (int x = 0; x < _rows; x++)
-        {
-            for (int y = 0; y < _cols; y++)
-            {
-                // Paredes representadas por '██', caminos por espacios, trapas por 'TT' y jugadores por sus respectivos caracteres
-                Console.Write(_maze[x, y] == -1 ? "██" : _maze[x, y] == token1[0].InfoId() ? token1[0].InfoCharacter() 
-                : _maze[x, y] == token1[1].InfoId() ? token1[1].InfoCharacter() : _maze[x, y] == token1[2].InfoId() ? token1[2].InfoCharacter() 
-                : _maze[x, y] == token1[3].InfoId() ? token1[3].InfoCharacter() : _maze[x, y] == -2 ? "TT" : "  "); 
-            }
-            Console.WriteLine();
-        }
-    }
-    */

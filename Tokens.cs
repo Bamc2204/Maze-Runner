@@ -287,10 +287,12 @@ class Tokens
     public void DisplayStatus()
     {
         //Informacion del Nombre, Salud, Velocidad, Habilidad, Tiempo de Enfrimiento
-        Console.WriteLine($"\n Ficha: {_name} | Daño: {_damage} | Salud: {_health} | Velocidad: {_speed} | Habilidad: {_skill} | Tiempo de enfriamiento: {_coldTime}"); 
+        Console.WriteLine("\n ***///PROPIEDADES DE LA FICHA///***");
+        Console.WriteLine($"\n FICHA: {_name} | DAÑO: {_damage} | SALUD: {_health} | VELOCIDAD: {_speed} | HABILIDAD: {_skill} | TIEMPO DE ENFRIAMIENTO: {_coldTime}"); 
+        Console.WriteLine($"\n ***///OBJETOS///***"); 
         for(int i = 0; i < _box.Length; i++) 
         {
-            Console.WriteLine($"\n Objeto {(i + 1)}: {(Objets)_box[i]}" );   //Objetos de la bolsa
+            Console.WriteLine($"\n Objeto #{(i + 1)}: {(Objets)_box[i]}");  //Objetos de la bolsa
         }
     }
     
