@@ -8,8 +8,8 @@ class Maze
     private static int _rows = 51, _cols = 51;                      //Filas y columnas
     public static int[,] _maze = new int [_rows, _cols];            //Laberinto
     private Players _player1, _player2;                             //Jugadores
-
     private int _cupX, _cupY;                                       //Coordenadas de la copa
+    private int[] _exitX, _exitY;
 
     // Direcciones posibles (arriba, derecha, abajo, izquierda)
     private static readonly int[] DirX = { 0, 1, 0, -1 };
@@ -164,12 +164,13 @@ class Maze
     }
 
     // Genera el laberinto cada cierto tiempo de forma dinamica ******************************************************
-    public void GenerateNewMaze()
+    public void GenerateNewMaze(bool cup)
     {
         _initializeMaze(BooleanMask());     // Inicializa el laberinto nuevamente
         _generateMaze(1, 1, BooleanMask()); // Genera el Laberinto de forma dinamica
         _setRoad();                         // Generar Caminos Alternativos
         _setCup();                          // Genera la COPA
+        _setEntryExit(cup);
     }
 
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
@@ -263,13 +264,21 @@ class Maze
     }
    
     // Establece la entrada y salida del laberinto**********************************************************
-    private void _setEntryExit()
+    private void _setEntryExit(bool cup)
     {
-        // Entrada (cerca de la esquina superior izquierda)
-        _maze[1, 0] = 0;
-        _maze[7, 0] = 0;
-        _maze[13, 0] = 0;
-        _maze[19, 0] = 0; // Salida (cerca de la esquina inferior derecha)
+        if(cup)
+        {
+            int cont = 0;
+            _exitX = new int[4];
+            _exitY = new int[4];
+            while(cont < 4)
+            {
+                _exitX[cont] = _random.Next(1, 40);
+                _exitY[cont] = _random.Next(1, 20);
+                if(!_checkTokenInThisPosition(_exitX[cont], _exitY[cont]) && _validExit(_exitX[cont], _exitY[cont]))
+                    _maze[_exitX[cont], _exitY[cont]] = -12;
+            }
+        }
     }
 
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
@@ -279,11 +288,34 @@ class Maze
     // Verifica si es la salida del Laberinto
     public bool IsExit(int x, int y, bool getTarget)
     {
-        if(((x ==  1) || (x == 7) || (x == 13) || (x == 19)) && y == 0 && getTarget)
-            return true;
+        for(int i = 0; i < 4; i++)
+        {
+            if(_exitX[i] == x && _exitY[i] == y && getTarget)
+                return true;
+        }
         return false;
     }
      
+    private bool _validExit(int x, int y)
+    {
+        for(int i = 0; i < 3; i++) 
+        {
+            for(int j = 0; j < 3; j++)
+            {
+                // Verifica q las salidas no esten cerca
+                bool exitAway =
+                (_maze[x + i, y + j] == -12) || 
+                (_maze[x - i, y - j] == -12) || 
+                (_maze[x + i, y - j] == -12) || 
+                (_maze[x - i, y + j] == -12);
+
+                if(exitAway)
+                    return false;
+            }
+        }
+        return true;
+    }
+
     //  Verifica q se puedan establecer esos caminos
     private bool _validRoad(int x, int y)
     {
@@ -308,20 +340,6 @@ class Maze
                 }                             
             }    
         }
-        return true;
-    }
-
-    //  Metodo de verificacion para establecer esos caminos en el laberinto nuevo
-    private bool _validRoadForNewMaze(int x, int y)
-    {
-        bool firstLayer = _validRoad(x, y);
-
-        // Verifica si la posición actual (x, y) no contiene una ficha
-        bool positionOccupiedByToken = _maze[x, y] >= 1 && _maze[x, y] <= 8;
-
-        if( firstLayer || positionOccupiedByToken)
-            return false;
-
         return true;
     }
 
@@ -414,21 +432,15 @@ class Maze
         }
         return false;
     }
-    
-    // Verifica la posicion de la trampa en el nevo laberinto
-    private bool _validTrapForNewMaze(int x, int y)
+
+    // Verifica si tiene la copa
+    public bool CheckCup(Tokens token)
     {
-        bool firstLayer = _validTrap(x, y);
-        
-        // Verifica si la posición actual (x, y) no contiene una ficha
-        bool positionOccupiedByToken = _maze[x, y] >= 1 && _maze[x, y] <= 8;
-
-        if( firstLayer || positionOccupiedByToken)
-            return false;
-
-        return true;
+        for(int i = 0; i < 3; i++)
+            if(token.InfoBox(i) == -6)
+            return true;
+        return false;
     }
-    
 
     #endregion              //////////////////////////////////////////////////////////////////////////////////////////
 
@@ -481,9 +493,10 @@ class Maze
                         _maze[x, y] == -6 ? "🏆" : // COPA
                         _maze[x, y] == -7 ? "🧬" : // Posion de vida
                         _maze[x, y] == -8 ? "🏃" : // Posion de velocidad
-                        _maze[x, y] == -9 ? "⛏️" : // Pico Magico
+                        _maze[x, y] == -9 ? "✂️" : // Tijera Magica
                         _maze[x, y] == -10 ? "🧹" : // Escoba
                         _maze[x, y] == -11 ? "🛡️" : // Escudo
+                        _maze[x, y] == -12 ? "🚪" : // Salida
                         "  "                        // Camino vacío
                     );
                 }
@@ -496,12 +509,45 @@ class Maze
     
     #region Metodo de victoria          //////////////////////////////////////////////////////////////////////////////////////////
     
-    // Condicion de Victoria ******************
-    public bool Win(int x, int y, bool getTarget)
+    // Condicion de Victoria
+    public void Win(Players player1, Players player2,ref bool running)
     {
-        if(IsExit(x, y, getTarget))
-            return true;
-        return false;
+        if(player1.InfoFaction() == "MAGOS")
+        {
+            for (int i = 0; i < player1._tokens.Length; i++)
+            {
+                // Verificaa si los MAGOS llegaron a la salida con la COPA
+                if(IsExit(player1._tokens[i]._coordX, player1._tokens[i]._coordY, CheckCup(player1._tokens[i])))
+                {
+                    running = false;
+                    Console.WriteLine($"FELICIDADES {player1.InfoName()}, HAS GANADO EL JUEGO DEL LABERINTO");
+                }
+                //  Verifica si los MONSTRUOS mataron a todos los MAGOS
+                else if(player1._tokens.Length == 0)
+                {
+                    running = false;
+                    Console.WriteLine($"FELICIDADES {player2.InfoName()}, HAS GANADO EL JUEGO DEL LABERINTO");
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < player2._tokens.Length; i++)
+            {
+                // Verificaa si los MAGOS llegaron a la salida con la COPA
+                if(IsExit(player2._tokens[i]._coordX, player2._tokens[i]._coordY, CheckCup(player2._tokens[i])))
+                {
+                    running = false;
+                    Console.WriteLine($"FELICIDADES {player2.InfoName()}, HAS GANADO EL JUEGO DEL LABERINTO");
+                }
+                //  Verifica si los MONSTRUOS mataron a todos los MAGOS
+                else if(player2._tokens.Length == 0)
+                {
+                    running = false;
+                    Console.WriteLine($"FELICIDADES {player1.InfoName()}, HAS GANADO EL JUEGO DEL LABERINTO");
+                }
+            }
+        }
     }
     
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
@@ -537,7 +583,7 @@ class Maze
         -6 = COPA
         -7 = Posion de vida 
         -8 = Posion de velocidad
-        -9 = Pico
+        -9 = Tijera Magica
         -10 = Escoba
         -11 = Escudo
         0 = CAMINO

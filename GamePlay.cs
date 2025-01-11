@@ -160,7 +160,9 @@ class GamePlay
     // Hace las pausas necesarias en el juego
     public static void Pause(string message)
     {
+        Console.ForegroundColor = ConsoleColor.DarkGray;
         Console.WriteLine(message);
+        Console.ResetColor();
         Console.ReadKey();
     }
 

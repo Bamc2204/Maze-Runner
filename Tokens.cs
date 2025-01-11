@@ -68,6 +68,7 @@ class Tokens
     // Objetos Bolsa
     public enum Objects
     {
+        cup = -6,
         healthPotion = -7,
         speedPotion = -8,
         shield = -9,
@@ -97,8 +98,8 @@ class Tokens
                 case Objects.shield: Console.Write($"\n {_name}, "); Shield(ref piece._activeShield); 
                     break;
                 
-                case Objects.pick: _beak(lab, ref newX, ref newY, ref piece, player1, player2); Console.WriteLine($"\n {_name} va a usar un pico.");
-                    Console.WriteLine("Se ha roto el pico"); _box[index] = 0;break;
+                case Objects.pick: _magicScissors(lab, ref newX, ref newY, ref piece, player1, player2); Console.WriteLine($"\n {_name} va a usar una TIJERA MAGICA.");
+                    Console.WriteLine("Se ha roto LA TIJERA MAGICA"); _box[index] = 0;break;
             }
              // Elimina el objeto de la bolsa
         }
@@ -107,13 +108,41 @@ class Tokens
     }
 
     // Recoger recursos
-    private void _collect(Objects objet) 
+    public void _collect(Tokens token)
+    {
+        for (int i = -11; i < -5; i++)
+        {
+            bool canCollect = 
+            Maze._maze[token._coordX + 1, token._coordY + 1] == i ||
+            Maze._maze[token._coordX + 1, token._coordY - 1] == i ||
+            Maze._maze[token._coordX - 1, token._coordY + 1] == i ||
+            Maze._maze[token._coordX - 1, token._coordY - 1] == i;
+
+            if(canCollect)
+            {   
+                for(int j = 0; j < 3; j++)
+                {
+                    if(token.InfoBox(j) == 0)
+                    {
+                        _saveObjects(i);
+                        Console.WriteLine($"Has obtenido: {(Object)i}");
+                        return;
+                    }
+                }
+            }
+        }
+        Console.WriteLine("NO HABIA NINGUN OBJETO ALREDEDOR PARA COGER");
+        GamePlay.Pause("\n PRESIONE ALGUNA TECLA PARA CONTINUAR");
+    }
+
+    // Guardar recursos
+    private void _saveObjects(int Object) 
     {
         for(int i = 0; i < _box.Length; i++) 
         {
             if(_box[i] == 0)
             {
-                _box[i] = (int)objet;
+                _box[i] = Object;
                 break;
             }    
         }
@@ -177,8 +206,8 @@ class Tokens
         }
     }
 
-    // Metodo Pico
-    private void _beak(Maze lab, ref int newX, ref int newY, ref Tokens piece, Players player1, Players player2)  
+    // Metodo Tijera Magica
+    private void _magicScissors(Maze lab, ref int newX, ref int newY, ref Tokens piece, Players player1, Players player2)  
     {
         newX = piece._coordX;
         newY = piece._coordY;
@@ -282,6 +311,12 @@ class Tokens
     public int InfoSpeed()
     {
         return _speed;
+    }
+
+    // Informacion de la bolsa
+    public int InfoBox(int index)
+    {
+        return _box[index];
     }
 
     // Metodo para mostrar todo soble la ficha

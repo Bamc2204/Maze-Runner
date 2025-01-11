@@ -214,8 +214,9 @@ class Players
                     countTurns++;
                 }
 
-                if(countTurns % 8 == 0 && player2.InfoTurn())
-                    maze.GenerateNewMaze();
+                for(int i = 0; i < player1._tokens.Length; i++)
+                    if(countTurns % 8 == 0 && player2.InfoTurn())
+                        maze.GenerateNewMaze(maze.CheckCup(player1._tokens[i]));
             }
             else
             {
@@ -235,65 +236,67 @@ class Players
         int newX = piece1._coordX;
         int newY = piece1._coordY;
 
+        // Verifica si hay algun jugador en la proxima posicion
+        bool isPiece = 
+        Maze._maze[newX, newY] == 1 || Maze._maze[newX, newY] == 2 ||
+        Maze._maze[newX, newY] == 3 || Maze._maze[newX, newY] == 4 ||
+        Maze._maze[newX, newY] == 5 || Maze._maze[newX, newY] == 6 ||
+        Maze._maze[newX, newY] == 7 || Maze._maze[newX, newY] == 8;
+        
+        // Verifica si la copa esta en la proxima posicion;
+        bool isCup = Maze._maze[newX, newY] == -6;
 
+        // Verifica los pasos y si el juego aun corre
         while(steps != 0 && running)
-        {
-            // Si llegas al final del juego
-            if(maze.Win(piece1._coordX, piece1._coordY, getTarget))                     // Si llego al final del laberinto o no
+        {   
+            // Tecla q toca el jugador en el teclado            
+            ConsoleKey key = Console.ReadKey().Key;
+
+            if(key == ConsoleKey.Escape)                                            // Termina la simulacion
             {
-                Console.WriteLine("\n Felicidades, Completaste El Laberinto");                
                 running = false;
+                return;
             }
+
+            // Lee el teclado
+            _readBoard(key, maze, ref newX, ref newY, ref running, ref piece1, player1, player2);
+
+            // Si toca una tecla q no sea para moverse
+            if(key == ConsoleKey.I || key == ConsoleKey.E || key == ConsoleKey.Tab || !(key == ConsoleKey.UpArrow || key == ConsoleKey.DownArrow || key == ConsoleKey.LeftArrow || key == ConsoleKey.RightArrow || key == ConsoleKey.Q)) 
+                continue;
+
+            // Dentro de filas, columnas y si es un camino
+            if (newX >= 0 && newX < Maze._maze.GetLength(0) && newY >= 0 && newY < Maze._maze.GetLength(1) && 
+            Maze._maze[newX, newY] != -1 && !isPiece && !isCup)                    
+            {
+                //Verifica si hay trampa y en caso de q si aplica la funcion de la trampa
+                _checkTrap(maze, ref newX, ref newY, ref running, ref piece1, ref player1);
                 
+                // Actualiza el tablero
+                Maze._maze[piece1._coordX, piece1._coordY] = 0;                 // Vacía la posición actual
+                Maze._maze[newX, newY] = piece1.InfoId();                                     // Mueve la ficha
+                piece1._coordX = newX;                                          // Actualiza las coordenadas actuales
+                piece1._coordY = newY;
+                steps --;                                                       // Pasos q puede recorer cada ficha
+            }
+
             else
             {
-                // Tecla q toca el jugador en el teclado            
-                ConsoleKey key = Console.ReadKey().Key;
+                Console.Clear();
 
-                if(key == ConsoleKey.Escape)                                            // Termina la simulacion
-                {
-                    running = false;
-                    return;
-                }
-
-                // Lee el teclado
-                _readBoard(key, maze, ref newX, ref newY, ref running, ref piece1, player1, player2);
-
-                // Si toca una tecla q no sea para moverse
-                if(key == ConsoleKey.I || key == ConsoleKey.E || key == ConsoleKey.Tab || !(key == ConsoleKey.UpArrow || key == ConsoleKey.DownArrow || key == ConsoleKey.LeftArrow || key == ConsoleKey.RightArrow || key == ConsoleKey.Q)) 
-                    continue;
-
-                // Dentro de filas, columnas y si es un camino
-                if (newX >= 0 && newX < Maze._maze.GetLength(0) && newY >= 0 && newY < Maze._maze.GetLength(1) && 
-                Maze._maze[newX, newY] != -1 && Maze._maze[newX, newY] != 2)                    
-                {
-                    //Verifica si hay trampa y en caso de q si aplica la funcion de la trampa
-                    _checkTrap(maze, ref newX, ref newY, ref running, ref piece1);
+                Console.WriteLine("\n LOS PASOS NO SON VALIDOS, INTRODUZCA OTRA DIRECCION\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+                newX = piece1._coordX; newY = piece1._coordY;   
                     
-                    // Actualiza el tablero
-                    Maze._maze[piece1._coordX, piece1._coordY] = 0;                 // Vacía la posición actual
-                    Maze._maze[newX, newY] = piece1.InfoId();                                     // Mueve la ficha
-                    piece1._coordX = newX;                                          // Actualiza las coordenadas actuales
-                    piece1._coordY = newY;
-                    steps --;                                                       // Pasos q puede recorer cada ficha
-                }
-
-                else
-                {
-                    Console.Clear();
-
-                    Console.WriteLine("\n LOS PASOS NO SON VALIDOS, INTRODUZCA OTRA DIRECCION\n\n\n\n\n\n\n\n\n\n\n\n");
-                    newX = piece1._coordX; newY = piece1._coordY;   
-                    
-                    Console.WriteLine("\n PRESIONE UNA TECLA PARA CONTINUAR"); 
-                    key = Console.ReadKey().Key;                 
-                }
-
-                Maze.PrintMaze(player1, player2);                                    // Imprime el laberinto
+                GamePlay.Pause("\n PRESIONE UNA TECLA PARA CONTINUAR");            
             }
-        }  
-        Console.WriteLine("PRESIONE UNA TECLA PARA CAMBIAR TURNO");
-        ConsoleKey nextTurn = Console.ReadKey().Key;
+
+            Maze.PrintMaze(player1, player2);                                    // Imprime el laberinto
+
+            // Si llegas al final del juego
+            maze.Win(player1, player2, ref running);
+            
+        } 
+        GamePlay.Pause("\n PRESIONE UNA TECLA PARA CAMBIAR TURNO"); 
     }
     
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
@@ -321,6 +324,8 @@ class Players
             case ConsoleKey.E: Console.Clear(); if(player1.InfoIndexFaction() == 1) player1.InfoGoodFaction(); else player1.InfoBadFaction(); Console.WriteLine("\n EL OBJETIVO DE LA FACCION: " + player1.InfoTarget()); break;
 
             case ConsoleKey.Q: Console.WriteLine("LA FICHA VA A ATACAR"); piece.Attack(piece, ref player2, piece.InfoDamage()); break;
+
+            case ConsoleKey.G: Console.WriteLine("LA FICHA VA A INTENTAR COGER UN OBJETO"); piece._collect(piece); GamePlay.Pause("\n PRESIONE UNA TECLA PARA CONTINUAR"); break;
         }
     }
 
@@ -507,8 +512,8 @@ class Players
      
     #region Metodo para Verificar las trampas           ////////////////////////////////////////////////////////////////////////////////////////
     
-    // Chequea si caiste en una trampa ***********************************************************
-    public static void _checkTrap(Maze lab, ref int newX, ref int newY, ref bool running, ref Tokens piece)
+    // Chequea si caiste en una trampa
+    public static void _checkTrap(Maze lab, ref int newX, ref int newY, ref bool running, ref Tokens piece, ref Players player)
     {
         if(Maze._maze[newX, newY] == -2) //Verificacion de trapas
         {
@@ -518,18 +523,22 @@ class Players
             {   
                 running = false;
                 piece.SlowDown(piece.InfoSpeed());
-                Console.WriteLine("\n Has muerto");
+                Console.WriteLine($"\n {piece.InfoName()} ha muerto");
+                for(int i = 0; i < player._tokens.Length; i++)
+                {
+                    if(player._tokens[i] == piece)
+                        player.DeleteToken(ref player, i);
+                }
             }
         }
         else if(Maze._maze[newX, newY] == -3)
         {
-            if(piece.InfoSpeed() == 1)
+            if(piece.InfoSpeed() == 2)
             {
-                Console.WriteLine("\n Has caido muchas veces en trampas de velocidad, ya no puedes moverte");
                 return;
             }
-            piece.SlowDown(-1);
-            Console.WriteLine("\n Has caido en una trampa y has perdido 2 puntos de velocidad");
+            piece.SlowDown(-2);
+            Console.WriteLine("\n Has caido en una trampa de reduccion de velocidad y has perdido 2 puntos de velocidad");
         }
         else if(Maze._maze[newX, newY] == -4)
         {
