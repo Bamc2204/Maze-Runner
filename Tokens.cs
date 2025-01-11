@@ -5,8 +5,8 @@ class Tokens
     #region Propiedades de las fichas           ////////////////////////////////////////////////////////////////////////////////////////
     private string _name;                       // Nombre de ficha
     private int _id;                            // Identidad de la ficha
-    public int _coordX;                         // Coordenada X
-    public int _coordY;                         // Coordenada Y
+    public int CoordX;                         // Coordenada X
+    public int CoordY;                         // Coordenada Y
     private string _character;                  // Caracter de la ficha
     public int _health;                         // Salud
     private int _damage;                        // Daño
@@ -30,8 +30,8 @@ class Tokens
     {
         _name = name;
         _id = id;
-        _coordX = coordX;
-        _coordY = coordY;
+        CoordX = coordX;
+        CoordY = coordY;
         _character = character;
         _health = health;
         _damage = damage;
@@ -50,8 +50,8 @@ class Tokens
         Random random = new Random();
         _name = name;
         _id = id;
-        _coordX = coordX;
-        _coordY = coordY;
+        CoordX = coordX;
+        CoordY = coordY;
         _character = character;
         _health = health;
         _damage = damage;
@@ -77,7 +77,7 @@ class Tokens
     }
 
     // Usar objetos bolsa*****************************************************************
-    public void _useBoxObject(Maze lab, ref int newX, ref int newY, ref Tokens piece, Players player1, Players player2)
+    public void _useBoxObject( ref int newX, ref int newY, ref Tokens token, Players player1, Players player2)
     {
         //Tecla q toca el jugador en el teclado            
         ConsoleKeyInfo key = Console.ReadKey();
@@ -89,17 +89,25 @@ class Tokens
             Objects objeto = (Objects)_box[index];//Objeto de la bolsa
             switch (objeto)
             {
-                case Objects.healthPotion: AddHealth(50); Console.WriteLine($"\n {_name} usó una poción de salud. Salud actual: {_health}"); _box[index] = 0; 
+                // Posion de Vida
+                case Objects.healthPotion: AddHealth(50); Console.WriteLine($"\n {_name} usó una poción de salud. Salud actual: {_health}"); _deleteObject(index); 
                     break;
                 
-                case Objects.speedPotion: AddSpeed(4); Console.WriteLine($"\n {_name} usó una poción de velocidad. Velocidad actual: {(_speed - 1)}"); 
-                    _box[index] = 0;    break;
-                
-                case Objects.shield: Console.Write($"\n {_name}, "); Shield(ref piece._activeShield); 
+                // Posion de Velocidad
+                case Objects.speedPotion: AddSpeed(4); Console.WriteLine($"\n {_name} usó una poción de velocidad. Velocidad actual: {(_speed)}"); _deleteObject(index);    
                     break;
                 
-                case Objects.magicScissors: _magicScissors(lab, ref newX, ref newY, ref piece, player1, player2); Console.WriteLine($"\n {_name} va a usar una TIJERA MAGICA.");
-                    Console.WriteLine("Se ha roto LA TIJERA MAGICA"); _box[index] = 0;break;
+                // Escudo 
+                case Objects.shield: Console.Write($"\n {_name}, "); Shield(ref token._activeShield); if(token.InfoShield() <= -100) {_deleteObject(index); Console.WriteLine("Has perdido el escudo");} 
+                    break;
+                
+                // Tijera Magica
+                case Objects.magicScissors: _magicScissors( ref newX, ref newY, ref token, player1, player2); Console.WriteLine($"\n {_name} va a usar una TIJERA MAGICA.");  Console.WriteLine("Se ha roto LA TIJERA MAGICA"); _deleteObject(index); 
+                    break;
+
+                // Escoba
+                case Objects.broom: __broom(ref token, player1, player2); Console.WriteLine("HAS USADO LA ESCOBA"); _deleteObject(index);
+                    break;
             }
              // Elimina el objeto de la bolsa
         }
@@ -107,16 +115,20 @@ class Tokens
             System.Console.WriteLine("\n No hay nada en esa espacio de la bolsa");
     }
 
+    #endregion          ////////////////////////////////////////////////////////////////////////////////////////
+
+    #region Metodos de Habilidad           ////////////////////////////////////////////////////////////////////////////////////////
+    
     // Recoger recursos
     public void _collect(Tokens token)
     {
         for (int i = -11; i < -5; i++)
         {
             bool canCollect = 
-            Maze._maze[token._coordX + 1, token._coordY + 1] == i ||
-            Maze._maze[token._coordX + 1, token._coordY - 1] == i ||
-            Maze._maze[token._coordX - 1, token._coordY + 1] == i ||
-            Maze._maze[token._coordX - 1, token._coordY - 1] == i;
+            Maze._maze[token.CoordX + 1, token.CoordY] == i ||
+            Maze._maze[token.CoordX - 1, token.CoordY] == i ||
+            Maze._maze[token.CoordX , token.CoordY + 1] == i ||
+            Maze._maze[token.CoordX , token.CoordY - 1] == i;
 
             if(canCollect)
             {   
@@ -125,13 +137,14 @@ class Tokens
                     if(token.InfoBox(j) == 0)
                     {
                         _saveObjects(i);
-                        Console.WriteLine($"Has obtenido: {(Object)i}");
+                        Console.WriteLine($"\nHas obtenido: {(Object)i}");
+                        _deleteObject(token);
                         return;
                     }
                 }
             }
         }
-        Console.WriteLine("NO HABIA NINGUN OBJETO ALREDEDOR PARA COGER");
+        Console.WriteLine("\nNO SE PUDO OBTENER NADA, PUEDE QUE NO TIENES ESPACIO EN LA BOLSA");
         GamePlay.Pause("\n PRESIONE ALGUNA TECLA PARA CONTINUAR");
     }
 
@@ -148,10 +161,43 @@ class Tokens
         }
     }
 
-    #endregion          ////////////////////////////////////////////////////////////////////////////////////////
+    // Elimina el objeto obtenido de la Bolsa
+    private void _deleteObject(int index)
+    {
+        _box[index] = 0;
+    }
 
-    #region Metodos de Habilidad           ////////////////////////////////////////////////////////////////////////////////////////
-    
+    // Elimina el objeto obtenido del mapa
+    private void _deleteObject(Tokens token)
+    {
+         for (int i = -11; i < -5; i++)
+        {
+            if(Maze._maze[token.CoordX + 1, token.CoordY] == i)
+            {
+                Maze._maze[token.CoordX + 1, token.CoordY] = 0;
+                return;
+            } 
+            
+            if(Maze._maze[token.CoordX - 1, token.CoordY] == i)
+            {
+                Maze._maze[token.CoordX - 1, token.CoordY] = 0;
+                return;
+            } 
+
+            if(Maze._maze[token.CoordX, token.CoordY + 1] == i)
+            {
+                Maze._maze[token.CoordX, token.CoordY - 1] = 0;
+                return;
+            } 
+
+            if(Maze._maze[token.CoordX, token.CoordY - 1] == i)
+            {
+                Maze._maze[token.CoordX, token.CoordY - 1] = 0;
+                return;
+            } 
+        }
+    }
+
     // Metodo para agregar salud
     public void AddHealth(int add)
     {
@@ -192,7 +238,7 @@ class Tokens
         {
             Console.WriteLine(" El escudo se ha activado");
             _shield += 100;
-            _speed -= 3;
+            _speed -= 2;
             if(_shield < 0)
                 System.Console.WriteLine("\n El escudo ya no funciona");
             activeShield = true;
@@ -207,37 +253,79 @@ class Tokens
     }
 
     // Metodo Tijera Magica
-    private void _magicScissors(Maze lab, ref int newX, ref int newY, ref Tokens piece, Players player1, Players player2)  
+    private void _magicScissors( ref int newX, ref int newY, ref Tokens token, Players player1, Players player2)  
     {
-        newX = piece._coordX;
-        newY = piece._coordY;
+        newX = token.CoordX;
+        newY = token.CoordY;
         bool running = true;
         do                                                          //Minimetodo de Desplazamiento
         {
             //Tecla q toca el jugador en el teclado            
             ConsoleKey key = Console.ReadKey().Key;
-            Players._readBoard(key, lab, ref newX, ref newY, ref running, ref piece, player1, player2);
+            Players.ReadBoard(key, ref newX, ref newY, ref running, ref token, player1, player2);
 
             // Dentro de filas, columnas y si es un camino
             if (newX >= 0 && newX < Maze._maze.GetLength(0) && newY >= 0 && newY < Maze._maze.GetLength(1))                    
             {
                 // Actualiza el tablero
-                Maze._maze[piece._coordX, piece._coordY] = 0;        // Vacía la posición actual
-                Maze._maze[newX, newY] = 2;                          // Mueve la ficha
-                piece._coordX = newX;                               // Actualiza las coordenadas actuales
-                piece._coordY = newY;
+                Maze._maze[token.CoordX, token.CoordY] = 0;        // Vacía la posición actual
+                Maze._maze[newX, newY] = token.InfoId();                          // Mueve la ficha
+                token.CoordX = newX;                               // Actualiza las coordenadas actuales
+                token.CoordY = newY;
             }
 
             else
             {
                 System.Console.WriteLine("\n los pasos no son validos");
-                newX = piece._coordX; newY = piece._coordY;                    
+                newX = token.CoordX; newY = token.CoordY;                    
             }
 
             Maze.PrintMaze(player1,  player2);//Imprime el laberinto
         }while(false);
     }
     
+    private void __broom(ref Tokens token, Players player1, Players player2)
+    {
+        int newX = token.CoordX;
+        int newY = token.CoordY;
+
+        ConsoleKey key = Console.ReadKey().Key;
+
+        // Verifica q el jugador haya introducido una direccion
+        if(key != ConsoleKey.UpArrow && key != ConsoleKey.DownArrow && key != ConsoleKey.LeftArrow && key != ConsoleKey.RightArrow)
+        {
+            GamePlay.Pause("LA DIRECCION NO ES CORRECTA \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n PRESIONE UNA TECLA PARA CONTINUAR");
+            return;
+        }
+
+        Players.ReadBoard(key, ref newX, ref newY);
+
+        // Verifica los limites del mapa
+        if(newX <= 0 && newX > Maze._maze.GetLength(0) && newY <= 0 && newY > Maze._maze.GetLength(1))
+        {
+            GamePlay.Pause("VAS EN DIRECCION AL VACIO Q TE CAUSARA LA MUERTE (VAS FUERA DEL MAPA) \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n PRESIONE UNA TECLA PARA CONNTINUAR");
+            return;
+        }
+
+        if(_checkRoad(newX, newY))
+        {
+            Maze._maze[token.CoordX, token.CoordY] = 0;
+
+            token.CoordX = newX;
+            token.CoordY = newY;
+
+            Maze._maze[token.CoordX, token.CoordY] = token.InfoId();
+            Maze.PrintMaze(player1, player2);
+        }
+    }
+
+    private bool _checkRoad(int newX, int newY)
+    {
+        if(Maze._maze[newX,  newY] == 0)
+            return true;
+        return false;
+    }
+
     // Metodo para quitar fuerza
     public void RemoveDamage(int remove)
     {
@@ -260,7 +348,7 @@ class Tokens
             return;
         }
 
-        Players._readBoard(key, token, ref player, damage);
+        Players.ReadBoard(key, token, ref player, damage);
 
         for(int i = 0; i < 4; i++)
             Console.WriteLine("\n " + player._tokens[i].InfoHealth());
@@ -283,19 +371,19 @@ class Tokens
         return _name;
     }
     
-    // Informacion del caracter de la ficha
+    // Informacion del Caracter de la Ficha
     public string InfoCharacter()
     {
         return _character;
     }
 
-    // Informacion de la vida
+    // Informacion de la Vida
     public int InfoHealth()
     {
         return _health;
     }
 
-    // Informacion del daño
+    // Informacion del Daño
     public int InfoDamage()
     {
         return _damage;
@@ -307,13 +395,19 @@ class Tokens
         return _distAttack;
     }
 
-    // Informacion de la velocidad
+    // Informacion de la Velocidad
     public int InfoSpeed()
     {
         return _speed;
     }
 
-    // Informacion de la bolsa
+    // Informacion del Escudo
+    public int InfoShield()
+    {
+        return _shield;
+    }
+    
+    // Informacion de la Bolsa
     public int InfoBox(int index)
     {
         return _box[index];

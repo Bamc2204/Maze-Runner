@@ -2,6 +2,9 @@
 
 class GamePlay
 {
+    // Array de colores disponibles
+    public static ConsoleColor[] colors = { ConsoleColor.Red, ConsoleColor.Green, ConsoleColor.Blue, ConsoleColor.Yellow, ConsoleColor.Cyan, ConsoleColor.Magenta };
+    
     public static void Main(string[] args)
     {
         // Limpiar consola y mostrar título del juego
@@ -88,7 +91,7 @@ class GamePlay
             ConsoleKey key = Console.ReadKey().Key;
             if (key == ConsoleKey.LeftArrow || key == ConsoleKey.RightArrow)
             {
-                Players._readBoard(key, ref indexPlayer1);
+                Players.ReadBoard(key, ref indexPlayer1);
                 break;
             }
             Console.WriteLine("\nPor favor, presiona solo FLECHA IZQUIERDA o FLECHA DERECHA. Inténtalo otra vez.");
@@ -129,9 +132,6 @@ class GamePlay
     // Crea el titulo de juego
     private static void PrintGameTitle()
     {
-       // Array de colores disponibles
-        ConsoleColor[] colors = { ConsoleColor.Red, ConsoleColor.Green, ConsoleColor.Blue, ConsoleColor.Yellow, ConsoleColor.Cyan, ConsoleColor.Magenta };
-
         foreach (var color in colors)
         {
             Console.ForegroundColor = color;  // Cambia el color del texto
