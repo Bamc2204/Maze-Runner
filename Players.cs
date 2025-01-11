@@ -93,11 +93,11 @@ class Players
     // Metodo para crear las fichas malas********************************************************************************************************************
     private void CreateTokensBadPlayer(ref Players player)
     {
-        player._tokens[0] = new Tokens("Acromántula", 5, "🕷️", 7, 43, "Velocidad", 4, 3, 80, 1, 300);
+        player._tokens[0] = new Tokens("Acromántula", 5, "🕷️", 7, 43, "Velocidad", 4, 6, 80, 1, 300);
 
         player._tokens[1] = new Tokens("Esfinge", 6, "🦁", 19, 43, "Velocidad", 4, 4, 90, 1, 300);
 
-        player._tokens[2] = new Tokens("Boggart", 7, "👻", 31, 43, "Velocidad", 4, 8, 50, 3, 300);
+        player._tokens[2] = new Tokens("Boggart", 7, "👻", 31, 43, "Velocidad", 4, 4, 50, 3, 300);
 
         player._tokens[3] = new Tokens("Blast-Ended Skrewts", 8, "🦂", 43, 43, "Velocidad", 4, 8, 60, 5, 300);
 
@@ -162,6 +162,8 @@ class Players
     {
         int indexPiece = 0;
 
+        int countTurns = 0;
+
         Console.WriteLine("LA FACCION DE LOS MAGOS COMIENZA 1RO");
 
         while(running)
@@ -209,7 +211,11 @@ class Players
                 else if(player2.InfoTurn())
                 {
                     _displacement(player2._tokens[indexPiece].InfoSpeed(), maze, player2._tokens[indexPiece], player2, player1, ref running, ref player2._tokens[indexPiece]._target);
+                    countTurns++;
                 }
+
+                if(countTurns % 8 == 0 && player2.InfoTurn())
+                    maze.GenerateNewMaze();
             }
             else
             {

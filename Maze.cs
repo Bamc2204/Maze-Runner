@@ -52,7 +52,7 @@ class Maze
 
     #region Metodos de Generacion del Laberinto         ////////////////////////////////////////////////////////////////////////////////////////
    
-    // Inicializa el laberinto con paredes (1) por defecto
+    // Inicializa el laberinto con paredes (-1) por defecto
     private void _initializeMaze()
     {
         for (int x = 0; x < _rows; x++)
@@ -60,6 +60,20 @@ class Maze
             for (int y = 0; y < _cols; y++)
             {
                 _maze[x, y] = -1; // Coloca paredes por defecto
+            }
+        }
+    }
+
+    // Sobrecarga del Metodo Inicializar el laberinto para la generacion dinamica del mismo
+    // Inicializa el laberinto con paredes (-1) por defecto, excepto donde hay piezas
+    private void _initializeMaze(bool[,] occupiedPositions)
+    {
+        for (int x = 0; x < _rows; x++)
+        {
+            for (int y = 0; y < _cols; y++)
+            {
+                // Si la posición está ocupada por una pieza, no la modificamos
+                _maze[x, y] = occupiedPositions[x, y] ? _maze[x, y] : -1;
             }
         }
     }
@@ -89,6 +103,37 @@ class Maze
         }
     }
  
+    // Sobrecarga del metodo de generacion del laberinto pero de forma dinamica
+    // Genera el laberinto utilizando el algoritmo de backtracking
+    private void _generateMaze(int x, int y, bool[,] occupiedPositions)
+    {
+        // Si la celda actual está ocupada por una pieza, no la modificamos
+        if (occupiedPositions[x, y]) return;
+
+        _maze[x, y] = 0; // Marca la celda actual como un camino vacío
+
+        // Lista de direcciones aleatorias para explorar
+        int[] addresses = { 0, 1, 2, 3 };
+        addresses = _mess(addresses); // Aleatoriza las direcciones
+
+        foreach (int address in addresses)
+        {
+            // Saltamos dos celdas en la dirección
+            int nx = x + DirX[address] * 2;
+            int ny = y + DirY[address] * 2;
+
+            // Si la nueva celda es válida (dentro de los límites y no ha sido recorrida)
+            if (_isValid(nx, ny) && !occupiedPositions[nx, ny])
+            {
+                // Rompemos el muro entre la celda actual y la nueva celda
+                _maze[x + DirX[address], y + DirY[address]] = 0;
+
+                // Llamamos recursivamente para continuar el recorrido
+                _generateMaze(nx, ny, occupiedPositions);
+            }
+        }
+    }                                                                                                           
+
     //Desordenar Array
     private int[] _mess(int[] a)
     {
@@ -121,10 +166,9 @@ class Maze
     // Genera el laberinto cada cierto tiempo de forma dinamica ******************************************************
     public void GenerateNewMaze()
     {
-
-
-
-        _setRoad();                         //  Generar Caminos Alternativos
+        _initializeMaze(BooleanMask());     // Inicializa el laberinto nuevamente
+        _generateMaze(1, 1, BooleanMask()); // Genera el Laberinto de forma dinamica
+        _setRoad();                         // Generar Caminos Alternativos
         _setCup();                          // Genera la COPA
     }
 
@@ -484,7 +528,7 @@ class Maze
     
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
 
-/*      LEYENDA DE LABERINTO            //////////////////////////////////////////////////////////////////////////////////////////
+    /*      LEYENDA DE LABERINTO            //////////////////////////////////////////////////////////////////////////////////////////
         -1 = PARED
         -2 = TRAMPA 1
         -3 = TRAMPA 2
