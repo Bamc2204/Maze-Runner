@@ -71,9 +71,9 @@ class Tokens
         cup = -6,
         healthPotion = -7,
         speedPotion = -8,
-        shield = -9,
+        magicScissors = -9,
         broom = -10,
-        pick = -11,
+        shield = -11,
     }
 
     // Usar objetos bolsa*****************************************************************
@@ -98,7 +98,7 @@ class Tokens
                 case Objects.shield: Console.Write($"\n {_name}, "); Shield(ref piece._activeShield); 
                     break;
                 
-                case Objects.pick: _magicScissors(lab, ref newX, ref newY, ref piece, player1, player2); Console.WriteLine($"\n {_name} va a usar una TIJERA MAGICA.");
+                case Objects.magicScissors: _magicScissors(lab, ref newX, ref newY, ref piece, player1, player2); Console.WriteLine($"\n {_name} va a usar una TIJERA MAGICA.");
                     Console.WriteLine("Se ha roto LA TIJERA MAGICA"); _box[index] = 0;break;
             }
              // Elimina el objeto de la bolsa
