@@ -9,7 +9,6 @@ class GamePlay
     // Booleano para parar la musica cuando se termine el proyecto
     private static bool musicRunning = true;
 
-
     public static void Main(string[] args)
     {
         // Ruta de las canciones (asegúrate de que los archivos existan)
@@ -105,10 +104,32 @@ class GamePlay
         // Historia del juego
         Console.Clear();
         Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine("********//////// HISTORIA ////////********");
-        Console.WriteLine("\nEn el misterioso laberinto del Torneo de los Tres Magos, los competidores deben usar magia, "
-            + "estrategia y valentía para superar trampas mortales y monstruos aterradores. "
-            + "Pero esta vez, no estás solo. ¡Compite contra otro jugador para alcanzar la gloria!");
+        Console.WriteLine("          ********//////// HISTORIA ////////********");
+        string History = "\nAlbus Dumbledore anuncia, durante el banquete de bienvenida en "
+            + "\nHogwarts, que la escuela será la sede del Torneo de los Tres "
+            + "\nMagos, una competencia interescolar entre Hogwarts, la Academia "
+            + "\nBeauxbatons y el Instituto Durmstrang. Un estudiante de cada una "
+            + "\nde tres escuelas de magia sería elegido por el Cáliz de fuego para "
+            + "\ncompetir en el torneo. Los campeones que elige el Cáliz son Fleur "
+            + "\nDelacour de Beauxbatons, Viktor Krum de Durmstrang y Cedrics "
+            + "\nDiggory de Hogwarts. Misteriosamente, Harry Potter también es "
+            + "\nelegido, pese a que no había ingresado su nombre en el Cáliz del "
+            + "\nfuego. Ahora son 4 los magos que deben enfrentarse a los desafíos "
+            + "\ndel Torneo. "
+            + "\nLa tercera y última prueba, en la que está basada este juego, "
+            + "\nconsiste en un laberinto lleno de obstáculos mágicos diseñados "
+            + "\npara confundir incluso a los magos más astutos, y como si no fuera  "
+            + "\nsuficiente lo habitan monstruos como acromántulas sedientas de "
+            + "\ncarne humana; boggarts que se alimentan del miedo; esfinges que "
+            + "\ndesafían la mente con enigmas mortales y otras criaturas que "
+            + "\nobstaculizan el camino a la legendaria Copa que se haya en el "
+            + "\ncorazón del laberinto. La Copa otorga, a quien la alcance, 1000 "
+            + "\ngaleones en concepto de premio. "
+            + "\nEl jugador puede elegir entre ser bestia, y evitar de forma "
+            + "\nsanguinaria que cualquiera de los magos se convierta en el "
+            + "\nganador, o mago, y hacer uso de sus conocimientos magícos para "
+            + "\nalcanzar la Copa y escapar triunfante. "; 
+        PrintTextSlowly(History);
         Console.ResetColor();
 
         // Pausa antes de continuar
@@ -182,6 +203,16 @@ class GamePlay
 
     }
 
+    // Imrpime el texto letra por letra despacio
+    public static void PrintTextSlowly(string text)
+    {
+        foreach (char c in text)
+        {
+            Console.Write(c);
+            Thread.Sleep(50); // Controla la velocidad de impresión
+        }
+    }
+
     // Crea el titulo de juego
     private static void PrintGameTitle()
     {
@@ -195,7 +226,7 @@ class GamePlay
                 ╚═╝╩═╝   ╩ ╚═╝╩╚═╝╚╝╚═╝╚═╝  ═╩╝╚═╝╩═╝  ╩═╝╩ ╩╚═╝╚═╝╩╚═╩╝╚╝ ╩ ╚═╝  ╩ ╩╩ ╩╚═╝╩╚═╝╚═╝
             ");
             Console.ResetColor();
-            System.Threading.Thread.Sleep(3500);  // Pequeño retraso para mostrar el cambio de color
+            Thread.Sleep(3500);  // Pequeño retraso para mostrar el cambio de color
         }
         Console.ForegroundColor = ConsoleColor.Magenta;
         Console.WriteLine(@" 
