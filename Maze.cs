@@ -6,10 +6,10 @@ class Maze
 
     private Random _random = new Random();                          // Generador de numeros aleatorios
     private static int _rows = 51, _cols = 51;                      // Filas y columnas
-    public static int[,] _maze = new int [_rows, _cols];            // Laberinto
+    public static int[,] GeneralMaze = new int [_rows, _cols];            // Laberinto
     private Players _player1, _player2;                             // Jugadores
     private int _cupX, _cupY;                                       // Coordenadas de la copa
-    public static bool _generatedDoors = false;
+    private static bool _generatedDoors = false;
 
     // Direcciones posibles (arriba, derecha, abajo, izquierda)
     private static readonly int[] DirX = { 0, 1, 0, -1 };
@@ -50,7 +50,7 @@ class Maze
         {
             for (int y = 0; y < _cols; y++)
             {
-                _maze[x, y] = -1; // Coloca paredes por defecto
+                GeneralMaze[x, y] = -1; // Coloca paredes por defecto
             }
         }
     }
@@ -64,7 +64,7 @@ class Maze
             for (int y = 0; y < _cols; y++)
             {
                 // Si la posición está ocupada por una pieza, no la modificamos
-                _maze[x, y] = occupiedPositions[x, y] ? _maze[x, y] : -1;
+                GeneralMaze[x, y] = occupiedPositions[x, y] ? GeneralMaze[x, y] : -1;
             }
         }
     }
@@ -72,7 +72,7 @@ class Maze
     // Genera el laberinto utilizando el algoritmo de backtracking
     private void _generateMaze(int x, int y)
     {
-        _maze[x, y] = 0; // Marca la celda actual como un camino vacío
+        GeneralMaze[x, y] = 0; // Marca la celda actual como un camino vacío
         // Lista de direcciones aleatorias para explorar
         int[] addresses = {0, 1, 2, 3};
         addresses = _mess(addresses); // Aleatoriza las direcciones{abajo, derecha, arriba, izquierda}
@@ -87,7 +87,7 @@ class Maze
             if (_isValid(nx, ny))
             {
                 // Rompemos el muro entre la celda actual y la nueva celda
-                _maze[x + DirX[address], y + DirY[address]] = 0;
+                GeneralMaze[x + DirX[address], y + DirY[address]] = 0;
                 // Llamamos recursivamente para continuar el recorrido
                 _generateMaze(nx, ny);
             }
@@ -101,7 +101,7 @@ class Maze
         // Si la celda actual está ocupada por una pieza, no la modificamos
         if (occupiedPositions[x, y]) return;
 
-        _maze[x, y] = 0; // Marca la celda actual como un camino vacío
+        GeneralMaze[x, y] = 0; // Marca la celda actual como un camino vacío
 
         // Lista de direcciones aleatorias para explorar
         int[] addresses = { 0, 1, 2, 3 };
@@ -117,7 +117,7 @@ class Maze
             if (_isValid(nx, ny) && !occupiedPositions[nx, ny])
             {
                 // Rompemos el muro entre la celda actual y la nueva celda
-                _maze[x + DirX[address], y + DirY[address]] = 0;
+                GeneralMaze[x + DirX[address], y + DirY[address]] = 0;
 
                 // Llamamos recursivamente para continuar el recorrido
                 _generateMaze(nx, ny, occupiedPositions);
@@ -138,14 +138,14 @@ class Maze
     }
 
     //Crea una Mascara Booleana para guardar las ocurrencias del laberinto
-    private bool[,] BooleanMask()
+    private bool[,] _booleanMask()
     {
         bool[,] booleanMask = new bool[_rows, _cols];
         for (int i = 0; i < _rows; i++)
         {
             for (int j = 0; j < _cols; j++)
             {
-                if(_maze[i, j] != 0 && _maze[i, j] != -1 && _maze[i, j] != -6)
+                if(GeneralMaze[i, j] != 0 && GeneralMaze[i, j] != -1 && GeneralMaze[i, j] != -6)
                     booleanMask[i, j] = true;
                 else
                     booleanMask[i, j] = false;
@@ -155,10 +155,10 @@ class Maze
     }
 
     // Genera el laberinto cada cierto tiempo de forma dinamica ******************************************************
-    public void GenerateNewMaze(bool cup)
+    public void GenerateNewMaze()
     {
-        _initializeMaze(BooleanMask());     // Inicializa el laberinto nuevamente
-        _generateMaze(1, 1, BooleanMask()); // Genera el Laberinto de forma dinamica
+        _initializeMaze(_booleanMask());     // Inicializa el laberinto nuevamente
+        _generateMaze(1, 1, _booleanMask()); // Genera el Laberinto de forma dinamica
         _setRoad();                         // Generar Caminos Alternativos
         _setCup();                          // Genera la COPA    
         _setExit();                    // Genera las Salidas
@@ -188,7 +188,7 @@ class Maze
             //Colocar trampas
             if(_validTrap(x, y))
             {
-                _maze[x, y] = typeTrap;
+                GeneralMaze[x, y] = typeTrap;
                 cont++;
             }
         }
@@ -198,16 +198,16 @@ class Maze
     private void _setRoad()
     {
         int cont = 0;
-        while(cont < 50)
+        while(cont < 80)
         {
             //posiciones en el centro del mapa
-            int x = _random.Next(5, _rows - 5); 
-            int y = _random.Next(5, _cols - 5);
+            int x = _random.Next(3, _rows - 3); 
+            int y = _random.Next(3, _cols - 3);
 
             //Colocar trampas
             if(_validRoad(x, y))
             {
-                _maze[x, y] = -5;
+                GeneralMaze[x, y] = -5;
                 cont++;
             }
         }
@@ -216,10 +216,10 @@ class Maze
     // Establece el jugado
     private void _setPlayer(Players player)
     {
-        for(int i = 0; i < player._tokens.Length; i++)
+        for(int i = 0; i < player.Tokens.Length; i++)
         {
             // Jugador (cerca de la esquina superior izquierda)
-            _maze[player._tokens[i].CoordX, player._tokens[i].CoordY] = player._tokens[i].InfoId(); 
+            GeneralMaze[player.Tokens[i].CoordX, player.Tokens[i].CoordY] = player.Tokens[i].InfoId(); 
             
         }
     }
@@ -235,9 +235,9 @@ class Maze
             {
                 int x = _random.Next(1,40);
                 int y = _random.Next(20,45);
-                if(_maze[x, y] == 0)
+                if(GeneralMaze[x, y] == 0)
                 {
-                    _maze[x, y] = i;
+                    GeneralMaze[x, y] = i;
                     cont++;
                 }
             }
@@ -251,7 +251,7 @@ class Maze
         _cupX = _random.Next(8, 40);
         _cupY = _random.Next(34, 40);
         if(!_checkTokenInThisPosition(_cupX, _cupY))
-            _maze[_cupX,_cupY] = -6;
+            GeneralMaze[_cupX,_cupY] = -6;
     }
    
     // Establece la entrada y salida del laberinto**********************************************************
@@ -265,9 +265,9 @@ class Maze
         {
             x = _random.Next(5, 40);
             y = _random.Next(5, 20);
-            if(_maze[x, y] == 0 && _validExit(x, y))
+            if(GeneralMaze[x, y] == 0 && _validExit(x, y))
             {
-                _maze[x, y] = -12;
+                GeneralMaze[x, y] = -12;
                 cont++;
             }
         }
@@ -282,7 +282,7 @@ class Maze
     {
         for(int i = 0; i < 4; i++)
         {
-            if(Maze._maze[x, y] == -12)
+            if(Maze.GeneralMaze[x, y] == -12)
                 return true;
         }
         return false;
@@ -296,10 +296,10 @@ class Maze
             {
                 // Verifica q las salidas no esten cerca
                 bool exitAway =
-                (_maze[x + i, y + j] == -12) || 
-                (_maze[x - i, y - j] == -12) || 
-                (_maze[x + i, y - j] == -12) || 
-                (_maze[x - i, y + j] == -12);
+                (GeneralMaze[x + i, y + j] == -12) || 
+                (GeneralMaze[x - i, y - j] == -12) || 
+                (GeneralMaze[x + i, y - j] == -12) || 
+                (GeneralMaze[x - i, y + j] == -12);
 
                 if(exitAway)
                     return false;
@@ -316,17 +316,17 @@ class Maze
             for(int j = 0; j < 2; j++)
             {
                 bool surroundedByWalls =
-                    (_maze[x + 1, y] == -1 && _maze[x - 1, y] == -1) &&
-                    (_maze[x, y + 1] == -1 && _maze[x, y - 1] == -1);
+                    (GeneralMaze[x + 1, y] == -1 && GeneralMaze[x - 1, y] == -1) &&
+                    (GeneralMaze[x, y + 1] == -1 && GeneralMaze[x, y - 1] == -1);
 
                 bool invalidPlacement =
-                    !((_maze[x + 1, y] == -1 && _maze[x - 1, y] == -1) || 
-                    (_maze[x, y + 1] == -1 && _maze[x, y - 1] == -1));
+                    ((GeneralMaze[x + 1, y] == 0 && GeneralMaze[x - 1, y] == 0) || 
+                    (GeneralMaze[x, y + 1] == 0 && GeneralMaze[x, y - 1] == 0));
 
-                bool isWall = _maze[x, y] == -1;
+                bool isWall = GeneralMaze[x, y] == -1;
 
 
-                if (invalidPlacement || surroundedByWalls || !isWall)
+                if (!invalidPlacement || surroundedByWalls || !isWall)
                 {
                     return false;
                 }                             
@@ -338,56 +338,7 @@ class Maze
     // Verifica si una celda es válida para colocar un camino
     private bool _isValid(int x, int y)
     {
-        return x > 0 && y > 0 && x < _rows - 1 && y < _cols - 1 && _maze[x, y] == -1;
-    }
-
-    // Metodo para verificar si hay pared, retorna false si hay alguna pared en las direccion introducida y true si no hay pared
-    public static bool CheckWall(int direction, int totalCheckBox, Tokens token)
-    {
-        switch(direction)
-        {
-            case 1: // Arriba
-            
-            for (int i = 0; i < totalCheckBox; i++)
-            {
-                if(Maze._maze[token.CoordX + i, token.CoordY] == -1)
-                    return false;
-            }
-
-            break;
-        
-            case 2: // Abajo
-            
-            for (int i = 0; i < totalCheckBox; i++)
-            {
-                if(Maze._maze[token.CoordX - i, token.CoordY] == -1)
-                    return false;
-            }
-
-            break;
-
-            case 3: // Izquierda
-            
-            for (int i = 0; i < totalCheckBox; i++)
-            {
-                if(Maze._maze[token.CoordX, token.CoordY - i] == -1)
-                    return false;
-            }
-
-            break;
-
-            case 4: // Derecha
-            
-            for (int i = 0; i < totalCheckBox; i++)
-            {
-                if(Maze._maze[token.CoordX, token.CoordY + i] == -1)
-                    return false;
-            }
-
-            break;
-        }
-
-        return true;
+        return x > 0 && y > 0 && x < _rows - 1 && y < _cols - 1 && GeneralMaze[x, y] == -1;
     }
 
     // Verifica la posicion de la trampa
@@ -399,12 +350,12 @@ class Maze
             {
                 // Verifica q las trampas no esten cerca
                 bool trapsAway =
-                (_maze[x + i, y + j] == -2) || (_maze[x - i, y - j] == -2) || (_maze[x + i, y - j] == -2) || (_maze[x - i, y + j] == -2) || 
-                (_maze[x + i, y + j] == -3) || (_maze[x - i, y - j] == -3) || (_maze[x + i, y - j] == -3) || (_maze[x - i, y + j] == -3) || 
-                (_maze[x + i, y + j] == -4) || (_maze[x - i, y - j] == -4) || (_maze[x + i, y - j] == -4) || (_maze[x - i, y + j] == -4);
+                (GeneralMaze[x + i, y + j] == -2) || (GeneralMaze[x - i, y - j] == -2) || (GeneralMaze[x + i, y - j] == -2) || (GeneralMaze[x - i, y + j] == -2) || 
+                (GeneralMaze[x + i, y + j] == -3) || (GeneralMaze[x - i, y - j] == -3) || (GeneralMaze[x + i, y - j] == -3) || (GeneralMaze[x - i, y + j] == -3) || 
+                (GeneralMaze[x + i, y + j] == -4) || (GeneralMaze[x - i, y - j] == -4) || (GeneralMaze[x + i, y - j] == -4) || (GeneralMaze[x - i, y + j] == -4);
 
                 // Verifica de q hayan paredes adyacense para colocar las trampas
-                bool adjacentRoads = !((_maze[(x+1), y] == 0 && _maze[(x-1), y] == 0) || (_maze[x, (y+1)] == 0 && _maze[x, (y-1)] == 0));
+                bool adjacentRoads = ((GeneralMaze[(x+1), y] == 0 && GeneralMaze[(x-1), y] == 0) || (GeneralMaze[x, (y+1)] == 0 && GeneralMaze[x, (y-1)] == 0));
 
                 //Verifica si se puede colocar trampas
                 if(trapsAway || !adjacentRoads || _checkTokenInThisPosition(x, y))
@@ -419,7 +370,7 @@ class Maze
     {
         for (int i = 1; i < 9; i++)
         {
-            if(_maze[x, y] == i)
+            if(GeneralMaze[x, y] == i)
                 return true;
         }
         return false;
@@ -428,8 +379,8 @@ class Maze
     // Verifica si alguna de las pieazas del jugador logro el objetivo
     public bool CheckCupPlayer(Players player)
     {
-        for(int i = 0; i < player._tokens.Length; i++)
-            if(CheckCup(player._tokens[i]))
+        for(int i = 0; i < player.Tokens.Length; i++)
+            if(CheckCup(player.Tokens[i]))
                 return true;
         return false;
     }
@@ -446,9 +397,9 @@ class Maze
     // Sobrecarga del Metodo q verifica si tienes la copa
     public bool CheckCup(Players player)
     {
-        for (int i = 0; i < player._tokens.Length; i++)
+        for (int i = 0; i < player.Tokens.Length; i++)
             for(int j = 0; j < 3; j++)
-                if(player._tokens[i].InfoBox(j) == -6)
+                if(player.Tokens[i].InfoBox(j) == -6)
                     return true;
         return false;
     }
@@ -471,7 +422,7 @@ class Maze
         {
             for (int j = 0; j < _cols; j++)
             {
-                if(Maze._maze[i, j] == -6)
+                if(Maze.GeneralMaze[i, j] == -6)
                     return true;
             }
         }
@@ -494,11 +445,11 @@ class Maze
                 // Comprueba si hay alguna ficha del Player1 en esta posición
                 bool printedToken = false;
 
-                    for (int i = 0; i < player1._tokens.Length; i++)
+                    for (int i = 0; i < player1.Tokens.Length; i++)
                     {
-                        if (_maze[x, y] == player1._tokens[i].InfoId())
+                        if (GeneralMaze[x, y] == player1.Tokens[i].InfoId())
                         {
-                            Console.Write(player1._tokens[i].InfoCharacter());
+                            Console.Write(player1.Tokens[i].InfoCharacter());
                             printedToken = true;
                             break;
                         }
@@ -507,11 +458,11 @@ class Maze
                 // Comprobamos si hay alguna ficha de Player2 en esta posición
                 if (!printedToken)
                 {
-                    for (int i = 0; i < player2._tokens.Length; i++)
+                    for (int i = 0; i < player2.Tokens.Length; i++)
                     {
-                        if (_maze[x, y] == player2._tokens[i].InfoId())
+                        if (GeneralMaze[x, y] == player2.Tokens[i].InfoId())
                         {
-                            Console.Write(player2._tokens[i].InfoCharacter());
+                            Console.Write(player2.Tokens[i].InfoCharacter());
                             printedToken = true;
                             break;
                         }
@@ -522,17 +473,17 @@ class Maze
                 {
                     // Si no hay fichas en la posicion x,y del laberinto entonces imprimimos el contenido normal del laberinto
                     Console.Write(
-                        _maze[x, y] == -1 ? "🌿" : // Pared
-                        _maze[x, y] == -2 ? "☠️" : // Trampa tipo 1
-                        _maze[x, y] == -3 ? "❄️" : // Trampa tipo 2
-                        _maze[x, y] == -4 ? "💥" : // Trampa tipo 3
-                        _maze[x, y] == -6 ? "🏆" : // COPA
-                        _maze[x, y] == -7 ? "🧬" : // Posion de vida
-                        _maze[x, y] == -8 ? "🏃" : // Posion de velocidad
-                        _maze[x, y] == -9 ? "✂️" : // Tijera Magica
-                        _maze[x, y] == -10 ? "🧹" : // Escoba
-                        _maze[x, y] == -11 ? "🛡️" : // Escudo
-                        _maze[x, y] == -12 ? "🚪" : // Salida
+                        GeneralMaze[x, y] == -1 ? "🌿" : // Pared
+                        GeneralMaze[x, y] == -2 ? "☠️" : // Trampa tipo 1
+                        GeneralMaze[x, y] == -3 ? "❄️" : // Trampa tipo 2
+                        GeneralMaze[x, y] == -4 ? "💥" : // Trampa tipo 3
+                        GeneralMaze[x, y] == -6 ? "🏆" : // COPA
+                        GeneralMaze[x, y] == -7 ? "🧬" : // Posion de vida
+                        GeneralMaze[x, y] == -8 ? "🏃" : // Posion de velocidad
+                        GeneralMaze[x, y] == -9 ? "✂️" : // Tijera Magica
+                        GeneralMaze[x, y] == -10 ? "🧹" : // Escoba
+                        GeneralMaze[x, y] == -11 ? "🛡️" : // Escudo
+                        GeneralMaze[x, y] == -12 ? "🚪" : // Salida
                         "  "                        // Camino vacío
                     );
                 }
@@ -551,73 +502,54 @@ class Maze
         
         if(player1.InfoFaction() == "MAGOS")
         {            
-            for (int i = 0; i < player1._tokens.Length; i++)
-            {
-                // Verificaa si los MAGOS llegaron a la salida con la COPA
-                if(IsExit(newX, newY) && Maze.GeneratedDoors(maze.CheckCup(player1)))
-                {
-                    running = false;
-                    foreach (var color in GamePlay.colors)
-                    {
-                        Console.ForegroundColor = color;
-                        Console.WriteLine($"FELICIDADES {player1.InfoName()}, HAS GANADO EL JUEGO DEL LABERINTO");
-                        Console.ResetColor();
-                        System.Threading.Thread.Sleep(500);  // Pequeño retraso para mostrar el cambio de color
-                    }
-                    GamePlay.Pause("PRESIONE UNA TECLA PARA FINALIZAR");
-                }
-                //  Verifica si los MONSTRUOS mataron a todos los MAGOS
-                else if(player1._tokens.Length == 0 || _anotherWay(player1))
-                {
-                    running = false;
-                    foreach (var color in GamePlay.colors)
-                    {
-                        Console.ForegroundColor = color;
-                        Console.WriteLine($"FELICIDADES {player2.InfoName()}, HAS GANADO EL JUEGO DEL LABERINTO");
-                        Console.ResetColor();
-                        System.Threading.Thread.Sleep(500);  // Pequeño retraso para mostrar el cambio de color
-                    }
-                    GamePlay.Pause("PRESIONE UNA TECLA PARA FINALIZAR");
-                }
-            }
+            _checkWin(player1, player2, maze, newX, newY, ref running);
         }
         else
         { 
-            for (int i = 0; i < player2._tokens.Length; i++)
+            _checkWin(player2, player1, maze, newX, newY, ref running);
+        }
+    }
+
+    private void _checkWin(Players player1, Players player2, Maze maze, int newX, int newY, ref bool running)
+    {
+        for (int i = 0; i < player1.Tokens.Length; i++)
+        {
+            // Verificaa si los MAGOS llegaron a la salida con la COPA
+            if(IsExit(newX, newY) && maze.CheckCup(player1))
             {
-                // Verificaa si los MAGOS llegaron a la salida con la COPA
-                if(IsExit(newX, newY) && Maze.GeneratedDoors(maze.CheckCup(player1)))
+                running = false;
+                foreach (var color in GamePlay.colors)
                 {
-                    running = false;
-                    foreach (var color in GamePlay.colors)
-                    {
-                        Console.ForegroundColor = color;
-                        Console.WriteLine($"FELICIDADES {player2.InfoName()}, HAS GANADO EL JUEGO DEL LABERINTO");
-                        Console.ResetColor();
-                        System.Threading.Thread.Sleep(500);  // Pequeño retraso para mostrar el cambio de color
-                    }
-                    GamePlay.Pause("PRESIONE UNA TECLA PARA FINALIZAR");
+                    Console.Clear();
+                    Console.ForegroundColor = color;
+                    Console.WriteLine($"FELICIDADES {player1.InfoName()}, HAS GANADO EL JUEGO DEL LABERINTO");
+                    Console.ResetColor();
+                    System.Threading.Thread.Sleep(500);  // Pequeño retraso para mostrar el cambio de color
                 }
-                //  Verifica si los MONSTRUOS mataron a todos los MAGOS
-                else if(player2._tokens.Length == 0 || _anotherWay(player2))
+                GamePlay.Pause("PRESIONE UNA TECLA PARA FINALIZAR");
+                return;
+            }
+            //  Verifica si los MONSTRUOS mataron a todos los MAGOS
+            else if(player1.Tokens.Length == 0 || _anotherWay(player1))
+            {
+                running = false;
+                foreach (var color in GamePlay.colors)
                 {
-                    running = false;
-                    foreach (var color in GamePlay.colors)
-                    {
-                        Console.ForegroundColor = color;
-                        Console.WriteLine($"FELICIDADES {player1.InfoName()}, HAS GANADO EL JUEGO DEL LABERINTO");
-                        Console.ResetColor();
-                        System.Threading.Thread.Sleep(500);  // Pequeño retraso para mostrar el cambio de color
-                    }
-                    GamePlay.Pause("PRESIONE UNA TECLA PARA FINALIZAR");
+                    Console.Clear();
+                    Console.ForegroundColor = color;
+                    Console.WriteLine($"FELICIDADES {player2.InfoName()}, HAS GANADO EL JUEGO DEL LABERINTO");
+                    Console.ResetColor();
+                    System.Threading.Thread.Sleep(500);  // Pequeño retraso para mostrar el cambio de color
                 }
+                GamePlay.Pause("PRESIONE UNA TECLA PARA FINALIZAR");
+                return;
             }
         }
     }
 
     private bool _anotherWay(Players player)
     {
-        if(CheckCup(player) && !_checkCupInMaze())
+        if(!CheckCup(player) && !_checkCupInMaze())
             return true;
 
         return false;
@@ -630,7 +562,7 @@ class Maze
     // Informacion del  laberinto
     public static int[,] InfoMaze()
     {
-        return _maze;
+        return GeneralMaze;
     } 
     
     // Informacion de las filas

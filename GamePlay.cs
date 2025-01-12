@@ -4,7 +4,7 @@ class GamePlay
 {
     // Array de colores disponibles
     public static ConsoleColor[] colors = { ConsoleColor.Red, ConsoleColor.Green, ConsoleColor.Blue, ConsoleColor.Yellow, ConsoleColor.Cyan, ConsoleColor.Magenta };
-    
+
     public static void Main(string[] args)
     {
         // Limpiar consola y mostrar título del juego
@@ -22,7 +22,6 @@ class GamePlay
         // Finalizar el juego
         Console.Clear();
         Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.WriteLine("G");
         Console.WriteLine("Espero que hayas disfrutado de esta aventura mágica.");
         Console.WriteLine("\n GRACIAS POR JUGAR \n");
         Console.ResetColor();
@@ -98,10 +97,10 @@ class GamePlay
         }
 
         Players player1 = new Players(name1, indexPlayer1);
-        player1._ChooseFaction(ref indexPlayer1, ref indexPlayer2);
+        player1.ChooseFaction(ref indexPlayer1, ref indexPlayer2);
 
         Players player2 = new Players(name2, indexPlayer2);
-        player2._ChooseFaction(ref indexPlayer2, ref indexPlayer1);
+        player2.ChooseFaction(ref indexPlayer2, ref indexPlayer1);
 
         // Crear fichas para los jugadores
         player1.CreateTokensFaction(player1, player2);

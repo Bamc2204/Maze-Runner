@@ -6,7 +6,7 @@ class Players
     
     private string _name;               // Nombre del jugador
     private bool _myTurn = false;       // Turno de la ficha
-    public Tokens[] _tokens;             // Cantidad de fichas (hasta 4)
+    public Tokens[] Tokens;             // Cantidad de fichas (hasta 4)
     private int _index = 0;             // Indice para escoger la faccion
     private string _faction;            // Faccion del jugador
     private string _InfoTarget;         // Objetivo del jugador
@@ -20,7 +20,7 @@ class Players
     {
         _name = name;                                   //Nombre del jugador
         _myTurn = false;                                //Todos los turnos empiezan falso
-        _tokens = new Tokens[4];                        //Cantidad de fichas
+        Tokens = new Tokens[4];                        //Cantidad de fichas
         _index = indexFaction;                          //Escoger faccion
         _faction = ((Faction)_index).ToString();        //Escribir el nombre de la faccion
     }
@@ -37,7 +37,7 @@ class Players
     }
 
     // Metodo para escoger las fichas
-    public void _ChooseFaction(ref int indexPlayer1, ref int indexPlayer2)
+    public void ChooseFaction(ref int indexPlayer1, ref int indexPlayer2)
     {
         if(indexPlayer1 == 1)
         {
@@ -77,13 +77,13 @@ class Players
     // Metodo para crear las fichas buenas*******************************************************************************************************************
     public void CreateTokensGoodPlayer(ref Players player)
     {
-        player._tokens[0] = new Tokens("Harry Potter", 1, "⚡", 1, 0, "Velocidad", 4, 10000, 0, 0, 0, 50, 4, 100);
+        player.Tokens[0] = new Tokens("Harry Potter", 1, "⚡", 1, 0, "Velocidad", 4, 25, 0, 0, 0, 50, 4, 100);
 
-        player._tokens[1] = new Tokens("Cedric Diggory", 2, "🦡", 13, 0, "Velocidad", 4, 4, 0, 0, 0);
+        player.Tokens[1] = new Tokens("Cedric Diggory", 2, "🦡", 13, 0, "Velocidad", 4, 4, 0, 0, 0);
 
-        player._tokens[2] = new Tokens("Fleur Delacour", 3, "🌸", 25, 0, "Velocidad", 4, 8, 0, 0, 0);
+        player.Tokens[2] = new Tokens("Fleur Delacour", 3, "🌸", 25, 0, "Velocidad", 4, 8, 0, 0, 0);
 
-        player._tokens[3] = new Tokens("Viktor Krum", 4, "💪", 37, 0, "Velocidad", 4, 8, 0, 0, 0);
+        player.Tokens[3] = new Tokens("Viktor Krum", 4, "💪", 37, 0, "Velocidad", 4, 8, 0, 0, 0);
 
         string infoTarget = "Obtener la COPA y escapar del laberinto";
 
@@ -93,13 +93,13 @@ class Players
     // Metodo para crear las fichas malas********************************************************************************************************************
     private void CreateTokensBadPlayer(ref Players player)
     {
-        player._tokens[0] = new Tokens("Acromántula", 5, "🕷️", 7, 43, "Velocidad", 4, 6, 80, 1, 300);
+        player.Tokens[0] = new Tokens("Acromántula", 5, "🕷️", 7, 43, "Velocidad", 4, 25, 100000, 5, 300);
 
-        player._tokens[1] = new Tokens("Esfinge", 6, "🦁", 19, 43, "Velocidad", 4, 4, 90, 1, 300);
+        player.Tokens[1] = new Tokens("Esfinge", 6, "🦁", 19, 43, "Velocidad", 4, 4, 90, 1, 300);
 
-        player._tokens[2] = new Tokens("Boggart", 7, "👻", 31, 43, "Velocidad", 4, 4, 50, 3, 300);
+        player.Tokens[2] = new Tokens("Boggart", 7, "👻", 31, 43, "Velocidad", 4, 4, 50, 3, 300);
 
-        player._tokens[3] = new Tokens("Blast-Ended Skrewts", 8, "🦂", 43, 43, "Velocidad", 4, 8, 60, 5, 300);
+        player.Tokens[3] = new Tokens("Blast-Ended Skrewts", 8, "🦂", 43, 43, "Velocidad", 4, 8, 60, 5, 300);
 
         string infoTarget = "Asesinar a los 4 elegidos y evitar que escapen del laberinto";
 
@@ -109,17 +109,17 @@ class Players
     // Metodo para eliminar la ficha de la posicion i del array de fichas del jugador
     public void DeleteToken(ref Players player, int index)
     {
-        Tokens[] token = new Tokens [player._tokens.Length - 1];
+        Tokens[] token = new Tokens [player.Tokens.Length - 1];
         
         for(int i = 0; i < token.Length; i++)
         {
             if(i < index)
-                token[i] = player._tokens[i];
+                token[i] = player.Tokens[i];
             else
-                token[i] = player._tokens[i + 1];
+                token[i] = player.Tokens[i + 1];
         }
 
-        player._tokens = token;
+        player.Tokens = token;
     }
 
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
@@ -130,15 +130,6 @@ class Players
     public void SetTarget(ref string infoTarget)
     {
         _InfoTarget = infoTarget;
-    }
-
-    //Verifica se logro el objetivo 
-    public bool _checkTargetPlayers(Players player)
-    {
-        for(int i = 0; i < player._tokens.Length; i++)
-            if(!((player._tokens[i]._target)))
-                return true;
-        return false;
     }
 
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
@@ -187,41 +178,34 @@ class Players
             // Se inicializan los turnos
             if(player1.InfoTurn() == false)
             {
-                Console.WriteLine("\n Has escogido la ficha a: " + player1._tokens[indexPiece].InfoName());  
+                Console.WriteLine("\n Has escogido la ficha a: " + player1.Tokens[indexPiece].InfoName());  
                 player1.StartTurn();
                 player2.EndTurn();
             } 
             else
             {
-                Console.WriteLine("\n Has escogido la ficha a: " + player2._tokens[indexPiece].InfoName());
+                Console.WriteLine("\n Has escogido la ficha a: " + player2.Tokens[indexPiece].InfoName());
                 player2.StartTurn();
                 player1.EndTurn();    
             }
 
             Console.WriteLine("\n Ya puede desplazarse");
 
-            // Se verifica q el objetivo no se haya cumplido aun para poder deplazarse
-            if(!((player1._tokens[indexPiece]._target) && (player2._tokens[indexPiece]._target)))
+            // Se verifica de quien es el turno
+            if(player1.InfoTurn())
             {
-                // Se verifica de quien es el turno
-                if(player1.InfoTurn())
-                {
-                    _displacement(player1._tokens[indexPiece].InfoSpeed(), maze, ref player1._tokens[indexPiece], player1, player2, ref running, ref player1._tokens[indexPiece]._target);
-                }
-                else if(player2.InfoTurn())
-                {
-                    _displacement(player2._tokens[indexPiece].InfoSpeed(), maze, ref player2._tokens[indexPiece], player2, player1, ref running, ref player2._tokens[indexPiece]._target);
-                    countTurns++;
-                }
+                _displacement(player1.Tokens[indexPiece].InfoSpeed(), maze, ref player1.Tokens[indexPiece], player1, player2, ref running);
+            }
+            else if(player2.InfoTurn())
+            {
+                _displacement(player2.Tokens[indexPiece].InfoSpeed(), maze, ref player2.Tokens[indexPiece], player2, player1, ref running);
+                countTurns++;
+            }
 
-                for(int i = 0; i < player1._tokens.Length; i++)
-                    if((countTurns % 8 == 0 && player2.InfoTurn()) || Maze.GeneratedDoors(maze.CheckCup(player1._tokens[i])))
-                        maze.GenerateNewMaze(maze.CheckCup(player1._tokens[i]));
-            }
-            else
-            {
-                running = false;
-            }
+            if(countTurns % 8 == 0 && player2.InfoTurn())
+                maze.GenerateNewMaze();
+            
+            
         }
     }
 
@@ -230,11 +214,11 @@ class Players
     #region Metodo de Desplazamiento           ////////////////////////////////////////////////////////////////////////////////////////
 
     // Desplaza la ficha
-    private static void _displacement(int steps, Maze maze, ref Tokens piece1, Players player1, Players player2, ref bool running,ref bool getTarget)
+    private static void _displacement(int steps, Maze maze, ref Tokens token, Players player1, Players player2, ref bool running)
     {   
-        Maze._maze[piece1.CoordX, piece1.CoordY] = piece1.InfoId();                   // Pone la ficha en el tablero
-        int newX = piece1.CoordX;
-        int newY = piece1.CoordY;
+        Maze.GeneralMaze[token.CoordX, token.CoordY] = token.InfoId();                   // Pone la ficha en el tablero
+        int newX = token.CoordX;
+        int newY = token.CoordY;
 
         // Verifica los pasos y si el juego aun corre
         while(steps != 0 && running)
@@ -243,7 +227,7 @@ class Players
             ConsoleKey key = Console.ReadKey().Key;
 
             // Lee el teclado
-            ReadBoard(key, ref newX, ref newY, ref running, ref piece1, player1, player2);
+            ReadBoard(key, ref newX, ref newY, ref running, ref token, player1, player2);
 
             if(key == ConsoleKey.Escape)                                            // Termina la simulacion
             {
@@ -251,7 +235,7 @@ class Players
                 return;
             }
 
-            if(!(newX >= 0 && newX < Maze._maze.GetLength(0) && newY >= 0 && newY < Maze._maze.GetLength(1)))
+            if(!(newX >= 0 && newX < Maze.GeneralMaze.GetLength(0) && newY >= 0 && newY < Maze.GeneralMaze.GetLength(1)))
             {
                 Console.Clear();
                 GamePlay.Pause("\n NO SE PUEDE AVANZAR POR QUE NO HAY CAMINO \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPresiona cualquier tecla para comenzar el juego...");
@@ -266,29 +250,29 @@ class Players
             
             // Verifica si hay algun jugador en la proxima posicion
             bool isPiece = 
-            Maze._maze[newX, newY] == 1 || Maze._maze[newX, newY] == 2 ||
-            Maze._maze[newX, newY] == 3 || Maze._maze[newX, newY] == 4 ||
-            Maze._maze[newX, newY] == 5 || Maze._maze[newX, newY] == 6 ||
-            Maze._maze[newX, newY] == 7 || Maze._maze[newX, newY] == 8;
+            Maze.GeneralMaze[newX, newY] == 1 || Maze.GeneralMaze[newX, newY] == 2 ||
+            Maze.GeneralMaze[newX, newY] == 3 || Maze.GeneralMaze[newX, newY] == 4 ||
+            Maze.GeneralMaze[newX, newY] == 5 || Maze.GeneralMaze[newX, newY] == 6 ||
+            Maze.GeneralMaze[newX, newY] == 7 || Maze.GeneralMaze[newX, newY] == 8;
 
             // Verifica si la copa esta en la proxima posicion;
-            bool isCup = Maze._maze[newX, newY] == -6;
+            bool isCup = Maze.GeneralMaze[newX, newY] == -6;
 
             // Si toca una tecla q no sea para moverse
             if(key == ConsoleKey.I || key == ConsoleKey.E || key == ConsoleKey.Tab || key == ConsoleKey.Q || key == ConsoleKey.G) 
                 continue;
 
             // Dentro de filas, columnas y si es un camino*********************************************
-            if (Maze._maze[newX, newY] != -1 && !isPiece && !isCup )                    
+            if (Maze.GeneralMaze[newX, newY] != -1 && !isPiece && !isCup )                    
             {
                 //Verifica si hay trampa y en caso de q si aplica la funcion de la trampa
-                _checkTrap(maze, ref newX, ref newY, ref running, ref piece1, ref player1);
+                CheckTrap(maze, ref newX, ref newY, ref running, ref token, ref player1);
                 
                 // Actualiza el tablero
-                Maze._maze[piece1.CoordX, piece1.CoordY] = 0;                 // Vacía la posición actual
-                Maze._maze[newX, newY] = piece1.InfoId();                       // Mueve la ficha
-                piece1.CoordX = newX;                                          // Actualiza las coordenadas actuales
-                piece1.CoordY = newY;
+                Maze.GeneralMaze[token.CoordX, token.CoordY] = 0;                 // Vacía la posición actual
+                Maze.GeneralMaze[newX, newY] = token.InfoId();                       // Mueve la ficha
+                token.CoordX = newX;                                          // Actualiza las coordenadas actuales
+                token.CoordY = newY;
                 steps --;                                                       // Pasos q puede recorer cada ficha
             }
 
@@ -297,7 +281,7 @@ class Players
                 Console.Clear();
 
                 Console.WriteLine("\n LOS PASOS NO SON VALIDOS, INTRODUZCA OTRA DIRECCION\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-                newX = piece1.CoordX; newY = piece1.CoordY;   
+                newX = token.CoordX; newY = token.CoordY;   
                     
                 GamePlay.Pause("\n PRESIONE UNA TECLA PARA CONTINUAR");            
             }
@@ -312,27 +296,27 @@ class Players
     #region Metodos de Lectura del Teclado          ////////////////////////////////////////////////////////////////////////////////////////
 
     // Lee el teclado
-    public static void ReadBoard(ConsoleKey key, ref int newX, ref int newY, ref bool running, ref Tokens piece, Players player1, Players player2) 
+    public static void ReadBoard(ConsoleKey key, ref int newX, ref int newY, ref bool running, ref Tokens token, Players player1, Players player2) 
     {
         //Casos para cada tecla
         switch (key)
         {
-            case ConsoleKey.UpArrow:    newX = piece.CoordX - 1; 
+            case ConsoleKey.UpArrow:    newX = token.CoordX - 1; 
                 break;
 
-            case ConsoleKey.DownArrow:  newX = piece.CoordX + 1; 
+            case ConsoleKey.DownArrow:  newX = token.CoordX + 1; 
                 break;
 
-            case ConsoleKey.LeftArrow:  newY = piece.CoordY - 1; 
+            case ConsoleKey.LeftArrow:  newY = token.CoordY - 1; 
                 break;
 
-            case ConsoleKey.RightArrow: newY = piece.CoordY + 1; 
+            case ConsoleKey.RightArrow: newY = token.CoordY + 1; 
                 break;
 
-            case ConsoleKey.Tab: piece._useBoxObject( ref newX, ref newY, ref piece, player1, player2); 
+            case ConsoleKey.Tab: token.UseBoxObject( ref newX, ref newY, ref token, player1, player2); 
                 break;
 
-            case ConsoleKey.I: Console.Clear(); Console.WriteLine("\n " + player1.InfoFaction() + "\n" + " \n ***///OBETIVO///*** \n \n " + player1.InfoTarget()); piece.DisplayStatus(); GamePlay.Pause("\nPRESIONE UNA TECLA PARA VOLVER AL LABERINTO");
+            case ConsoleKey.I: Console.Clear(); Console.WriteLine("\n " + player1.InfoFaction() + "\n" + " \n ***///OBETIVO///*** \n \n " + player1.InfoTarget()); token.DisplayStatus(); GamePlay.Pause("\nPRESIONE UNA TECLA PARA VOLVER AL LABERINTO");
                 Maze.PrintMaze(player1,player2);
                 break;
 
@@ -340,10 +324,10 @@ class Players
                 Maze.PrintMaze(player1,player2);
                 break;
 
-            case ConsoleKey.Q: Console.WriteLine("\nLA FICHA VA A ATACAR"); piece.Attack(piece, ref player2, piece.InfoDamage()); 
+            case ConsoleKey.Q: Console.WriteLine("\nLA FICHA VA A ATACAR"); token.Attack(token, ref player2, player1, token.InfoDamage()); 
                 break;
 
-            case ConsoleKey.G: Console.WriteLine("\nLA FICHA VA A INTENTAR COGER UN OBJETO"); piece._collect(piece); GamePlay.Pause("\n PRESIONE UNA TECLA PARA CONTINUAR"); Console.Clear(); Maze.PrintMaze(player1,player2); 
+            case ConsoleKey.G: Console.WriteLine("\nLA FICHA VA A INTENTAR COGER UN OBJETO"); token.Collect(token); GamePlay.Pause("\n PRESIONE UNA TECLA PARA CONTINUAR"); Console.Clear(); Maze.PrintMaze(player1,player2); 
                 break;
         }
     }
@@ -365,168 +349,75 @@ class Players
     }
     
     // 2da Sobrecarga para leer el teclado
-    public static void ReadBoard(ConsoleKey key,ref int _index)
+    public static void ReadBoard(ConsoleKey key, ref int _index)
     {
         switch (key)
         {
-            case ConsoleKey.LeftArrow: Console.WriteLine("\n Has escogido la faccion de los Magos"); _index = 1; break;
-            case ConsoleKey.RightArrow:  Console.WriteLine("\n Has escogido la faccion de los Monstruos"); _index = 2; break;
+            case ConsoleKey.LeftArrow: _index = 1; break;
+            case ConsoleKey.RightArrow: _index = 2; break;
         }
     }
 
     // 3ra Sobrecarga para leer el teclado
-    public static void ReadBoard(ConsoleKey key, Tokens token, ref Players player, int damage)
+    public static void ReadBoard(ConsoleKey key, Tokens token, ref Players player, int damage, int attackRange)
     {
-        if(player.InfoIndexFaction() == 1)
-        {  
-            switch(key)
-            {
-                case ConsoleKey.UpArrow: // Arriba
-                for(int i = 1; i < token.InfoDistAttack(); i++)
-                {
-                    for(int j = 0; j < player._tokens.Length; j++)
-                    {
-                        if(Maze._maze[(token.CoordX + i), token.CoordY] == player._tokens[j].InfoId() && Maze.CheckWall(1, 4, token))
-                        {
-                            player._tokens[j].RemoveHealth(damage);
-                            Console.WriteLine("Le has quitado " + damage + " puntos de vida a " + " " + player._tokens[j].InfoName());
-                            player.EndTurn();
-                            break;
-                        }
-                        
-                    }
-                }
-                Console.WriteLine("No se infligió daño en ninguna ficha ya q habia una pared de por medio o directamente no habia nada a lo q se pudiera atacar");
-                break;
+        int newX = token.CoordX;
+        int newY = token.CoordY;
 
-                case ConsoleKey.DownArrow: // Abajo
-                for(int i = 1; i < token.InfoDistAttack(); i++)
-                {
-                    for(int j = 0; j < player._tokens.Length; j++)
-                    {
-                        if(Maze._maze[(token.CoordX - i), token.CoordY] == player._tokens[j].InfoId() && Maze.CheckWall(2, 4, token))
-                        {
-                            player._tokens[j].RemoveHealth(damage);
-                            Console.WriteLine("Le has quitado " + damage + " puntos de vida a " + " " + player._tokens[j].InfoName());
-                            player.EndTurn();
-                            break;
-                        }
-                    }
-                }
-                Console.WriteLine("No se infligió daño en ninguna ficha ya q habia una pared de por medio o directamente no habia nada a lo q se pudiera atacar");
-                break;
-
-                case ConsoleKey.LeftArrow: // Izquierda
-                for(int i = 1; i < token.InfoDistAttack(); i++)
-                {
-                    for(int j = 0; j < player._tokens.Length; j++)
-                    {
-                        if(Maze._maze[token.CoordX , (token.CoordY - 1)] == player._tokens[j].InfoId() && Maze.CheckWall(3, 4, token))
-                        {
-                            player._tokens[j].RemoveHealth(damage);
-                            Console.WriteLine("Le has quitado " + damage + " puntos de vida a " + " " + player._tokens[j].InfoName());
-                            player.EndTurn();
-                            break;
-                        }
-                    }
-                }
-                Console.WriteLine("No se infligió daño en ninguna ficha ya q habia una pared de por medio o directamente no habia nada a lo q se pudiera atacar");
-                break;
-
-                case ConsoleKey.RightArrow: // Derecha
-                for(int i = 1; i < token.InfoDistAttack(); i++)
-                {
-                    for(int j = 0; j < player._tokens.Length; j++)
-                    {
-                        if(Maze._maze[token.CoordX , (token.CoordY + 1)] == player._tokens[j].InfoId() && Maze.CheckWall(4, 4, token))
-                        {
-                            player._tokens[j].RemoveHealth(damage);
-                            Console.WriteLine("Le has quitado " + damage + " puntos de vida a " + " " + player._tokens[j].InfoName());
-                            player.EndTurn();
-                            break;
-                        }
-                    }
-                }
-                Console.WriteLine("No se infligió daño en ninguna ficha ya q habia una pared de por medio o directamente no habia nada a lo q se pudiera atacar");
-                break;
-            }
-        }
-        
-        else
+        for (int i = 1; i <= attackRange; i++)
         {
-            switch(key)
+            switch (key)
             {
-                case ConsoleKey.UpArrow: 
-                for(int i = 1; i < token.InfoDistAttack(); i++)
-                {
-                    for(int j = 0; j < player._tokens.Length; j++)
-                    {
-                        if(Maze._maze[(token.CoordX + i), token.CoordY] == player._tokens[j].InfoId() && Maze.CheckWall(1, token.InfoDistAttack(), token))
-                        {
-                            player._tokens[j].RemoveHealth(damage);
-                            Console.WriteLine("Le has quitado " + damage + " puntos de vida a " + " " + player._tokens[j].InfoName());
-                            player.EndTurn();
-                            break;
-                        }
-                    }
-                }
-                Console.WriteLine("No se infligió daño en ninguna ficha ya q habia una pared de por medio o directamente no habia nada a lo q se pudiera atacar");
-                break;
-
+                case ConsoleKey.UpArrow:
+                    newX = token.CoordX - i;
+                    newY = token.CoordY;
+                    break;
                 case ConsoleKey.DownArrow:
-                for(int i = 1; i < token.InfoDistAttack(); i++)
-                {
-                    for(int j = 0; j < player._tokens.Length; j++)
-                    {
-                        if(Maze._maze[(token.CoordX - i), token.CoordY] == player._tokens[j].InfoId() && Maze.CheckWall(2, token.InfoDistAttack(), token))
-                        {
-                            player._tokens[j].RemoveHealth(damage);
-                            Console.WriteLine("Le has quitado " + damage + " puntos de vida a " + " " + player._tokens[j].InfoName());
-                            player.EndTurn();
-                            break;
-                        }
-                    }
-                }
-                Console.WriteLine("No se infligió daño en ninguna ficha ya q habia una pared de por medio o directamente no habia nada a lo q se pudiera atacar");
-                break;
-
+                    newX = token.CoordX + i;
+                    newY = token.CoordY;
+                    break;
                 case ConsoleKey.LeftArrow:
-                for(int i = 1; i < token.InfoDistAttack(); i++)
-                {
-                    for(int j = 0; j < player._tokens.Length; j++)
-                    {
-                        if(Maze._maze[token.CoordX , (token.CoordY - 1)] == player._tokens[j].InfoId() && Maze.CheckWall(3, token.InfoDistAttack(), token))
-                        {
-                            player._tokens[j].RemoveHealth(damage);
-                            Console.WriteLine("Le has quitado " + damage + " puntos de vida a " + " " + player._tokens[j].InfoName());
-                            player.EndTurn();
-                            break;
-                        }
-                    }
-                }
-                Console.WriteLine("No se infligió daño en ninguna ficha ya q habia una pared de por medio o directamente no habia nada a lo q se pudiera atacar");
-                break;
-
+                    newX = token.CoordX;
+                    newY = token.CoordY - i;
+                    break;
                 case ConsoleKey.RightArrow:
-                for(int i = 1; i < token.InfoDistAttack(); i++)
+                    newX = token.CoordX;
+                    newY = token.CoordY + i;
+                    break;
+            }
+
+            // Verifica si hay una pared en la nueva posición
+            if (Maze.GeneralMaze[newX, newY] == -1)
+            {
+                Console.WriteLine("El ataque fue bloqueado por una pared.");
+                GamePlay.Pause("\n PRESIONE UNA TECLA PARA CONTINUAR...");
+                return;
+            }
+
+            // Verifica si hay un enemigo en la nueva posición
+            for (int j = 0; j < player.Tokens.Length; j++)
+            {
+                if (player.Tokens[j].CoordX == newX && player.Tokens[j].CoordY == newY)
                 {
-                    for(int j = 0; j < player._tokens.Length; j++)
+                    player.Tokens[j].RemoveHealth(damage);
+                    Console.WriteLine($"Le has quitado {damage} puntos de vida a {player.Tokens[j].InfoName()}, Le queda {player.Tokens[j].Health}");
+
+                    // Verifica si la ficha aún tiene vida
+                    if (player.Tokens[j].InfoHealth() <= 0)
                     {
-                        if(Maze._maze[token.CoordX , (token.CoordY + 1)] == player._tokens[j].InfoId() && Maze.CheckWall(4, token.InfoDistAttack(), token))
-                        {
-                            player._tokens[j].RemoveHealth(damage);
-                            Console.WriteLine("Le has quitado " + damage + " puntos de vida a " + " " + player._tokens[j].InfoName());
-                            player.EndTurn();
-                            break;
-                        }
+                        Console.WriteLine($"{player.Tokens[j].InfoName()} ha sido eliminado.");
+                        player.DeleteToken(ref player, j);
                     }
+                    GamePlay.Pause("\n PRESIONE UNA TECLA PARA CONTINUAR...");
+                    Console.Clear();
+                    return;
                 }
-                Console.WriteLine("No se infligió daño en ninguna ficha ya q habia una pared de por medio o directamente no habia nada a lo q se pudiera atacar");
-                break;
             }
         }
-    }
 
+        Console.WriteLine("\nNo se infligió daño en ninguna ficha\n");
+        GamePlay.Pause("\n PRESIONE UNA TECLA PARA CONTINUAR...");
+    }
     // 4ta Sobrecarga para leer el teclado
     public static void ReadBoard(ConsoleKey key, ref int newX, ref int newY)
     {
@@ -547,39 +438,44 @@ class Players
     #region Metodo para Verificar las trampas           ////////////////////////////////////////////////////////////////////////////////////////
     
     // Chequea si caiste en una trampa
-    public static void _checkTrap(Maze lab, ref int newX, ref int newY, ref bool running, ref Tokens token, ref Players player)
+    public static void CheckTrap(Maze lab, ref int newX, ref int newY, ref bool running, ref Tokens token, ref Players player)
     {
-        if(Maze._maze[newX, newY] == -2) //Verificacion de trapas
+        if(Maze.GeneralMaze[newX, newY] == -2) //Verificacion de trapas
         {
-            token.RemoveHealth(20, token._activeShield);
+            token.RemoveHealth(20, token.ActiveShield);
             Console.WriteLine("\n Has caido en una trampa y has perdido 20 puntos de vidas");
             if(token.InfoHealth() <= 0)
             { 
                 Console.WriteLine($"\n {token.InfoName()} HA MUERTO");
-                GamePlay.Pause("PRESIONE UAN TECLA PARA CONTINUAR");
-                for(int i = 0; i < player._tokens.Length; i++)
-                    if(player._tokens[i] == token)
+                GamePlay.Pause("\n\n\n\n\nPRESIONE UAN TECLA PARA CONTINUAR...");
+                for(int i = 0; i < player.Tokens.Length; i++)
+                    if(player.Tokens[i] == token)
                         player.DeleteToken(ref player, i);
             }
         }
-        else if(Maze._maze[newX, newY] == -3)
+        else if(Maze.GeneralMaze[newX, newY] == -3)
         {
             if(token.InfoSpeed() == 2)
             {
+                Console.WriteLine("ESTAS EN TU LIMITE DE VELOCIDAD");
+                GamePlay.Pause("\n\n\n\n\nPRESIONE UAN TECLA PARA CONTINUAR...");
                 return;
             }
             token.SlowDown(2);
             Console.WriteLine("\n Has caido en una trampa de reduccion de velocidad y has perdido 2 puntos de velocidad");
+            GamePlay.Pause("\n\n\n\n\nPRESIONE UAN TECLA PARA CONTINUAR...");
         }
-        else if(Maze._maze[newX, newY] == -4)
+        else if(Maze.GeneralMaze[newX, newY] == -4)
         {
-            if(token.InfoDamage() <= 0)
+            if(token.InfoDamage() == 0)
             {
                 Console.WriteLine("\n Has caido muchas veces en trampas de debilitacion de furza, ya tus ataques no hacen daño");
+                GamePlay.Pause("\n\n\n\n\nPRESIONE UAN TECLA PARA CONTINUAR...");
                 return;
             }
             token.RemoveDamage(35);
             Console.WriteLine("\n Has caido en una trampa y has perdido 30 puntos de daño, ahora haces menos daño");
+            GamePlay.Pause("\n\n\n\n\nPRESIONE UAN TECLA PARA CONTINUAR...");
         }
     }
 
