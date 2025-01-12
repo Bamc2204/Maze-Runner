@@ -280,11 +280,8 @@ class Maze
     // Verifica si es la salida del Laberinto
     public bool IsExit(int x, int y)
     {
-        for(int i = 0; i < 4; i++)
-        {
-            if(Maze.GeneralMaze[x, y] == -12)
-                return true;
-        }
+        if(Maze.GeneralMaze[x, y] == -12)
+            return true;
         return false;
     }
      
@@ -404,17 +401,6 @@ class Maze
         return false;
     }
 
-    // Verifica q las puertas ya hayn sido generadas
-    public static bool GeneratedDoors(bool cup)
-    {
-        if(cup && !_generatedDoors)
-        {
-            _generatedDoors = true;
-            return true;
-        }
-        return false;
-    }
-
     // Verifica q en el mapa ya no haya una copa
     private bool _checkCupInMaze()
     {
@@ -497,53 +483,57 @@ class Maze
     #region Metodo de victoria          //////////////////////////////////////////////////////////////////////////////////////////
     
     // Condicion de Victoria 
-    public void Win(Players player1, Players player2, Maze maze, int newX, int newY, ref bool running)
+    public void Win(Tokens token, Players player1, Players player2, Maze maze, int newX, int newY, ref bool running)
     {
         
         if(player1.InfoFaction() == "MAGOS")
         {            
-            _checkWin(player1, player2, maze, newX, newY, ref running);
+            _checkGoodWin(token, player1, player2, maze, newX, newY, ref running);
+            _checkBadWin(player2, player1, maze, newX, newY, ref running);
         }
         else
         { 
-            _checkWin(player2, player1, maze, newX, newY, ref running);
+            _checkGoodWin(token, player2, player1, maze, newX, newY, ref running);
+            _checkBadWin(player1, player2, maze, newX, newY, ref running);
         }
     }
 
-    private void _checkWin(Players player1, Players player2, Maze maze, int newX, int newY, ref bool running)
-    {
-        for (int i = 0; i < player1.Tokens.Length; i++)
+    // Verifica q los Magos ganaron
+    private void _checkGoodWin(Tokens token, Players player1, Players player2, Maze maze, int newX, int newY, ref bool running)
+    {   
+        // Verificaa si los MAGOS llegaron a la salida con la COPA
+        if(IsExit(newX, newY) && maze.CheckCup(token))
         {
-            // Verificaa si los MAGOS llegaron a la salida con la COPA
-            if(IsExit(newX, newY) && maze.CheckCup(player1))
+            running = false;
+            foreach (var color in GamePlay.colors)
             {
-                running = false;
-                foreach (var color in GamePlay.colors)
-                {
-                    Console.Clear();
-                    Console.ForegroundColor = color;
-                    Console.WriteLine($"FELICIDADES {player1.InfoName()}, HAS GANADO EL JUEGO DEL LABERINTO");
-                    Console.ResetColor();
-                    System.Threading.Thread.Sleep(500);  // Pequeño retraso para mostrar el cambio de color
-                }
-                GamePlay.Pause("PRESIONE UNA TECLA PARA FINALIZAR");
-                return;
+                Console.Clear();
+                Console.ForegroundColor = color;
+                Console.WriteLine($"FELICIDADES {player1.InfoName()}, HAS GANADO EL JUEGO DEL LABERINTO");
+                Console.ResetColor();
+                System.Threading.Thread.Sleep(500);  // Pequeño retraso para mostrar el cambio de color
             }
-            //  Verifica si los MONSTRUOS mataron a todos los MAGOS
-            else if(player1.Tokens.Length == 0 || _anotherWay(player1))
+            GamePlay.Pause("PRESIONE UNA TECLA PARA FINALIZAR");
+        }
+    }
+
+    // Verifica q los Monstruos ganaron
+    private void _checkBadWin(Players player1, Players player2, Maze maze, int newX, int newY, ref bool running)
+    {
+        //  Verifica si los MONSTRUOS mataron a todos los MAGOS
+        if(player2.Tokens.Length < 1 || _anotherWay(player2))
+        {
+            running = false;
+            foreach (var color in GamePlay.colors)
             {
-                running = false;
-                foreach (var color in GamePlay.colors)
-                {
-                    Console.Clear();
-                    Console.ForegroundColor = color;
-                    Console.WriteLine($"FELICIDADES {player2.InfoName()}, HAS GANADO EL JUEGO DEL LABERINTO");
-                    Console.ResetColor();
-                    System.Threading.Thread.Sleep(500);  // Pequeño retraso para mostrar el cambio de color
-                }
-                GamePlay.Pause("PRESIONE UNA TECLA PARA FINALIZAR");
-                return;
+                Console.Clear();
+                Console.ForegroundColor = color;
+                Console.WriteLine($"FELICIDADES {player1.InfoName()}, HAS GANADO EL JUEGO DEL LABERINTO");
+                Console.ResetColor();
+                System.Threading.Thread.Sleep(500);  // Pequeño retraso para mostrar el cambio de color
             }
+            GamePlay.Pause("PRESIONE UNA TECLA PARA FINALIZAR");
+            return;
         }
     }
 

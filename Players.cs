@@ -77,13 +77,13 @@ class Players
     // Metodo para crear las fichas buenas*******************************************************************************************************************
     public void CreateTokensGoodPlayer(ref Players player)
     {
-        player.Tokens[0] = new Tokens("Harry Potter", 1, "⚡", 1, 0, "Velocidad", 4, 25, 0, 0, 0, 50, 4, 100);
+        player.Tokens[0] = new Tokens("Harry Potter", 1, "⚡", 1, 0, "Velocidad", 4, 2, -10, -10, -10, 50, 4, 100);
 
-        player.Tokens[1] = new Tokens("Cedric Diggory", 2, "🦡", 13, 0, "Velocidad", 4, 4, 0, 0, 0);
+        player.Tokens[1] = new Tokens("Cedric Diggory", 2, "🦡", 13, 0, "Velocidad", 4, 2, -10, -10, -10);
 
-        player.Tokens[2] = new Tokens("Fleur Delacour", 3, "🌸", 25, 0, "Velocidad", 4, 8, 0, 0, 0);
+        player.Tokens[2] = new Tokens("Fleur Delacour", 3, "🌸", 25, 0, "Velocidad", 4, 2, -10, -10, -10);
 
-        player.Tokens[3] = new Tokens("Viktor Krum", 4, "💪", 37, 0, "Velocidad", 4, 8, 0, 0, 0);
+        player.Tokens[3] = new Tokens("Viktor Krum", 4, "💪", 37, 0, "Velocidad", 4, 2, -10, -10, -10);
 
         string infoTarget = "Obtener la COPA y escapar del laberinto";
 
@@ -93,13 +93,13 @@ class Players
     // Metodo para crear las fichas malas********************************************************************************************************************
     private void CreateTokensBadPlayer(ref Players player)
     {
-        player.Tokens[0] = new Tokens("Acromántula", 5, "🕷️", 7, 43, "Velocidad", 4, 25, 100000, 5, 300);
+        player.Tokens[0] = new Tokens("Acromántula", 5, "🕷️", 7, 43, "Velocidad", 4, 2,50, 5, 300);
 
-        player.Tokens[1] = new Tokens("Esfinge", 6, "🦁", 19, 43, "Velocidad", 4, 4, 90, 1, 300);
+        player.Tokens[1] = new Tokens("Esfinge", 6, "🦁", 19, 43, "Velocidad", 4, 2, 60, 4, 300);
 
-        player.Tokens[2] = new Tokens("Boggart", 7, "👻", 31, 43, "Velocidad", 4, 4, 50, 3, 300);
+        player.Tokens[2] = new Tokens("Boggart", 7, "👻", 31, 43, "Velocidad", 4, 2, 30, 3, 300);
 
-        player.Tokens[3] = new Tokens("Blast-Ended Skrewts", 8, "🦂", 43, 43, "Velocidad", 4, 8, 60, 5, 300);
+        player.Tokens[3] = new Tokens("Blast-Ended Skrewts", 8, "🦂", 43, 43, "Velocidad", 4, 2, 60, 5, 300);
 
         string infoTarget = "Asesinar a los 4 elegidos y evitar que escapen del laberinto";
 
@@ -118,6 +118,8 @@ class Players
             else
                 token[i] = player.Tokens[i + 1];
         }
+
+        Maze.GeneralMaze[player.Tokens[index].CoordX,player.Tokens[index].CoordY] = 0;
 
         player.Tokens = token;
     }
@@ -244,7 +246,7 @@ class Players
             }
 
             // Verifica la victoria
-            maze.Win(player1, player2, maze, newX, newY, ref running);
+            maze.Win(token, player1, player2, maze, newX, newY, ref running);
             if(!running)
                 return;
             
