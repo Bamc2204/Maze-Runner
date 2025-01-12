@@ -258,12 +258,15 @@ class Tokens
     {
         newX = token.CoordX;
         newY = token.CoordY;
-        bool running = true;
+
+        // Creado para poder usar el mismo metodo y no crear otro
+        int step = 0;
+        
         do                                                          //Minimetodo de Desplazamiento
         {
             //Tecla q toca el jugador en el teclado            
             ConsoleKey key = Console.ReadKey().Key;
-            Players.ReadBoard(key, ref newX, ref newY, ref running, ref token, player1, player2);
+            Players.ReadBoard(key, ref newX, ref newY, ref step, ref token, player1, player2);
 
             // Dentro de filas, columnas y si es un camino
             if (newX >= 0 && newX < Maze.GeneralMaze.GetLength(0) && newY >= 0 && newY < Maze.GeneralMaze.GetLength(1))                    
@@ -336,7 +339,7 @@ class Tokens
     }
 
     //Metodo Atacar
-    public void Attack(Tokens token, ref Players player2, Players player1, int damage)
+    public void Attack(Tokens token, ref int step, ref Players player2, Players player1, int damage)
     {
         Console.WriteLine("\n En q direccion piensa atacar, presione una flecha para ver la direccion \n");
         
@@ -348,7 +351,7 @@ class Tokens
             return;
         }
 
-        Players.ReadBoard(key, token, ref player2, damage, token.InfoDistAttack());
+        Players.ReadBoard(key, token, ref step, ref player2, damage, token.InfoDistAttack());
 
         Maze.PrintMaze(player1,player2);
     } 

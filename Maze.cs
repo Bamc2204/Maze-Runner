@@ -9,7 +9,6 @@ class Maze
     public static int[,] GeneralMaze = new int [_rows, _cols];            // Laberinto
     private Players _player1, _player2;                             // Jugadores
     private int _cupX, _cupY;                                       // Coordenadas de la copa
-    private static bool _generatedDoors = false;
 
     // Direcciones posibles (arriba, derecha, abajo, izquierda)
     private static readonly int[] DirX = { 0, 1, 0, -1 };
@@ -157,11 +156,13 @@ class Maze
     // Genera el laberinto cada cierto tiempo de forma dinamica ******************************************************
     public void GenerateNewMaze()
     {
-        _initializeMaze(_booleanMask());     // Inicializa el laberinto nuevamente
-        _generateMaze(1, 1, _booleanMask()); // Genera el Laberinto de forma dinamica
-        _setRoad();                         // Generar Caminos Alternativos
-        _setCup();                          // Genera la COPA    
-        _setExit();                    // Genera las Salidas
+        bool[,] bools = _booleanMask();
+        _initializeMaze(bools);                         // Inicializa el laberinto nuevamente
+        _generateMaze(1, 1, bools);                     // Genera el Laberinto de forma dinamica
+        _setRoad();                                     // Generar Caminos Alternativos
+        _setExit();                                     // Genera las Salidas
+        _setRoadAroundObjects(bools);                   // Genera Caminos alrededor de los Jugadores para q no queden encerrados
+        _setCup();                                      // Genera la COPA    
     }
 
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
@@ -269,6 +270,37 @@ class Maze
             {
                 GeneralMaze[x, y] = -12;
                 cont++;
+            }
+        }
+    }
+
+    //  Coloca los caminos alrededor de las los objetos
+    private void _setRoadAroundObjects(bool[,] bools)
+    {
+        
+        for (int i = 0; i < bools.GetLength(0); i++)
+        {
+            for (int j = 0; j < bools.GetLength(1); j++)
+            {
+                if(bools[i, j])
+                    _setRoad(i, j);
+            }
+        }
+    }
+
+    // Sobrecarga para colocar Caminos alrededor de las ficha
+    private void _setRoad(int x, int y)
+    {
+        for (int i = 0; i < 2; i++)
+        {
+            for (int j = 0; j < 2; j++)
+            {   
+                if((i == 0 && j  == 0) || x <= 2 || y <= 2)
+                    continue;
+                Maze.GeneralMaze[x + i, y + j] = -1;
+                Maze.GeneralMaze[x + i, y - j] = -1;
+                Maze.GeneralMaze[x - i, y + j] = -1;
+                Maze.GeneralMaze[x - i, y - j] = -1;
             }
         }
     }

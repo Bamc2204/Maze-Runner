@@ -74,32 +74,32 @@ class Players
 
     #region Metodos para Crear/Eliminar de Fichas         ////////////////////////////////////////////////////////////////////////////////////////
 
-    // Metodo para crear las fichas buenas*******************************************************************************************************************
+    // Metodo para crear las fichas buenas
     public void CreateTokensGoodPlayer(ref Players player)
     {
-        player.Tokens[0] = new Tokens("Harry Potter", 1, "⚡", 1, 0, "Velocidad", 4, 2, -10, -10, -10, 50, 4, 100);
+        player.Tokens[0] = new Tokens("Harry Potter", 1, "⚡", 1, 0, "Expellarmus", 6, 4, -7, -8, -9, 20, 4, 150);
 
-        player.Tokens[1] = new Tokens("Cedric Diggory", 2, "🦡", 13, 0, "Velocidad", 4, 2, -10, -10, -10);
+        player.Tokens[1] = new Tokens("Cedric Diggory", 2, "🦡", 13, 0, "Conjuro Elemental", 4, 6, -7, -7, -9, 20, 4, 150);
 
-        player.Tokens[2] = new Tokens("Fleur Delacour", 3, "🌸", 25, 0, "Velocidad", 4, 2, -10, -10, -10);
+        player.Tokens[2] = new Tokens("Fleur Delacour", 3, "🌸", 25, 0, "Sanacion Magica", 4, 8, -9, -9, -9, 15, 8);
 
-        player.Tokens[3] = new Tokens("Viktor Krum", 4, "💪", 37, 0, "Velocidad", 4, 2, -10, -10, -10);
+        player.Tokens[3] = new Tokens("Viktor Krum", 4, "💪", 37, 0, "Draconifors", 4, 4, -8, -8, -9, 30, 1, 250);
 
         string infoTarget = "Obtener la COPA y escapar del laberinto";
 
         player.SetTarget(ref infoTarget);
     }
 
-    // Metodo para crear las fichas malas********************************************************************************************************************
+    // Metodo para crear las fichas malas
     private void CreateTokensBadPlayer(ref Players player)
     {
-        player.Tokens[0] = new Tokens("Acromántula", 5, "🕷️", 7, 43, "Velocidad", 4, 2,50, 5, 300);
+        player.Tokens[0] = new Tokens("Acromántula", 5, "🕷️", 7, 43, "Veneno", 3, 6, 15, 3, 300);
 
-        player.Tokens[1] = new Tokens("Esfinge", 6, "🦁", 19, 43, "Velocidad", 4, 2, 60, 4, 300);
+        player.Tokens[1] = new Tokens("Esfinge", 6, "🦁", 19, 43, "Aumento de Fuerza", 6, 4, 25, 2, 320);
 
-        player.Tokens[2] = new Tokens("Boggart", 7, "👻", 31, 43, "Velocidad", 4, 2, 30, 3, 300);
+        player.Tokens[2] = new Tokens("Boggart", 7, "👻", 31, 43, "Copiar", 4, 4, 0, 0, 80);
 
-        player.Tokens[3] = new Tokens("Blast-Ended Skrewts", 8, "🦂", 43, 43, "Velocidad", 4, 2, 60, 5, 300);
+        player.Tokens[3] = new Tokens("Blast-Ended Skrewts", 8, "🦂", 43, 43, "Lazar Fuego", 6, 8, 20, 5, 150);
 
         string infoTarget = "Asesinar a los 4 elegidos y evitar que escapen del laberinto";
 
@@ -135,6 +135,32 @@ class Players
     }
 
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
+
+    #region Metodos de Habilidades de las Fichas           ////////////////////////////////////////////////////////////////////////////////////////
+
+    /*
+        //MAGOS
+
+        public void Expellarmus()
+
+        public void ConjuracionElemental()
+
+        public void Draconifors()
+
+        public void SanacionMagica()
+
+        //MONSTRUOS
+
+        publlc void Veneno()
+
+        public void AumentoDeFuerza()
+
+        public void Copiar()
+
+        public LanzaFuego()
+    */
+
+    #endregion              ////////////////////////////////////////////////////////////////////////////////////////
 
     #region Metodos de Turnos           ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -204,7 +230,7 @@ class Players
                 countTurns++;
             }
 
-            if(countTurns % 8 == 0 && player2.InfoTurn())
+            if(countTurns % 2 == 0 && player2.InfoTurn())
                 maze.GenerateNewMaze();
             
             
@@ -229,7 +255,7 @@ class Players
             ConsoleKey key = Console.ReadKey().Key;
 
             // Lee el teclado
-            ReadBoard(key, ref newX, ref newY, ref running, ref token, player1, player2);
+            ReadBoard(key, ref newX, ref newY, ref steps, ref token, player1, player2);
 
             if(key == ConsoleKey.Escape)                                            // Termina la simulacion
             {
@@ -298,7 +324,7 @@ class Players
     #region Metodos de Lectura del Teclado          ////////////////////////////////////////////////////////////////////////////////////////
 
     // Lee el teclado
-    public static void ReadBoard(ConsoleKey key, ref int newX, ref int newY, ref bool running, ref Tokens token, Players player1, Players player2) 
+    public static void ReadBoard(ConsoleKey key, ref int newX, ref int newY,ref int steps, ref Tokens token, Players player1, Players player2) 
     {
         //Casos para cada tecla
         switch (key)
@@ -326,7 +352,7 @@ class Players
                 Maze.PrintMaze(player1,player2);
                 break;
 
-            case ConsoleKey.Q: Console.WriteLine("\nLA FICHA VA A ATACAR"); token.Attack(token, ref player2, player1, token.InfoDamage()); 
+            case ConsoleKey.Q: Console.WriteLine("\nLA FICHA VA A ATACAR"); token.Attack(token, ref steps, ref player2, player1, token.InfoDamage()); 
                 break;
 
             case ConsoleKey.G: Console.WriteLine("\nLA FICHA VA A INTENTAR COGER UN OBJETO"); token.Collect(token); GamePlay.Pause("\n PRESIONE UNA TECLA PARA CONTINUAR"); Console.Clear(); Maze.PrintMaze(player1,player2); 
@@ -361,7 +387,7 @@ class Players
     }
 
     // 3ra Sobrecarga para leer el teclado
-    public static void ReadBoard(ConsoleKey key, Tokens token, ref Players player, int damage, int attackRange)
+    public static void ReadBoard(ConsoleKey key, Tokens token, ref int step, ref Players player, int damage, int attackRange)
     {
         int newX = token.CoordX;
         int newY = token.CoordY;
@@ -404,6 +430,8 @@ class Players
                     player.Tokens[j].RemoveHealth(damage);
                     Console.WriteLine($"Le has quitado {damage} puntos de vida a {player.Tokens[j].InfoName()}, Le queda {player.Tokens[j].Health}");
 
+                    step = 0;
+
                     // Verifica si la ficha aún tiene vida
                     if (player.Tokens[j].InfoHealth() <= 0)
                     {
@@ -420,6 +448,7 @@ class Players
         Console.WriteLine("\nNo se infligió daño en ninguna ficha\n");
         GamePlay.Pause("\n PRESIONE UNA TECLA PARA CONTINUAR...");
     }
+    
     // 4ta Sobrecarga para leer el teclado
     public static void ReadBoard(ConsoleKey key, ref int newX, ref int newY)
     {
