@@ -1,12 +1,29 @@
 ﻿using System;
-
+using System.Diagnostics; // Para iniciar procesos
+using System.Threading;  // Para manejar hilos
 class GamePlay
 {
     // Array de colores disponibles
     public static ConsoleColor[] colors = { ConsoleColor.Red, ConsoleColor.Green, ConsoleColor.Blue, ConsoleColor.Yellow, ConsoleColor.Cyan, ConsoleColor.Magenta };
 
+    // Booleano para parar la musica cuando se termine el proyecto
+    private static bool musicRunning = true;
+
+
     public static void Main(string[] args)
     {
+        // Ruta de las canciones (asegúrate de que los archivos existan)
+        string[] songs = {
+            @"D:\Programacion\Maze-Runner\Backend\musica\1.mp3",
+            @"D:\Programacion\Maze-Runner\Backend\musica\2.mp3",
+            @"D:\Programacion\Maze-Runner\Backend\musica\3.mp3"
+        };
+
+        // Crear un hilo separado para reproducir música en bucle
+        Thread musicThread = new Thread(() => PlayMusicLoop(songs));
+        musicThread.IsBackground = true; // El hilo se detendrá automáticamente cuando termine el programa
+        musicThread.Start();
+
         // Limpiar consola y mostrar título del juego
         Console.Clear();
         PrintGameTitle();
@@ -26,6 +43,43 @@ class GamePlay
         Console.WriteLine("\n GRACIAS POR JUGAR \n");
         Console.ResetColor();
 
+        // Finaliza el juego y detén la música
+        musicRunning = false;
+        Thread.Sleep(500); // Breve pausa para que el hilo de música termine correctamente
+
+    }
+
+    // Reproduce la musica
+    private static void PlayMusicLoop(string[] songs)
+    {
+        int currentSongIndex = 0; // Índice de la canción actual
+
+        while (musicRunning) // El bucle se detiene cuando musicRunning es falso
+        {
+            try
+            {
+                using (Process player = new Process())
+                {
+                    player.StartInfo.FileName = songs[currentSongIndex]; // Ruta de la canción actual
+                    player.StartInfo.UseShellExecute = true; // Indica que queremos usar un proceso externo
+                    player.StartInfo.WindowStyle = ProcessWindowStyle.Hidden; // Oculta la ventana del reproductor
+                    player.Start(); // Inicia la reproducción de la canción
+
+                    // Esperar a que el proceso termine (cuando la canción termine)
+                    player.WaitForExit();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"Error al reproducir la canción: {songs[currentSongIndex]}");
+                Console.WriteLine($"Detalles: {ex.Message}");
+                Console.ResetColor();
+            }
+
+            // Avanzar a la siguiente canción (y volver al inicio si llegamos al final)
+            currentSongIndex = (currentSongIndex + 1) % songs.Length;
+        }
     }
 
     //Multijugador
@@ -141,7 +195,7 @@ class GamePlay
                 ╚═╝╩═╝   ╩ ╚═╝╩╚═╝╚╝╚═╝╚═╝  ═╩╝╚═╝╩═╝  ╩═╝╩ ╩╚═╝╚═╝╩╚═╩╝╚╝ ╩ ╚═╝  ╩ ╩╩ ╩╚═╝╩╚═╝╚═╝
             ");
             Console.ResetColor();
-            System.Threading.Thread.Sleep(500);  // Pequeño retraso para mostrar el cambio de color
+            System.Threading.Thread.Sleep(3500);  // Pequeño retraso para mostrar el cambio de color
         }
         Console.ForegroundColor = ConsoleColor.Magenta;
         Console.WriteLine(@" 
@@ -165,5 +219,6 @@ class GamePlay
         Console.ReadKey();
     }
 
+    
 }
 

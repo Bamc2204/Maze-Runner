@@ -41,3 +41,11 @@ D:\Programacion\Maze-Runner\Backend\obj\Debug\net9.0\refint\Backend.dll
 D:\Programacion\Maze-Runner\Backend\obj\Debug\net9.0\Backend.pdb
 D:\Programacion\Maze-Runner\Backend\obj\Debug\net9.0\Backend.genruntimeconfig.cache
 D:\Programacion\Maze-Runner\Backend\obj\Debug\net9.0\ref\Backend.dll
+D:\Programacion\Maze-Runner\Backend\bin\Debug\net9.0\NAudio.dll
+D:\Programacion\Maze-Runner\Backend\bin\Debug\net9.0\NAudio.Asio.dll
+D:\Programacion\Maze-Runner\Backend\bin\Debug\net9.0\NAudio.Core.dll
+D:\Programacion\Maze-Runner\Backend\bin\Debug\net9.0\NAudio.Midi.dll
+D:\Programacion\Maze-Runner\Backend\bin\Debug\net9.0\NAudio.Wasapi.dll
+D:\Programacion\Maze-Runner\Backend\bin\Debug\net9.0\NAudio.WinMM.dll
+D:\Programacion\Maze-Runner\Backend\obj\Debug\net9.0\Backend.csproj.AssemblyReference.cache
+D:\Programacion\Maze-Runner\Backend\obj\Debug\net9.0\Backend.csproj.Up2Date
