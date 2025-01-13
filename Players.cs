@@ -413,35 +413,45 @@ class Players
         //Casos para cada tecla
         switch (key)
         {
+            // Arriba
             case ConsoleKey.UpArrow:    newX = token.CoordX - 1; 
                 break;
 
+            // Abajo
             case ConsoleKey.DownArrow:  newX = token.CoordX + 1; 
                 break;
 
+            // Izquierda
             case ConsoleKey.LeftArrow:  newY = token.CoordY - 1; 
                 break;
 
+            // Derecha
             case ConsoleKey.RightArrow: newY = token.CoordY + 1; 
                 break;
 
+            // Bolsa
             case ConsoleKey.Tab: token.UseBoxObject( ref newX, ref newY, ref token, player1, player2); 
                 break;
 
+            // Informacion de la Ficha
             case ConsoleKey.I: Console.Clear(); Console.WriteLine("\n " + player1.InfoFaction() + "\n" + " \n ***///OBETIVO///*** \n \n " + player1.InfoTarget()); token.DisplayStatus(); GamePlay.Pause("\nPRESIONE UNA TECLA PARA VOLVER AL LABERINTO");
                 Maze.PrintMaze(player1,player2);
                 break;
 
+            // Informacion de la Faccion
             case ConsoleKey.J: Console.Clear(); if(player1.InfoIndexFaction() == 1) player1.InfoGoodFaction(); else player1.InfoBadFaction(); Console.WriteLine("\n EL OBJETIVO DE LA FACCION: " + player1.InfoTarget()); GamePlay.Pause("PRESIONE UNA TECLA PARA VOLVER AL LABERINTO");
                 Maze.PrintMaze(player1,player2);
                 break;
 
+            // Atacar
             case ConsoleKey.E: Console.WriteLine("\nLA FICHA VA A ATACAR"); token.Attack(token, ref steps, ref player2, player1, token.InfoDamage()); 
                 break;
 
+            // Obtener Objetos
             case ConsoleKey.Q: Console.WriteLine("\nLA FICHA VA A INTENTAR COGER UN OBJETO"); token.Collect(token); GamePlay.Pause("\n PRESIONE UNA TECLA PARA CONTINUAR"); Console.Clear(); Maze.PrintMaze(player1,player2); 
                 break;
 
+            // Usar Habilidad
             case ConsoleKey.R: Console.WriteLine("\nLA FICHA VA A USAR SU HABILIDAD"); _usedSkill(token); 
                 break;
         }

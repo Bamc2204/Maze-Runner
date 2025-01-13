@@ -241,7 +241,7 @@ class Tokens
             _shield += 100;
             _speed -= 2;
             if(_shield < 0)
-                System.Console.WriteLine("\n El escudo ya no funciona");
+                Console.WriteLine("\n El escudo ya no funciona");
             activeShield = true;
         }
         else
