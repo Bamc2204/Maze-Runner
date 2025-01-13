@@ -58,15 +58,27 @@ class Players
         {
             CreateTokensGoodPlayer(ref player1);
             CreateTokensBadPlayer(ref player2);
+
+            Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("\n El jugador " + player1.InfoName() + " ha escogido la faccion " + player1.InfoFaction());
+            Console.ResetColor();
+
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("\n Y el jugador " + player2.InfoName() + " ha escogido la faccion " + player2.InfoFaction());
+            Console.ResetColor();
         }
         else
         {
             CreateTokensGoodPlayer(ref player2);
             CreateTokensBadPlayer(ref player1);
+
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("\n El jugador " + player1.InfoName() + " ha escogido la faccion " + player1.InfoFaction());
+            Console.ResetColor();
+
+            Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("\n Y el jugador " + player2.InfoName() + " ha escogido la faccion " + player2.InfoFaction()); 
+            Console.ResetColor();
         }
     }
 
@@ -77,13 +89,13 @@ class Players
     // Metodo para crear las fichas buenas
     public void CreateTokensGoodPlayer(ref Players player)
     {
-        player.Tokens[0] = new Tokens("Harry Potter", 1, "⚡", 1, 0, "Expellarmus", 6, 4, -7, -8, -9, 20, 4, 150);
+        player.Tokens[0] = new Tokens("Harry Potter", 1, "⚡", 1, 0, "Expellarmus", 6, 6, -7, -8, -10, 20, 4, 150);
 
-        player.Tokens[1] = new Tokens("Cedric Diggory", 2, "🦡", 13, 0, "Conjuro Elemental", 4, 6, -7, -7, -9, 20, 4, 150);
+        player.Tokens[1] = new Tokens("Cedric Diggory", 2, "🦡", 13, 0, "Conjuro Elemental", 4, 8, -7, -7, -9, 20, 4, 150);
 
-        player.Tokens[2] = new Tokens("Fleur Delacour", 3, "🌸", 25, 0, "Sanacion Magica", 4, 8, -9, -9, -9, 15, 8);
+        player.Tokens[2] = new Tokens("Fleur Delacour", 3, "🌸", 25, 0, "Sanacion Magica", 4, 10, -9, -9, -9, 15, 8);
 
-        player.Tokens[3] = new Tokens("Viktor Krum", 4, "💪", 37, 0, "Draconifors", 4, 4, -8, -8, -9, 30, 1, 250);
+        player.Tokens[3] = new Tokens("Viktor Krum", 4, "💪", 37, 0, "Draconifors", 4, 6, -8, -8, -9, 30, 1, 250);
 
         string infoTarget = "Obtener la COPA y escapar del laberinto";
 
@@ -93,13 +105,13 @@ class Players
     // Metodo para crear las fichas malas
     private void CreateTokensBadPlayer(ref Players player)
     {
-        player.Tokens[0] = new Tokens("Acromántula", 5, "🕷️", 7, 43, "Veneno", 3, 6, 15, 3, 300);
+        player.Tokens[0] = new Tokens("Acromántula", 5, "🕷️", 7, 43, "Veneno", 3, 8, 15, 3, 300);
 
-        player.Tokens[1] = new Tokens("Esfinge", 6, "🦁", 19, 43, "Aumento de Fuerza", 6, 4, 25, 2, 320);
+        player.Tokens[1] = new Tokens("Esfinge", 6, "🦁", 19, 43, "Aumento de Fuerza", 6, 6, 25, 2, 320);
 
-        player.Tokens[2] = new Tokens("Boggart", 7, "👻", 31, 43, "Copiar", 4, 4, 0, 0, 80);
+        player.Tokens[2] = new Tokens("Boggart", 7, "👻", 31, 43, "Copiar", 4, 6, 0, 0, 80);
 
-        player.Tokens[3] = new Tokens("Blast-Ended Skrewts", 8, "🦂", 43, 43, "Lazar Fuego", 6, 8, 20, 5, 150);
+        player.Tokens[3] = new Tokens("Blast-Ended Skrewts", 8, "🦂", 43, 43, "Lazar Fuego", 6, 10, 20, 5, 150);
 
         string infoTarget = "Asesinar a los 4 elegidos y evitar que escapen del laberinto";
 
@@ -138,6 +150,63 @@ class Players
 
     #region Metodos de Habilidades de las Fichas           ////////////////////////////////////////////////////////////////////////////////////////
 
+    // Metodo para usar la Habilidad de las Fichas ***********************************************************************
+    private static void _usedSkill(Tokens token)
+    {
+        if(token.ColdTime != 0)
+        {
+            GamePlay.Pause("\nAUN NO SE A RESTABLECIDO LA HABILIDAD \n\n\n\n\n\n\n\n\n\n\n\nPRESIONE UNA TECLA PLARA CONTINUAR...");
+            return;
+        }
+
+        if(token.InfoId() == 1)
+        {
+            token.ColdTime = 5;
+            return;
+        }
+        if(token.InfoId() == 2)
+        {
+            token.ColdTime = 3;
+            return;
+        }
+
+        if(token.InfoId() == 3)
+        {
+            token.ColdTime = 3;
+            return;
+        }
+
+        if(token.InfoId() == 4)
+        {
+            token.ColdTime = 2;
+            return;
+        }
+
+        if(token.InfoId() == 5)
+        {
+            token.ColdTime = 4;
+            return;
+        }
+
+        if(token.InfoId() == 6)
+        {
+            token.ColdTime = 5;
+            return;
+        }
+
+        if(token.InfoId() == 7)
+        {
+            token.ColdTime = 4;
+            return;
+        }
+
+        if(token.InfoId() == 8)
+        {
+            token.ColdTime = 5;
+            return;
+        }
+
+    }
     /*
         //MAGOS
 
@@ -230,10 +299,25 @@ class Players
                 countTurns++;
             }
 
-            if(countTurns % 2 == 0 && player2.InfoTurn())
-                maze.GenerateNewMaze();
+            if(countTurns % 8 == 0 && player2.InfoTurn())
+            {
+                maze.GenerateNewMaze(player1, player2);
+                Maze.PrintMaze(player1, player2);
+            }    
             
-            
+            _minusColdTime(player1);
+            _minusColdTime(player2);
+        }
+    }
+
+    // Metodo para El Tiempo de Enfriamiento
+    private static void _minusColdTime(Players player1)
+    {
+        for (int i = 0; i < player1.Tokens.Length; i++)
+        {
+            if(player1.Tokens[i].ColdTime == 0)
+                continue;
+            player1.Tokens[i].ColdTime--;
         }
     }
 
@@ -348,14 +432,17 @@ class Players
                 Maze.PrintMaze(player1,player2);
                 break;
 
-            case ConsoleKey.E: Console.Clear(); if(player1.InfoIndexFaction() == 1) player1.InfoGoodFaction(); else player1.InfoBadFaction(); Console.WriteLine("\n EL OBJETIVO DE LA FACCION: " + player1.InfoTarget()); GamePlay.Pause("PRESIONE UNA TECLA PARA VOLVER AL LABERINTO");
+            case ConsoleKey.J: Console.Clear(); if(player1.InfoIndexFaction() == 1) player1.InfoGoodFaction(); else player1.InfoBadFaction(); Console.WriteLine("\n EL OBJETIVO DE LA FACCION: " + player1.InfoTarget()); GamePlay.Pause("PRESIONE UNA TECLA PARA VOLVER AL LABERINTO");
                 Maze.PrintMaze(player1,player2);
                 break;
 
-            case ConsoleKey.Q: Console.WriteLine("\nLA FICHA VA A ATACAR"); token.Attack(token, ref steps, ref player2, player1, token.InfoDamage()); 
+            case ConsoleKey.E: Console.WriteLine("\nLA FICHA VA A ATACAR"); token.Attack(token, ref steps, ref player2, player1, token.InfoDamage()); 
                 break;
 
-            case ConsoleKey.G: Console.WriteLine("\nLA FICHA VA A INTENTAR COGER UN OBJETO"); token.Collect(token); GamePlay.Pause("\n PRESIONE UNA TECLA PARA CONTINUAR"); Console.Clear(); Maze.PrintMaze(player1,player2); 
+            case ConsoleKey.Q: Console.WriteLine("\nLA FICHA VA A INTENTAR COGER UN OBJETO"); token.Collect(token); GamePlay.Pause("\n PRESIONE UNA TECLA PARA CONTINUAR"); Console.Clear(); Maze.PrintMaze(player1,player2); 
+                break;
+
+            case ConsoleKey.R: Console.WriteLine("\nLA FICHA VA A USAR SU HABILIDAD"); _usedSkill(token); 
                 break;
         }
     }

@@ -54,20 +54,6 @@ class Maze
         }
     }
 
-    // Sobrecarga del Metodo Inicializar el laberinto para la generacion dinamica del mismo
-    // Inicializa el laberinto con paredes (-1) por defecto, excepto donde hay piezas
-    private void _initializeMaze(bool[,] occupiedPositions)
-    {
-        for (int x = 0; x < _rows; x++)
-        {
-            for (int y = 0; y < _cols; y++)
-            {
-                // Si la posición está ocupada por una pieza, no la modificamos
-                GeneralMaze[x, y] = occupiedPositions[x, y] ? GeneralMaze[x, y] : -1;
-            }
-        }
-    }
-
     // Genera el laberinto utilizando el algoritmo de backtracking
     private void _generateMaze(int x, int y)
     {
@@ -93,37 +79,6 @@ class Maze
         }
     }
  
-    // Sobrecarga del metodo de generacion del laberinto pero de forma dinamica
-    // Genera el laberinto utilizando el algoritmo de backtracking
-    private void _generateMaze(int x, int y, bool[,] occupiedPositions)
-    {
-        // Si la celda actual está ocupada por una pieza, no la modificamos
-        if (occupiedPositions[x, y]) return;
-
-        GeneralMaze[x, y] = 0; // Marca la celda actual como un camino vacío
-
-        // Lista de direcciones aleatorias para explorar
-        int[] addresses = { 0, 1, 2, 3 };
-        addresses = _mess(addresses); // Aleatoriza las direcciones
-
-        foreach (int address in addresses)
-        {
-            // Saltamos dos celdas en la dirección
-            int nx = x + DirX[address] * 2;
-            int ny = y + DirY[address] * 2;
-
-            // Si la nueva celda es válida (dentro de los límites y no ha sido recorrida)
-            if (_isValid(nx, ny) && !occupiedPositions[nx, ny])
-            {
-                // Rompemos el muro entre la celda actual y la nueva celda
-                GeneralMaze[x + DirX[address], y + DirY[address]] = 0;
-
-                // Llamamos recursivamente para continuar el recorrido
-                _generateMaze(nx, ny, occupiedPositions);
-            }
-        }
-    }                                                                                                           
-
     //Desordenar Array
     private int[] _mess(int[] a)
     {
@@ -136,33 +91,21 @@ class Maze
         return a;
     }
 
-    //Crea una Mascara Booleana para guardar las ocurrencias del laberinto
-    private bool[,] _booleanMask()
+    // Genera el laberinto cada cierto tiempo de forma dinamica
+    public void GenerateNewMaze(Players player1, Players player2)
     {
-        bool[,] booleanMask = new bool[_rows, _cols];
-        for (int i = 0; i < _rows; i++)
-        {
-            for (int j = 0; j < _cols; j++)
-            {
-                if(GeneralMaze[i, j] != 0 && GeneralMaze[i, j] != -1 && GeneralMaze[i, j] != -6)
-                    booleanMask[i, j] = true;
-                else
-                    booleanMask[i, j] = false;
-            }
-        }
-        return booleanMask;
-    }
-
-    // Genera el laberinto cada cierto tiempo de forma dinamica ******************************************************
-    public void GenerateNewMaze()
-    {
-        bool[,] bools = _booleanMask();
-        _initializeMaze(bools);                         // Inicializa el laberinto nuevamente
-        _generateMaze(1, 1, bools);                     // Genera el Laberinto de forma dinamica
-        _setRoad();                                     // Generar Caminos Alternativos
-        _setExit();                                     // Genera las Salidas
-        _setRoadAroundObjects(bools);                   // Genera Caminos alrededor de los Jugadores para q no queden encerrados
-        _setCup();                                      // Genera la COPA    
+        int [,] copyMaze = GeneralMaze;
+        _initializeMaze();                  // Crea el laberinto pero vacio(con todo paredes);
+        _generateMaze(1, 1);                // Comenzar desde la celda (1,1) a construir el laberinto;
+        _setRoad();                         // Genera caminos alternativos
+        _setPlayer(player1);                // Genera los 1ros jugadores
+        _setPlayer(player2);                // Genera los 2dos jugadores
+        _setTraps(-2);                      // Genera las trampas
+        _setTraps(-3);                      // Genera las trampas
+        _setTraps(-4);                      // Genera las trampas
+        _setCup();                          // Genera la COPA
+        _setExit();                         // Genera las Salidas
+        _setObject();                       // Genera los Objetos para ayudar al Jugador
     }
 
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
@@ -255,7 +198,7 @@ class Maze
             GeneralMaze[_cupX,_cupY] = -6;
     }
    
-    // Establece la entrada y salida del laberinto**********************************************************
+    // Establece la entrada y salida del laberinto
     private void _setExit()
     {
 
@@ -274,37 +217,6 @@ class Maze
         }
     }
 
-    //  Coloca los caminos alrededor de las los objetos
-    private void _setRoadAroundObjects(bool[,] bools)
-    {
-        
-        for (int i = 0; i < bools.GetLength(0); i++)
-        {
-            for (int j = 0; j < bools.GetLength(1); j++)
-            {
-                if(bools[i, j])
-                    _setRoad(i, j);
-            }
-        }
-    }
-
-    // Sobrecarga para colocar Caminos alrededor de las ficha
-    private void _setRoad(int x, int y)
-    {
-        for (int i = 0; i < 2; i++)
-        {
-            for (int j = 0; j < 2; j++)
-            {   
-                if((i == 0 && j  == 0) || x <= 2 || y <= 2)
-                    continue;
-                Maze.GeneralMaze[x + i, y + j] = -1;
-                Maze.GeneralMaze[x + i, y - j] = -1;
-                Maze.GeneralMaze[x - i, y + j] = -1;
-                Maze.GeneralMaze[x - i, y - j] = -1;
-            }
-        }
-    }
-
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
 
     #region Metodo de Verificacion          //////////////////////////////////////////////////////////////////////////////////////////
@@ -317,6 +229,7 @@ class Maze
         return false;
     }
      
+    // Verifica si es valida la salida
     private bool _validExit(int x, int y)
     {
         for(int i = 0; i < 5; i++) 

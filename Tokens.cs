@@ -13,7 +13,7 @@ class Tokens
     private int _distAttack;                    // Distacia de ataque
     private string _skill;                      // Habilidad
     private bool _skillActivation = true;       // Verificador de Habilidad
-    private int _coldTime;                      // Tiempo de enfriamiento de habilidad
+    public int ColdTime = 0;                      // Tiempo de enfriamiento de habilidad
     private int _speed;                         // Velocidad para recorrer casillas
     private int[] _box = new int[3];            // Bolsa con objetos
     public bool ActiveShield = false;          // Escudo activo
@@ -36,7 +36,7 @@ class Tokens
         _damage = damage;
         _distAttack = distAttack;
         _skill = skill;
-        _coldTime = coldTime;
+        ColdTime = coldTime;
         _speed = speed;
         _box[0] = obj1;
         _box[1] = obj2;
@@ -56,7 +56,7 @@ class Tokens
         _damage = damage;
         _distAttack = distAttack;
         _skill = skill;
-        _coldTime = coldTime;
+        ColdTime = coldTime;
         _speed = speed;
     }
 
@@ -288,6 +288,7 @@ class Tokens
         }while(false);
     }
     
+    // Metodo Escoba
     private void __broom(ref Tokens token, Players player1, Players player2)
     {
         int newX = token.CoordX;
@@ -305,7 +306,7 @@ class Tokens
         Players.ReadBoard(key, ref newX, ref newY);
 
         // Verifica los limites del mapa
-        if(newX <= 0 && newX > Maze.GeneralMaze.GetLength(0) && newY <= 0 && newY > Maze.GeneralMaze.GetLength(1))
+        if(newX <= 0 || newX >= Maze.GeneralMaze.GetLength(0) - 1 || newY <= 0 || newY > Maze.GeneralMaze.GetLength(1) - 1)
         {
             GamePlay.Pause("VAS EN DIRECCION AL VACIO Q TE CAUSARA LA MUERTE (VAS FUERA DEL MAPA) \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n PRESIONE UNA TECLA PARA CONNTINUAR");
             return;
@@ -323,6 +324,7 @@ class Tokens
         }
     }
 
+    // Metodo Verificar Camino
     private bool _checkRoad(int newX, int newY)
     {
         if(Maze.GeneralMaze[newX,  newY] == 0)
@@ -420,7 +422,7 @@ class Tokens
     {
         //Informacion del Nombre, Salud, Velocidad, Habilidad, Tiempo de Enfrimiento
         Console.WriteLine("\n ***///PROPIEDADES DE LA FICHA///***");
-        Console.WriteLine($"\n FICHA: {_name} | DAÑO: {_damage} | SALUD: {Health} | VELOCIDAD: {_speed} | HABILIDAD: {_skill} | TIEMPO DE ENFRIAMIENTO: {_coldTime}"); 
+        Console.WriteLine($"\n FICHA: {_name} | DAÑO: {_damage} | SALUD: {Health} | VELOCIDAD: {_speed} | HABILIDAD: {_skill} | TIEMPO DE ENFRIAMIENTO: {ColdTime}"); 
         Console.WriteLine($"\n ***///OBJETOS///***"); 
         for(int i = 0; i < _box.Length; i++) 
         {

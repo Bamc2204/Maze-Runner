@@ -4,7 +4,7 @@ using System.Threading;  // Para manejar hilos
 class GamePlay
 {
     // Array de colores disponibles
-    public static ConsoleColor[] colors = { ConsoleColor.Red, ConsoleColor.Green, ConsoleColor.Blue, ConsoleColor.Yellow, ConsoleColor.Cyan, ConsoleColor.Magenta };
+    public static ConsoleColor[] colors = { ConsoleColor.Red,ConsoleColor.Green, ConsoleColor.Blue, ConsoleColor.Yellow, ConsoleColor.Magenta};
 
     // Booleano para parar la musica cuando se termine el proyecto
     private static bool musicRunning = true;
@@ -13,9 +13,7 @@ class GamePlay
     {
         // Ruta de las canciones (asegúrate de que los archivos existan)
         string[] songs = {
-            @"D:\Programacion\Maze-Runner\Backend\musica\1.mp3",
-            @"D:\Programacion\Maze-Runner\Backend\musica\2.mp3",
-            @"D:\Programacion\Maze-Runner\Backend\musica\3.mp3"
+            @"D:\Programacion\Maze-Runner\Backend\musica\1.M4A",
         };
 
         // Crear un hilo separado para reproducir música en bucle
@@ -25,7 +23,7 @@ class GamePlay
 
         // Limpiar consola y mostrar título del juego
         Console.Clear();
-        PrintGameTitle();
+        _printGameTitle();
 
         // Mensaje de bienvenida
         Console.ForegroundColor = ConsoleColor.Yellow;
@@ -48,39 +46,6 @@ class GamePlay
 
     }
 
-    // Reproduce la musica
-    private static void PlayMusicLoop(string[] songs)
-    {
-        int currentSongIndex = 0; // Índice de la canción actual
-
-        while (musicRunning) // El bucle se detiene cuando musicRunning es falso
-        {
-            try
-            {
-                using (Process player = new Process())
-                {
-                    player.StartInfo.FileName = songs[currentSongIndex]; // Ruta de la canción actual
-                    player.StartInfo.UseShellExecute = true; // Indica que queremos usar un proceso externo
-                    player.StartInfo.WindowStyle = ProcessWindowStyle.Hidden; // Oculta la ventana del reproductor
-                    player.Start(); // Inicia la reproducción de la canción
-
-                    // Esperar a que el proceso termine (cuando la canción termine)
-                    player.WaitForExit();
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"Error al reproducir la canción: {songs[currentSongIndex]}");
-                Console.WriteLine($"Detalles: {ex.Message}");
-                Console.ResetColor();
-            }
-
-            // Avanzar a la siguiente canción (y volver al inicio si llegamos al final)
-            currentSongIndex = (currentSongIndex + 1) % songs.Length;
-        }
-    }
-
     //Multijugador
     private static void MultiPlayer()
     {
@@ -97,15 +62,13 @@ class GamePlay
         Console.ResetColor();
 
         // Pausa antes de continuar
-        Console.ForegroundColor = ConsoleColor.DarkGray;
         Pause("\nPresiona cualquier tecla para continuar...");
-        Console.ResetColor();
 
         // Historia del juego
         Console.Clear();
         Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine("          ********//////// HISTORIA ////////********");
-        string History = "\nAlbus Dumbledore anuncia, durante el banquete de bienvenida en "
+        string History1 = "\nAlbus Dumbledore anuncia, durante el banquete de bienvenida en "
             + "\nHogwarts, que la escuela será la sede del Torneo de los Tres "
             + "\nMagos, una competencia interescolar entre Hogwarts, la Academia "
             + "\nBeauxbatons y el Instituto Durmstrang. Un estudiante de cada una "
@@ -115,8 +78,17 @@ class GamePlay
             + "\nDiggory de Hogwarts. Misteriosamente, Harry Potter también es "
             + "\nelegido, pese a que no había ingresado su nombre en el Cáliz del "
             + "\nfuego. Ahora son 4 los magos que deben enfrentarse a los desafíos "
-            + "\ndel Torneo. "
-            + "\nLa tercera y última prueba, en la que está basada este juego, "
+            + "\ndel Torneo. ";
+        PrintTextSlowly(History1);
+        Console.ResetColor();
+
+        // Pausa antes de continuar
+        Pause("\nPRESIONE UNA TECLA PARA CONTINUAR LA HISTORIA...");
+        Console.Clear();
+
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("          ********//////// HISTORIA ////////********");
+        string History2 = "\nLa tercera y última prueba, en la que está basada este juego, "
             + "\nconsiste en un laberinto lleno de obstáculos mágicos diseñados "
             + "\npara confundir incluso a los magos más astutos, y como si no fuera  "
             + "\nsuficiente lo habitan monstruos como acromántulas sedientas de "
@@ -124,21 +96,28 @@ class GamePlay
             + "\ndesafían la mente con enigmas mortales y otras criaturas que "
             + "\nobstaculizan el camino a la legendaria Copa que se haya en el "
             + "\ncorazón del laberinto. La Copa otorga, a quien la alcance, 1000 "
-            + "\ngaleones en concepto de premio. "
-            + "\nEl jugador puede elegir entre ser bestia, y evitar de forma "
-            + "\nsanguinaria que cualquiera de los magos se convierta en el "
-            + "\nganador, o mago, y hacer uso de sus conocimientos magícos para "
-            + "\nalcanzar la Copa y escapar triunfante. "; 
-        PrintTextSlowly(History);
+            + "\ngaleones en concepto de premio. ";
+        PrintTextSlowly(History2);
         Console.ResetColor();
 
         // Pausa antes de continuar
-        Console.ForegroundColor = ConsoleColor.DarkGray;
-        Pause("\nPresiona cualquier tecla para continuar...");
+        Pause("\nPRESIONE UNA TECLA PARA CONTINUAR LA HISTORIA...");
+        Console.Clear();
+
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("          ********//////// HISTORIA ////////********");
+        string History3 = "\nEl jugador puede elegir entre ser bestia, y evitar de forma "
+            + "\nsanguinaria que cualquiera de los magos se convierta en el "
+            + "\nganador, o mago, y hacer uso de sus conocimientos magícos para "
+            + "\nalcanzar la Copa y escapar triunfante. "; 
+        PrintTextSlowly(History3);
         Console.ResetColor();
 
-        // Explicación inicial
+        // Pausa antes de continuar
+        Pause("\nPresiona cualquier tecla para continuar...");
         Console.Clear();
+
+        // Explicación inicial
         Console.ForegroundColor = ConsoleColor.Blue;
         Console.WriteLine("\nLAS FICHAS DISPONIBLES SON:");
         Console.WriteLine("\nLos *MAGOS* escogidos por el Caliz de Fuego y los *MONSTRUOS* que rondan el laberinto esperando algo que puedan devorar.");
@@ -147,9 +126,7 @@ class GamePlay
         Console.ResetColor();
 
         // Pausa antes de continuar
-        Console.ForegroundColor = ConsoleColor.DarkGray;
         Pause("\nPresiona cualquier tecla para continuar...");
-        Console.ResetColor();
 
         // Selección de facciones
         Console.Clear();
@@ -181,9 +158,7 @@ class GamePlay
         player1.CreateTokensFaction(player1, player2);
 
         // Pausa antes de continuar
-        Console.ForegroundColor = ConsoleColor.DarkGray;
         Pause("\nPresiona cualquier tecla para comenzar el juego...");
-        Console.ResetColor();
 
         Console.Clear();
 
@@ -203,19 +178,58 @@ class GamePlay
 
     }
 
+    // Reproduce la musica
+    private static void PlayMusicLoop(string[] songs)
+    {
+        int currentSongIndex = 0; // Índice de la canción actual
+
+        while (musicRunning) // El bucle se detiene cuando musicRunning es falso
+        {
+            try
+            {
+                using (Process player = new Process())
+                {
+                    player.StartInfo.FileName = songs[currentSongIndex]; // Ruta de la canción actual
+                    player.StartInfo.UseShellExecute = true; // Indica que queremos usar un proceso externo
+                    player.StartInfo.WindowStyle = ProcessWindowStyle.Hidden; // Oculta la ventana del reproductor
+                    player.Start(); // Inicia la reproducción de la canción
+
+                    currentSongIndex++;
+
+                    if(currentSongIndex == 4)
+                        currentSongIndex = 0;
+
+                    // Esperar a que el proceso termine (cuando la canción termine)
+                    player.WaitForExit();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"Error al reproducir la canción: {songs[currentSongIndex]}");
+                Console.WriteLine($"Detalles: {ex.Message}");
+                Console.ResetColor();
+            }
+
+            // Avanzar a la siguiente canción (y volver al inicio si llegamos al final)
+            currentSongIndex = (currentSongIndex + 1) % songs.Length;
+        }
+    }
+
     // Imrpime el texto letra por letra despacio
     public static void PrintTextSlowly(string text)
     {
         foreach (char c in text)
         {
             Console.Write(c);
-            Thread.Sleep(50); // Controla la velocidad de impresión
+            Thread.Sleep(10); // Controla la velocidad de impresión
         }
     }
 
     // Crea el titulo de juego
-    private static void PrintGameTitle()
+    private static void _printGameTitle()
     {
+        int contSecond = 1;
         foreach (var color in colors)
         {
             Console.ForegroundColor = color;  // Cambia el color del texto
@@ -226,7 +240,8 @@ class GamePlay
                 ╚═╝╩═╝   ╩ ╚═╝╩╚═╝╚╝╚═╝╚═╝  ═╩╝╚═╝╩═╝  ╩═╝╩ ╩╚═╝╚═╝╩╚═╩╝╚╝ ╩ ╚═╝  ╩ ╩╩ ╩╚═╝╩╚═╝╚═╝
             ");
             Console.ResetColor();
-            Thread.Sleep(3500);  // Pequeño retraso para mostrar el cambio de color
+            _timeInit(contSecond);
+            contSecond++;
         }
         Console.ForegroundColor = ConsoleColor.Magenta;
         Console.WriteLine(@" 
@@ -241,6 +256,21 @@ class GamePlay
         Console.ResetColor();
     }
 
+    private static void _timeInit(int cont)
+    {
+        if(cont == 1)
+                Thread.Sleep(6000);  // Pequeño retraso para mostrar el cambio de color
+        if(cont == 2)
+                Thread.Sleep(4000);  // Pequeño retraso para mostrar el cambio de color
+        if(cont == 3)
+                Thread.Sleep(5000);  // Pequeño retraso para mostrar el cambio de color
+        if(cont == 4)
+                Thread.Sleep(4000);  // Pequeño retraso para mostrar el cambio de color
+        if(cont == 5)
+                Thread.Sleep(5000);  // Pequeño retraso para mostrar el cambio de color
+
+    }
+
     // Hace las pausas necesarias en el juego
     public static void Pause(string message)
     {
@@ -250,6 +280,5 @@ class GamePlay
         Console.ReadKey();
     }
 
-    
 }
 
