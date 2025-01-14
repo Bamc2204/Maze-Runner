@@ -466,7 +466,7 @@ class Maze
     private void _checkBadWin(Players player1, Players player2, Maze maze, int newX, int newY, ref bool running)
     {
         //  Verifica si los MONSTRUOS mataron a todos los MAGOS
-        if(player2.Tokens.Length < 1 || _anotherWay(player2))
+        if(player2.Tokens.Length < 1)
         {
             running = false;
             foreach (var color in GamePlay.colors)
@@ -482,14 +482,6 @@ class Maze
         }
     }
 
-    private bool _anotherWay(Players player)
-    {
-        if(!CheckCup(player) && !_checkCupInMaze())
-            return true;
-
-        return false;
-    }
-    
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
     
     #region Metodos de informacion          //////////////////////////////////////////////////////////////////////////////////////////

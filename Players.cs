@@ -10,6 +10,7 @@ class Players
     private int _index = 0;             // Indice para escoger la faccion
     private string _faction;            // Faccion del jugador
     private string _InfoTarget;         // Objetivo del jugador
+    public static int countTurns = 0;   // Ciclos de turnos
 
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -109,7 +110,7 @@ class Players
 
         player.Tokens[1] = new Tokens("Esfinge", 6, "🦁", 19, 43, "Aumento de Fuerza", 6, 6, 25, 2, 320);
 
-        player.Tokens[2] = new Tokens("Boggart", 7, "👻", 31, 43, "Copiar", 4, 6, 0, 0, 80);
+        player.Tokens[2] = new Tokens("Boggart", 7, "👻", 31, 43, "Copiar", 4, 12, 0, 0, 40);
 
         player.Tokens[3] = new Tokens("Blast-Ended Skrewts", 8, "🦂", 43, 43, "Lazar Fuego", 6, 10, 20, 5, 150);
 
@@ -151,7 +152,7 @@ class Players
     #region Metodos de Habilidades de las Fichas           ////////////////////////////////////////////////////////////////////////////////////////
 
     // Metodo para usar la Habilidad de las Fichas ***********************************************************************
-    private static void _usedSkill(Tokens token)
+    private static void _usedSkill(Tokens token, ref Players player1, ref Players player2)
     {
         if(token.ColdTime != 0)
         {
@@ -161,73 +162,258 @@ class Players
 
         if(token.InfoId() == 1)
         {
+            _expellarmus(token, ref player2);
             token.ColdTime = 5;
             return;
         }
         if(token.InfoId() == 2)
         {
+            _elementalConjuration(token, ref player2);
             token.ColdTime = 3;
             return;
         }
 
         if(token.InfoId() == 3)
         {
+            _draconifors(token, ref player2);
             token.ColdTime = 3;
             return;
         }
 
         if(token.InfoId() == 4)
         {
+            _magicalHealing(token, ref player1);
             token.ColdTime = 2;
             return;
         }
 
         if(token.InfoId() == 5)
         {
+            _poison(token, ref player2);
             token.ColdTime = 4;
             return;
         }
 
         if(token.InfoId() == 6)
         {
+            _strengthIncrease(token, ref player2);
             token.ColdTime = 5;
             return;
         }
 
         if(token.InfoId() == 7)
         {
-            token.ColdTime = 4;
+            _copy(token, player1);
+            token.ColdTime = 10;
             return;
         }
 
         if(token.InfoId() == 8)
         {
+            _throwFire(token, ref player2);
             token.ColdTime = 5;
             return;
         }
 
     }
-    /*
-        //MAGOS
+    
+    // Habilidades de MAGOS
+    
+    // Metodo para paralizar un ficha**************************************** no encuentro la manera de paralizar
+    private static void _expellarmus(Tokens token, ref Players player2)
+    {
+        for(int i = 1; i <= 3; i++)
+        {
+            for (int j = 0; j <= 3; j++)
+            {
+                for (int k = 0; k < player2.Tokens.Length; k++)
+                {
+                    bool checkArea = 
+                    (player2.Tokens[k].CoordX == token.CoordX + i && player2.Tokens[k].CoordY == token.CoordY + j) || 
+                    (player2.Tokens[k].CoordX == token.CoordX + i && player2.Tokens[k].CoordY == token.CoordY - j) ||
+                    (player2.Tokens[k].CoordX == token.CoordX - i && player2.Tokens[k].CoordY == token.CoordY + j) ||
+                    (player2.Tokens[k].CoordX == token.CoordX - i && player2.Tokens[k].CoordY == token.CoordY - j);
 
-        public void Expellarmus()
+                    if(checkArea)
+                    {
+                        player2.Tokens[k].SlowDown(player2.Tokens[k].InfoSpeed());
+                        Console.WriteLine($"Se ha paralizado a {player2.Tokens[k].InfoName()}");
+                        GamePlay.Pause("\n\n\n\n\n\nPresione una tecla para continuar...");
+                        return;
+                    }
+                }
+            }
+        }
+    }
 
-        public void ConjuracionElemental()
+    // Lazar un ataque Elemental en Area distancia de 4 casillas y radio de 2
+    private static void _elementalConjuration(Tokens tokens, ref Players player2)
+    {
+        Console.WriteLine("En que direccion va a aplicar el efeccto");
+        ConsoleKey key = Console.ReadKey().Key;
+        ReadBoard(key, tokens, ref player2, 20, 4, 2);
+    }
 
-        public void Draconifors()
+    // Aumenta Daño Cuerpo a cuerpo
+    private static void _draconifors(Tokens tokens, ref Players player2)
+    {
+        Console.WriteLine("En que direccion va a aplicar el efeccto");
+        ConsoleKey key = Console.ReadKey().Key;
+        ReadBoard(key, tokens, ref player2, 40, 1);
+    }
 
-        public void SanacionMagica()
+    // Sana a la persona con menos vida en un radio de 2 casillas alrededor de la ficha
+    private static void _magicalHealing(Tokens token, ref Players player1)
+    {
+        int menor = int.MaxValue;
+        
+        int newX = token.CoordX;
+        int newY = token.CoordY;
 
-        //MONSTRUOS
+        int upX = 3;             //X---
+        int downX = 3;           //X+++
+        int leftY = 3;           //Y---
+        int rightY = 3;          //Y+++
 
-        publlc void Veneno()
+        while(true)
+        {
+            if(newX - upX <= 0)
+                upX--;
+            else if( newX + downX >= Maze.GeneralMaze.GetLength(0))
+                downX--;
+            else if(newY - leftY <= 0)
+                leftY--;
+            else if(newY + rightY >= Maze.GeneralMaze.GetLength(1))
+                rightY--;
+            else
+                break;
+        }
 
-        public void AumentoDeFuerza()
+        // Verifica si hay un enemigo en la nueva posición
+        for (int i = 0; i <= upX; i++)
+        {
+            for (int j = 0; j <= downX; j++)
+            {
+                for (int k = 0; k < leftY; k++)
+                {
+                    for (int l = 0; l < rightY; l++)
+                    {
+                        for (int m = 0; m < player1.Tokens.Length; m++)
+                        {    
+                            // Verifica si hay algun enemigo en esa area
+                            bool checkArea = 
+                            (player1.Tokens[m].CoordX == newX + downX && player1.Tokens[m].CoordY == newY + rightY) || 
+                            (player1.Tokens[m].CoordX == newX + downX && player1.Tokens[m].CoordY == newY - leftY) ||
+                            (player1.Tokens[m].CoordX == newX - upX && player1.Tokens[m].CoordY == newY + rightY) ||
+                            (player1.Tokens[m].CoordX == newX - upX && player1.Tokens[m].CoordY == newY - leftY);
 
-        public void Copiar()
+                            if(checkArea && player1.Tokens[m].InfoHealth() < menor)
+                            {
+                                menor = player1.Tokens[m].InfoHealth();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+       
+        for (int i = 0; i < player1.Tokens.Length; i++)
+        {
+            if(menor == player1.Tokens[i].InfoHealth())
+            {
+                player1.Tokens[i].AddHealth(20);
+                Console.WriteLine($"Se ha curado a {player1.Tokens[i].InfoName()}");
+                GamePlay.Pause("\n\n\n\n\n\nPresione una tecla para continuar...");
+                return;
+            }
+        }
 
-        public LanzaFuego()
-    */
+    }
+    
+    // Habilidades de MONSTRUOS
+
+    // Envenamiento ***************************************************************
+    private static void _poison(Tokens tokens, ref Players player2)
+    {
+        
+    }
+
+    // Aumenta Daño cuerpo a cuerpo, a una distancia de 1 casillas    
+    private static void _strengthIncrease(Tokens tokens, ref Players player2)
+    {
+        Console.WriteLine("En que direccion va a aplicar el efeccto");
+        ConsoleKey key = Console.ReadKey().Key;
+        ReadBoard(key, tokens, ref player2, 50, 1);
+    }
+
+    // Copiar otros monstruos
+    private static void _copy(Tokens token, Players player1)
+    {
+        int index = -1;
+        Console.WriteLine("En que Monstruo te quieres transformar(1-4)");
+        ConsoleKey key = Console.ReadKey().Key;
+        
+        if(key != ConsoleKey.NumPad1 && key != ConsoleKey.NumPad2 && key != ConsoleKey.NumPad3 && key != ConsoleKey.NumPad4)
+        {
+            Console.WriteLine("\nNo escogio convertirse en algo"); 
+            GamePlay.Pause("\n\n\n\n\n\nPresione una tecla para continuar...");
+            return; 
+        }
+           
+        ReadBoard(key, ref index);  
+
+        if(index > player1.Tokens.Length)
+        {
+            Console.WriteLine("Se han eliminado fichas por lo q esa posicion ya no existe");
+            GamePlay.Pause("Presione una tecla para continuar...");
+            return;
+        }
+
+        int id = player1.Tokens[index].InfoId();
+
+        switch(id)
+        {
+            case 5: 
+                token.ModifyCharacter("🕷️");
+                token.ModifiHealth(300 );
+                token.ModifySpeed(8);
+                token.ModifiDamage(15);
+                token.ModifiDistAttack(3);
+                break;
+
+            case 6: 
+                token.ModifyCharacter("🦁");
+                token.ModifiHealth(320);
+                token.ModifySpeed(6);
+                token.ModifiDamage(25);
+                token.ModifiDistAttack(2);
+                break;
+
+            case 7: 
+                token.ModifyCharacter("👻");
+                token.ModifiHealth(40);
+                token.ModifySpeed(12);
+                token.ModifiDamage(0);
+                token.ModifiDistAttack(0);
+                break;
+
+            case 8: 
+                token.ModifyCharacter("🦂");
+                token.ModifiHealth(150);
+                token.ModifySpeed(10);
+                token.ModifiDamage(20);
+                token.ModifiDistAttack(5);
+                break;
+        }
+    }
+    
+    // Lazar fuego en Area distancia de 5 casillas y radio de 1
+    public static void _throwFire(Tokens tokens, ref Players player2)
+    {
+        Console.WriteLine("En que direccion va a aplicar el efeccto");
+        ConsoleKey key = Console.ReadKey().Key;
+        ReadBoard(key, tokens, ref player2, 35, 5, 1);
+    }
 
     #endregion              ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -250,7 +436,7 @@ class Players
     {
         int indexPiece = 0;
 
-        int countTurns = 0;
+        bool CanRunning = true;
 
         Console.WriteLine("LA FACCION DE LOS MAGOS COMIENZA 1RO");
 
@@ -269,33 +455,46 @@ class Players
                 continue;
             }
 
-            ReadBoard(key, ref indexPiece, ref running);
-
+            ReadBoard(key, ref indexPiece);
 
             // Se inicializan los turnos
-            if(player1.InfoTurn() == false)
+            if(player1.InfoTurn() == false && CanRunning == true)
             {
                 Console.WriteLine("\n Has escogido la ficha a: " + player1.Tokens[indexPiece].InfoName());  
                 player1.StartTurn();
                 player2.EndTurn();
             } 
-            else
+            else if(CanRunning == true)
             {
                 Console.WriteLine("\n Has escogido la ficha a: " + player2.Tokens[indexPiece].InfoName());
                 player2.StartTurn();
                 player1.EndTurn();    
             }
 
-            Console.WriteLine("\n Ya puede desplazarse");
+                        
 
             // Se verifica de quien es el turno
             if(player1.InfoTurn())
             {
+                if(indexPiece > player1.Tokens.Length)
+                {
+                    Console.WriteLine("Hay una fichas eliminadas por lo que esa posicion ya no existe");
+                    CanRunning = false;
+                    continue;
+                }
                 _displacement(player1.Tokens[indexPiece].InfoSpeed(), maze, ref player1.Tokens[indexPiece], player1, player2, ref running);
+                CanRunning = true;
             }
             else if(player2.InfoTurn())
             {
+                if(indexPiece > player2.Tokens.Length)
+                {
+                    Console.WriteLine("Hay una fichas eliminadas por lo que esa posicion ya no existe");
+                    CanRunning = false;
+                    continue;
+                }
                 _displacement(player2.Tokens[indexPiece].InfoSpeed(), maze, ref player2.Tokens[indexPiece], player2, player1, ref running);
+                CanRunning = true;
                 countTurns++;
             }
 
@@ -335,6 +534,8 @@ class Players
         // Verifica los pasos y si el juego aun corre
         while(steps != 0 && running)
         {   
+            Console.WriteLine("\n Ya puede desplazarse");
+
             // Tecla q toca el jugador en el teclado            
             ConsoleKey key = Console.ReadKey().Key;
 
@@ -407,7 +608,7 @@ class Players
     
     #region Metodos de Lectura del Teclado          ////////////////////////////////////////////////////////////////////////////////////////
 
-    // Lee el teclado
+    // Lee el teclado para las funciones principales del juego
     public static void ReadBoard(ConsoleKey key, ref int newX, ref int newY,ref int steps, ref Tokens token, Players player1, Players player2) 
     {
         //Casos para cada tecla
@@ -452,13 +653,13 @@ class Players
                 break;
 
             // Usar Habilidad
-            case ConsoleKey.R: Console.WriteLine("\nLA FICHA VA A USAR SU HABILIDAD"); _usedSkill(token); 
+            case ConsoleKey.F: Console.WriteLine("\nLA FICHA VA A USAR SU HABILIDAD"); _usedSkill(token, ref player1, ref player2); 
                 break;
         }
     }
 
-    // Sobrecarga para leer el teclado
-    public static void ReadBoard(ConsoleKey key, ref int _index, ref bool running)
+    // Sobrecarga para leer el teclado para escoger una de las fichas o el Id de las fichas
+    public static void ReadBoard(ConsoleKey key, ref int _index)
     {
         switch (key)
         {
@@ -473,17 +674,17 @@ class Players
         }
     }
     
-    // 2da Sobrecarga para leer el teclado
-    public static void ReadBoard(ConsoleKey key, ref int _index)
+    // 2da Sobrecarga para leer el teclado para escoger faccion
+    public static void ReadBoard(ref int index, ConsoleKey key)
     {
         switch (key)
         {
-            case ConsoleKey.LeftArrow: _index = 1; break;
-            case ConsoleKey.RightArrow: _index = 2; break;
+            case ConsoleKey.LeftArrow: index = 1; break;
+            case ConsoleKey.RightArrow: index = 2; break;
         }
     }
 
-    // 3ra Sobrecarga para leer el teclado
+    // 3ra Sobrecarga para leer el teclado para atacar
     public static void ReadBoard(ConsoleKey key, Tokens token, ref int step, ref Players player, int damage, int attackRange)
     {
         int newX = token.CoordX;
@@ -525,7 +726,7 @@ class Players
                 if (player.Tokens[j].CoordX == newX && player.Tokens[j].CoordY == newY)
                 {
                     player.Tokens[j].RemoveHealth(damage);
-                    Console.WriteLine($"Le has quitado {damage} puntos de vida a {player.Tokens[j].InfoName()}, Le queda {player.Tokens[j].Health}");
+                    Console.WriteLine($"Le has quitado {damage} puntos de vida a {player.Tokens[j].InfoName()}, Le queda {player.Tokens[j].InfoHealth()}");
 
                     step = 0;
 
@@ -546,7 +747,7 @@ class Players
         GamePlay.Pause("\n PRESIONE UNA TECLA PARA CONTINUAR...");
     }
     
-    // 4ta Sobrecarga para leer el teclado
+    // 4ta Sobrecarga para leer el teclado para desplazarse con la escoba
     public static void ReadBoard(ConsoleKey key, ref int newX, ref int newY)
     {
         switch(key)
@@ -561,6 +762,163 @@ class Players
         }
     }
 
+    // 5ta Sobrecarga para leer el teclado para habilidad de ataque cuerpo a cuerpo 
+    public static void ReadBoard(ConsoleKey key, Tokens token, ref Players player, int damage, int attackRange)
+    {
+        int newX = token.CoordX;
+        int newY = token.CoordY;
+
+        for (int i = 1; i <= attackRange; i++)
+        {
+            switch (key)
+            {
+                case ConsoleKey.UpArrow:
+                    newX = token.CoordX - i;
+                    newY = token.CoordY;
+                    break;
+                case ConsoleKey.DownArrow:
+                    newX = token.CoordX + i;
+                    newY = token.CoordY;
+                    break;
+                case ConsoleKey.LeftArrow:
+                    newX = token.CoordX;
+                    newY = token.CoordY - i;
+                    break;
+                case ConsoleKey.RightArrow:
+                    newX = token.CoordX;
+                    newY = token.CoordY + i;
+                    break;
+            }
+
+            // Verifica si hay una pared en la nueva posición
+            if (Maze.GeneralMaze[newX, newY] == -1)
+            {
+                Console.WriteLine("El ataque fue bloqueado por una pared.");
+                GamePlay.Pause("\n PRESIONE UNA TECLA PARA CONTINUAR...");
+                return;
+            }
+
+            // Verifica si hay un enemigo en la nueva posición
+            for (int j = 0; j < player.Tokens.Length; j++)
+            {
+                if (player.Tokens[j].CoordX == newX && player.Tokens[j].CoordY == newY)
+                {
+                    player.Tokens[j].RemoveHealth(damage);
+                    Console.WriteLine($"Le has quitado {damage} puntos de vida a {player.Tokens[j].InfoName()}, Le queda {player.Tokens[j].InfoHealth()}");
+
+                    // Verifica si la ficha aún tiene vida
+                    if (player.Tokens[j].InfoHealth() <= 0)
+                    {
+                        Console.WriteLine($"{player.Tokens[j].InfoName()} ha sido eliminado.");
+                        player.DeleteToken(ref player, j);
+                    }
+                    GamePlay.Pause("\n PRESIONE UNA TECLA PARA CONTINUAR...");
+                    Console.Clear();
+                    return;
+                }
+            }
+        }
+
+        Console.WriteLine("\nNo se infligió daño en ninguna ficha\n");
+        GamePlay.Pause("\n PRESIONE UNA TECLA PARA CONTINUAR...");
+    }
+    
+    // 6ta Sobrecarga para leer el teclado para habilidad de ataque de Area
+    public static void ReadBoard(ConsoleKey key, Tokens token, ref Players player, int damage, int attackRange, int area)
+    {
+        int newX = token.CoordX;
+        int newY = token.CoordY;
+
+        switch (key)
+        {
+            case ConsoleKey.UpArrow:
+                newX = token.CoordX - attackRange;
+                newY = token.CoordY;
+                break;
+            case ConsoleKey.DownArrow:
+                newX = token.CoordX + attackRange;
+                newY = token.CoordY;
+                break;
+            case ConsoleKey.LeftArrow:
+                newX = token.CoordX;
+                newY = token.CoordY - attackRange;
+                break;
+            case ConsoleKey.RightArrow:
+                newX = token.CoordX;
+                newY = token.CoordY + attackRange;
+                break;
+        }
+
+        if(newX <= 0 || newX >= Maze.GeneralMaze.GetLength(0) || newY <= 0 || newY >= Maze.GeneralMaze.GetLength(1))
+        {
+            Console.WriteLine("El ataque fue dirigido hacia afuera del Laberinto");
+            GamePlay.Pause("\n PRESIONE UNA TECLA PARA CONTINUAR...");
+            return;
+        }
+
+        int upX = area;             //X---
+        int downX = area;           //X+++
+        int leftY = area;           //Y---
+        int rightY = area;          //Y+++
+
+        while(true)
+        {
+            if(newX - upX <= 0)
+                upX--;
+            else if( newX + downX >= Maze.GeneralMaze.GetLength(0))
+                downX--;
+            else if(newY - leftY <= 0)
+                leftY--;
+            else if(newY + rightY >= Maze.GeneralMaze.GetLength(1))
+                rightY--;
+            else
+                break;
+        }
+
+
+        // Verifica si hay un enemigo en la nueva posición
+        for (int i = 0; i <= upX; i++)
+        {
+            for (int j = 0; j <= downX; j++)
+            {
+                for (int k = 0; k < leftY; k++)
+                {
+                    for (int l = 0; l < rightY; l++)
+                    {
+                        for (int m = 0; m < player.Tokens.Length; m++)
+                        {    
+                            // Verifica si hay algun enemigo en esa area
+                            bool checkArea = 
+                            (player.Tokens[m].CoordX == newX + downX && player.Tokens[m].CoordY == newY + rightY) || 
+                            (player.Tokens[m].CoordX == newX + downX && player.Tokens[m].CoordY == newY - leftY) ||
+                            (player.Tokens[m].CoordX == newX - upX && player.Tokens[m].CoordY == newY + rightY) ||
+                            (player.Tokens[m].CoordX == newX - upX && player.Tokens[m].CoordY == newY - leftY);
+
+                            if (checkArea)
+                            {
+                                player.Tokens[j].RemoveHealth(damage);
+                                Console.WriteLine($"Le has quitado {damage} puntos de vida a {player.Tokens[j].InfoName()}, Le queda {player.Tokens[j].InfoHealth()}");
+
+                                // Verifica si la ficha aún tiene vida
+                                if (player.Tokens[j].InfoHealth() <= 0)
+                                {
+                                    Console.WriteLine($"{player.Tokens[j].InfoName()} ha sido eliminado.");
+                                    player.DeleteToken(ref player, j);
+                                }
+                                GamePlay.Pause("\n PRESIONE UNA TECLA PARA CONTINUAR...");
+                                Console.Clear();
+                                return;
+                            }
+                        }            
+                    }
+                }
+            }
+        }
+
+        Console.WriteLine("\nNo se infligió daño en ninguna ficha\n");
+        GamePlay.Pause("\n PRESIONE UNA TECLA PARA CONTINUAR...");
+    }
+    
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
      
     #region Metodo para Verificar las trampas           ////////////////////////////////////////////////////////////////////////////////////////

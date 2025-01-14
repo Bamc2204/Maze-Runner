@@ -8,7 +8,7 @@ class Tokens
     public int CoordX;                         // Coordenada X
     public int CoordY;                         // Coordenada Y
     private string _character;                  // Caracter de la ficha
-    public int Health;                         // Salud
+    private int _health;                         // Salud
     private int _damage;                        // Daño
     private int _distAttack;                    // Distacia de ataque
     private string _skill;                      // Habilidad
@@ -32,7 +32,7 @@ class Tokens
         CoordX = coordX;
         CoordY = coordY;
         _character = character;
-        Health = health;
+        _health = health;
         _damage = damage;
         _distAttack = distAttack;
         _skill = skill;
@@ -52,7 +52,7 @@ class Tokens
         CoordX = coordX;
         CoordY = coordY;
         _character = character;
-        Health = health;
+        _health = health;
         _damage = damage;
         _distAttack = distAttack;
         _skill = skill;
@@ -89,7 +89,7 @@ class Tokens
             switch (objeto)
             {
                 // Posion de Vida
-                case Objects.healthPotion: AddHealth(50); Console.WriteLine($"\n {_name} usó una poción de salud. Salud actual: {Health}"); _deleteObject(index); 
+                case Objects.healthPotion: AddHealth(50); Console.WriteLine($"\n {_name} usó una poción de salud. Salud actual: {_health}"); _deleteObject(index); 
                     break;
                 
                 // Posion de Velocidad
@@ -200,7 +200,7 @@ class Tokens
     // Metodo para agregar salud
     public void AddHealth(int add)
     {
-        Health += add;
+        _health += add;
     }
 
     // Metodo para quitar a la salud
@@ -209,13 +209,13 @@ class Tokens
         if(activeShield && _shield > 0)
             _shield -= remove;
         else
-            Health -= remove;
+            _health -= remove;
     }
 
     // Sobre carga del Metodo para quitar salud
     public void RemoveHealth(int remove)
     {
-        Health -= remove;
+        _health -= remove;
     }
 
     // Metodo para agregar velocidad
@@ -384,7 +384,7 @@ class Tokens
     // Informacion de la Vida
     public int InfoHealth()
     {
-        return Health;
+        return _health;
     }
 
     // Informacion del Daño
@@ -422,7 +422,7 @@ class Tokens
     {
         //Informacion del Nombre, Salud, Velocidad, Habilidad, Tiempo de Enfrimiento
         Console.WriteLine("\n ***///PROPIEDADES DE LA FICHA///***");
-        Console.WriteLine($"\n FICHA: {_name} | DAÑO: {_damage} | SALUD: {Health} | VELOCIDAD: {_speed} | HABILIDAD: {_skill} | TIEMPO DE ENFRIAMIENTO: {ColdTime}"); 
+        Console.WriteLine($"\n FICHA: {_name} | DAÑO: {_damage} | SALUD: {_health} | VELOCIDAD: {_speed} | HABILIDAD: {_skill} | TIEMPO DE ENFRIAMIENTO: {ColdTime}"); 
         Console.WriteLine($"\n ***///OBJETOS///***"); 
         for(int i = 0; i < _box.Length; i++) 
         {
@@ -432,4 +432,37 @@ class Tokens
     
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
 
+    #region Metodos de Modificacion             ////////////////////////////////////////////////////////////////////////////////////////
+
+    // Metodo para modificar el caracter
+    public void ModifyCharacter(string newCharacter)
+    {
+        _character = newCharacter;
+    }
+
+    // Metodo para modificar la velocidad
+    public void ModifySpeed(int newSpeed)
+    {
+        _speed = newSpeed;
+    }
+
+    //Metodo para modificar la vida
+    public void ModifiHealth(int newHealth)
+    {
+        _health = newHealth;
+    }
+
+    // Metodo para modificar el daño
+    public void ModifiDamage(int newDamage)
+    {
+        _damage = newDamage;
+    }
+
+    // Metodo para modificar la distacia de ataque
+    public void ModifiDistAttack(int newDistAttack)
+    {
+        _distAttack = newDistAttack;
+    }
+
+    #endregion              ////////////////////////////////////////////////////////////////////////////////////////
 }

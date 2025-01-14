@@ -30,6 +30,8 @@ class GamePlay
         Console.WriteLine("\n¡Bienvenido al juego del laberinto mágico! ¿Listo para esta aventura?");
         Console.ResetColor();
 
+
+
         //  Modo de juego multijugador
         MultiPlayer();
     
@@ -62,60 +64,10 @@ class GamePlay
         Console.ResetColor();
 
         // Pausa antes de continuar
-        Pause("\nPresiona cualquier tecla para continuar...");
+        Pause("\n\n\n\n\n\n\n\n\n\n\n\n\n\nPresiona cualquier tecla para continuar...");
 
         // Historia del juego
-        Console.Clear();
-        Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine("          ********//////// HISTORIA ////////********");
-        string History1 = "\nAlbus Dumbledore anuncia, durante el banquete de bienvenida en "
-            + "\nHogwarts, que la escuela será la sede del Torneo de los Tres "
-            + "\nMagos, una competencia interescolar entre Hogwarts, la Academia "
-            + "\nBeauxbatons y el Instituto Durmstrang. Un estudiante de cada una "
-            + "\nde tres escuelas de magia sería elegido por el Cáliz de fuego para "
-            + "\ncompetir en el torneo. Los campeones que elige el Cáliz son Fleur "
-            + "\nDelacour de Beauxbatons, Viktor Krum de Durmstrang y Cedrics "
-            + "\nDiggory de Hogwarts. Misteriosamente, Harry Potter también es "
-            + "\nelegido, pese a que no había ingresado su nombre en el Cáliz del "
-            + "\nfuego. Ahora son 4 los magos que deben enfrentarse a los desafíos "
-            + "\ndel Torneo. ";
-        PrintTextSlowly(History1);
-        Console.ResetColor();
-
-        // Pausa antes de continuar
-        Pause("\nPRESIONE UNA TECLA PARA CONTINUAR LA HISTORIA...");
-        Console.Clear();
-
-        Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine("          ********//////// HISTORIA ////////********");
-        string History2 = "\nLa tercera y última prueba, en la que está basada este juego, "
-            + "\nconsiste en un laberinto lleno de obstáculos mágicos diseñados "
-            + "\npara confundir incluso a los magos más astutos, y como si no fuera  "
-            + "\nsuficiente lo habitan monstruos como acromántulas sedientas de "
-            + "\ncarne humana; boggarts que se alimentan del miedo; esfinges que "
-            + "\ndesafían la mente con enigmas mortales y otras criaturas que "
-            + "\nobstaculizan el camino a la legendaria Copa que se haya en el "
-            + "\ncorazón del laberinto. La Copa otorga, a quien la alcance, 1000 "
-            + "\ngaleones en concepto de premio. ";
-        PrintTextSlowly(History2);
-        Console.ResetColor();
-
-        // Pausa antes de continuar
-        Pause("\nPRESIONE UNA TECLA PARA CONTINUAR LA HISTORIA...");
-        Console.Clear();
-
-        Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine("          ********//////// HISTORIA ////////********");
-        string History3 = "\nEl jugador puede elegir entre ser bestia, y evitar de forma "
-            + "\nsanguinaria que cualquiera de los magos se convierta en el "
-            + "\nganador, o mago, y hacer uso de sus conocimientos magícos para "
-            + "\nalcanzar la Copa y escapar triunfante. "; 
-        PrintTextSlowly(History3);
-        Console.ResetColor();
-
-        // Pausa antes de continuar
-        Pause("\nPresiona cualquier tecla para continuar...");
-        Console.Clear();
+        _history();
 
         // Explicación inicial
         Console.ForegroundColor = ConsoleColor.Blue;
@@ -142,7 +94,7 @@ class GamePlay
             ConsoleKey key = Console.ReadKey().Key;
             if (key == ConsoleKey.LeftArrow || key == ConsoleKey.RightArrow)
             {
-                Players.ReadBoard(key, ref indexPlayer1);
+                Players.ReadBoard(ref indexPlayer1, key);
                 break;
             }
             Console.WriteLine("\nPor favor, presiona solo FLECHA IZQUIERDA o FLECHA DERECHA. Inténtalo otra vez.");
@@ -158,9 +110,12 @@ class GamePlay
         player1.CreateTokensFaction(player1, player2);
 
         // Pausa antes de continuar
-        Pause("\nPresiona cualquier tecla para comenzar el juego...");
+        Pause("\nPresiona cualquier tecla para continuar...");
 
         Console.Clear();
+
+        // Leyenda
+        _legend();
 
         // Crear el laberinto y comenzar el juego
         Maze lab = new Maze(player1, player2);
@@ -217,12 +172,12 @@ class GamePlay
     }
 
     // Imrpime el texto letra por letra despacio
-    public static void PrintTextSlowly(string text)
+    public static void PrintTextSlowly(string text, int time)
     {
         foreach (char c in text)
         {
             Console.Write(c);
-            Thread.Sleep(10); // Controla la velocidad de impresión
+            Thread.Sleep(time); // Controla la velocidad de impresión
         }
     }
 
@@ -251,11 +206,10 @@ class GamePlay
         Console.ResetColor();
 
         // Pausa antes de continuar
-        Console.ForegroundColor = ConsoleColor.DarkGray;
         Pause("\nPresiona cualquier tecla para continuar...");
-        Console.ResetColor();
     }
 
+    // Tiempo de demora de la presentacion
     private static void _timeInit(int cont)
     {
         if(cont == 1)
@@ -267,9 +221,100 @@ class GamePlay
         if(cont == 4)
                 Thread.Sleep(4000);  // Pequeño retraso para mostrar el cambio de color
         if(cont == 5)
-                Thread.Sleep(5000);  // Pequeño retraso para mostrar el cambio de color
+                Thread.Sleep(0);  // Pequeño retraso para mostrar el cambio de color
 
     }
+
+    // Historia
+    private static void _history()
+    {
+        // Historia del juego
+        Console.Clear();
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("          ********//////// HISTORIA ////////********");
+        string History1 = "\nAlbus Dumbledore anuncia, durante el banquete de bienvenida en "
+            + "\nHogwarts, que la escuela será la sede del Torneo de los Tres "
+            + "\nMagos, una competencia interescolar entre Hogwarts, la Academia "
+            + "\nBeauxbatons y el Instituto Durmstrang. Un estudiante de cada una "
+            + "\nde tres escuelas de magia sería elegido por el Cáliz de fuego para "
+            + "\ncompetir en el torneo. Los campeones que elige el Cáliz son Fleur "
+            + "\nDelacour de Beauxbatons, Viktor Krum de Durmstrang y Cedrics "
+            + "\nDiggory de Hogwarts. Misteriosamente, Harry Potter también es "
+            + "\nelegido, pese a que no había ingresado su nombre en el Cáliz del "
+            + "\nfuego. Ahora son 4 los magos que deben enfrentarse a los desafíos "
+            + "\ndel Torneo. ";
+        PrintTextSlowly(History1, 5);
+        Console.ResetColor();
+
+        // Pausa antes de continuar
+        Pause("\n\n\n\n\n\n\n\n\n\n\n\n\n\nPRESIONE UNA TECLA PARA CONTINUAR LA HISTORIA...");
+        Console.Clear();
+
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("          ********//////// HISTORIA ////////********");
+        string History2 = "\nLa tercera y última prueba, en la que está basada este juego, "
+            + "\nconsiste en un laberinto lleno de obstáculos mágicos diseñados "
+            + "\npara confundir incluso a los magos más astutos, y como si no fuera  "
+            + "\nsuficiente lo habitan monstruos como acromántulas sedientas de "
+            + "\ncarne humana; boggarts que se alimentan del miedo; esfinges que "
+            + "\ndesafían la mente con enigmas mortales y otras criaturas que "
+            + "\nobstaculizan el camino a la legendaria Copa que se haya en el "
+            + "\ncorazón del laberinto. La Copa otorga, a quien la alcance, 1000 "
+            + "\ngaleones en concepto de premio. ";
+        PrintTextSlowly(History2, 10);
+        Console.ResetColor();
+
+        // Pausa antes de continuar
+        Pause("\n\n\n\n\n\n\n\n\n\n\n\n\n\nPRESIONE UNA TECLA PARA CONTINUAR LA HISTORIA...");
+        Console.Clear();
+
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("          ********//////// HISTORIA ////////********");
+        string History3 = "\nEl jugador puede elegir entre ser bestia, y evitar de forma "
+            + "\nsanguinaria que cualquiera de los magos se convierta en el "
+            + "\nganador, o mago, y hacer uso de sus conocimientos magícos para "
+            + "\nalcanzar la Copa y escapar triunfante. "; 
+        PrintTextSlowly(History3, 10);
+        Console.ResetColor();
+
+        // Pausa antes de continuar
+        Pause("\n\n\n\n\n\n\n\n\n\n\n\n\n\nPresiona cualquier tecla para continuar...");
+        Console.Clear();
+    }
+
+    // Leyenda del Juego (botones y objetivos)
+    private static void _legend()
+    {
+        Console.Clear();
+        Console.ForegroundColor = ConsoleColor.Magenta;
+        Console.WriteLine("////////////////////// TECLAS DEL JUEGO //////////////////////\n\n\n");
+        Console.WriteLine("\n DESPLAZAMIENTO: FLECHA ARRIBA, FLECHA ABAJO, FLECHA IZQUIERDA, FLECHA DERECHA \n");
+        Console.WriteLine("\n INFORMACION: \n I: INFORMACION DE LA FICHA           J: INFORMACION DE LA FACCION \n");
+        Console.WriteLine("\n BOLSA: \n TAB: ACCEDER A LA BOLSA DEL JUGADOR (SOLO MAGOS)   \n 1, 2, 3: SELECCIONAR LOS OBJETOS EN ESAS POSICIONES RESPECTIVAMENTE \n");
+        Console.WriteLine("\n ATACAR: E (CADA FICHA TIENE SU PROPIA DISTANCIA DE ATAQUE Y SI ATACA TERMINA EL TURNO DEL JUGADOR) \n");
+        Console.WriteLine("\n RECOLECTAR OBJETOS: Q (SOLO MAGOS, DISTANCIA DE RECOLECCION: 1 CASILLA) \n");
+        Console.WriteLine("\n USAR HABILIDAD DE LA FICHA: F (CADA FICHA TIENE UN TIEMPO DETERMINADO DE ENFRIAMIENTO) \n");
+        Console.ResetColor();
+
+        Pause("\n\n\n\n\n\n\n\n Presione una tecla para continuar...");
+
+        
+        string text = ("\n EL LABERINTO CADA 8 CICLOS DE TURNOS DE AMBOS JUGADORES, SE MODIFICA;" 
+        + "\n EL OBJETIVO DE LOS MAGOS ES OBTENER LA COPA Y ESCAPAR X UNO DE LOS PORTALES;"
+        + "\n EL OBJETIVO DE LOS MONSTRUOS ES EVITAR QUE ALGUN MAGO LOGRE ESCAPAR CON VIDA DEL LABERINTO," 
+        + "\n EN CASO DE QUE PASE HABRAN FRACASADO SU MISION;" 
+        + "\n LE ACONSEJAMOS A CADA JUGADOR QUE LEAN LA INFORMACION DE SU FACCION Y DE CADA FICHA,"
+        + "\n PARA TENER MEJOR NOCION DE LAS CAPACIDADES DE LAS MISMAS");
+
+        Console.Clear();
+        Console.ForegroundColor = ConsoleColor.DarkGreen;
+        Console.WriteLine("\n\n\n ////////////////////// INFORMACION DEL LABERINTO //////////////////////\n\n\n");
+        PrintTextSlowly(text, 5);
+        Console.WriteLine("\n\n\nESPERO QUE SE DIVIERTAN MUCHO");
+        Console.ResetColor();
+
+        Pause("\n\n\n\n\n\n\n\n Presione una tecla para comencar a jugars...");
+    } 
 
     // Hace las pausas necesarias en el juego
     public static void Pause(string message)
