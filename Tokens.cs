@@ -5,6 +5,7 @@ class Tokens
     #region Propiedades de las fichas           ////////////////////////////////////////////////////////////////////////////////////////
     private string _name;                       // Nombre de ficha
     private int _id;                            // Identidad de la ficha
+    private string _description;                // Descripcion de la ficha
     public int CoordX;                          // Coordenada X
     public int CoordY;                          // Coordenada Y
     private string _character;                  // Caracter de la ficha
@@ -28,40 +29,41 @@ class Tokens
     #region Constructor de fichas           ////////////////////////////////////////////////////////////////////////////////////////
 
     // Creador de fichas
-    public Tokens(string name, int id, string character, int coordX, int coordY, string skill, int coldTime, int speed, 
+    public Tokens(string name, int id, string character, string Descripcion, int coordX, int coordY, string skill, int coldTime, int speed, 
     int obj1, int obj2, int obj3, int damage = 50, int distAttack = 4, int health = 100)
     {
         _name = name;
         _id = id;
+        _character = character;
+        _description = Descripcion;
         CoordX = coordX;
         CoordY = coordY;
-        _character = character;
-        _health = health;
-        _damage = damage;
-        _distAttack = distAttack;
         _skill = skill;
         _coldTime = coldTime;
         _speed = speed;
         _box[0] = obj1;
         _box[1] = obj2;
         _box[2] = obj3;
+        _damage = damage;
+        _distAttack = distAttack;
+        _health = health;
     }
     
     //Sobrecarga de constructor
-    public Tokens(string name, int id, string character, int coordX, int coordY, string skill, int coldTime, int speed, int damage, int distAttack, int health = 400)
+    public Tokens(string name, int id, string character, string Descripcion, int coordX, int coordY, string skill, int coldTime, int speed, int damage, int distAttack, int health = 400)
     {
-        Random random = new Random();
         _name = name;
         _id = id;
+        _character = character;
+        _description = Descripcion;
         CoordX = coordX;
         CoordY = coordY;
-        _character = character;
-        _health = health;
-        _damage = damage;
-        _distAttack = distAttack;
         _skill = skill;
         _coldTime = coldTime;
         _speed = speed;
+        _damage = damage;
+        _distAttack = distAttack;
+        _health = health;
     }
 
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
@@ -364,6 +366,76 @@ class Tokens
 
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
 
+    #region Metodos de Modificacion             ////////////////////////////////////////////////////////////////////////////////////////
+
+    // Metodo para modificar el caracter
+    public void ModifyCharacter(string newCharacter)
+    {
+        _character = newCharacter;
+    }
+
+    // Metodo para modificar la velocidad
+    public void ModifySpeed(int newSpeed)
+    {
+        _speed = newSpeed;
+    }
+
+    //Metodo para modificar la vida
+    public void ModifiHealth(int newHealth)
+    {
+        _health = newHealth;
+    }
+
+    // Metodo para modificar el daño
+    public void ModifiDamage(int newDamage)
+    {
+        _damage = newDamage;
+    }
+
+    // Metodo para modificar la distacia de ataque
+    public void ModifiDistAttack(int newDistAttack)
+    {
+        _distAttack = newDistAttack;
+    }
+
+    //  Metodo para modificar el Tiempo de enfriamiento
+    public void ModifiColdTime(int newColdTime)
+    {
+        _coldTime = newColdTime;
+    }
+
+    // Disminuye el tiempo de enfriamiento
+    public void MinusColdTime(int minus)
+    {
+        _coldTime -= minus;
+    }
+
+    // Metodo para modificar la propiedad paralisis
+    public void ModifiParalysis(bool newParalysis)
+    {
+        _paralysis = newParalysis;
+    }
+
+    // Metodo para modificar el contador de turnos de la paralisis
+    public void ModifiContTurnParalysis(int cont)
+    {
+        _contTurnParalysis +=  cont;
+    }
+
+    // Metodo para modificar la propiedad Veneno
+    public void ModifiPoison(bool newPoison)
+    {
+        _poison = newPoison;
+    }
+
+    // Metodo para modificar el contador de turnos del Veneno
+    public void ModifiContTurnPoison(int cont)
+    {
+        _contTurnPoison += cont;
+    }
+
+    #endregion              ////////////////////////////////////////////////////////////////////////////////////////
+
     #region Metodos de Informacion        ////////////////////////////////////////////////////////////////////////////////////////
     
     // Informacion de la Identidad
@@ -463,6 +535,7 @@ class Tokens
         //Informacion del Nombre, Salud, Velocidad, Habilidad, Tiempo de Enfrimiento
         Console.WriteLine("\n ***///PROPIEDADES DE LA FICHA///***");
         Console.WriteLine($"\n FICHA: {_name} | DAÑO: {_damage} | SALUD: {_health} | VELOCIDAD: {_speed} | HABILIDAD: {_skill} | TIEMPO DE ENFRIAMIENTO: {_coldTime}"); 
+        Console.WriteLine($"\n DESCRIPCION: \n{_description}\n");
         Console.WriteLine($"\n ***///OBJETOS///***"); 
         for(int i = 0; i < _box.Length; i++) 
         {
@@ -472,73 +545,4 @@ class Tokens
 
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
 
-    #region Metodos de Modificacion             ////////////////////////////////////////////////////////////////////////////////////////
-
-    // Metodo para modificar el caracter
-    public void ModifyCharacter(string newCharacter)
-    {
-        _character = newCharacter;
-    }
-
-    // Metodo para modificar la velocidad
-    public void ModifySpeed(int newSpeed)
-    {
-        _speed = newSpeed;
-    }
-
-    //Metodo para modificar la vida
-    public void ModifiHealth(int newHealth)
-    {
-        _health = newHealth;
-    }
-
-    // Metodo para modificar el daño
-    public void ModifiDamage(int newDamage)
-    {
-        _damage = newDamage;
-    }
-
-    // Metodo para modificar la distacia de ataque
-    public void ModifiDistAttack(int newDistAttack)
-    {
-        _distAttack = newDistAttack;
-    }
-
-    //  Metodo para modificar el Tiempo de enfriamiento
-    public void ModifiColdTime(int newColdTime)
-    {
-        _coldTime = newColdTime;
-    }
-
-    // Disminuye el tiempo de enfriamiento
-    public void MinusColdTime(int minus)
-    {
-        _coldTime -= minus;
-    }
-
-    // Metodo para modificar la propiedad paralisis
-    public void ModifiParalysis(bool newParalysis)
-    {
-        _paralysis = newParalysis;
-    }
-
-    // Metodo para modificar el contador de turnos de la paralisis
-    public void ModifiContTurnParalysis(int cont)
-    {
-        _contTurnParalysis +=  cont;
-    }
-
-    // Metodo para modificar la propiedad Veneno
-    public void ModifiPoison(bool newPoison)
-    {
-        _poison = newPoison;
-    }
-
-    // Metodo para modificar el contador de turnos del Veneno
-    public void ModifiContTurnPoison(int cont)
-    {
-        _contTurnPoison += cont;
-    }
-
-    #endregion              ////////////////////////////////////////////////////////////////////////////////////////
 }

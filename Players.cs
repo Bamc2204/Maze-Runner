@@ -87,32 +87,32 @@ class Players
 
     #region Metodos para Crear/Eliminar de Fichas         ////////////////////////////////////////////////////////////////////////////////////////
 
-    // Metodo para crear las fichas buenas
+    // Metodo para crear las fichas buenas  ****************************************************
     public void CreateTokensGoodPlayer(ref Players player)
     {
-        player.Tokens[0] = new Tokens("Harry Potter", 1, "⚡", 1, 0, "Expellarmus", 6, 6, -7, -8, -10, 20, 4, 150);
+        player.Tokens[0] = new Tokens("Harry Potter", 1, "⚡", "Paralisis, Rango:", 1, 0, "Expellarmus", 6, 6, -7, -8, -10, 20, 4, 150);
 
-        player.Tokens[1] = new Tokens("Cedric Diggory", 2, "🦡", 13, 0, "Conjuro Elemental", 4, 8, -7, -7, -9, 20, 4, 150);
+        player.Tokens[1] = new Tokens("Cedric Diggory", 2, "🦡", "Ataque de Area, Rango:", 13, 0, "Conjuro Elemental", 4, 8, -7, -7, -9, 20, 4, 150);
 
-        player.Tokens[2] = new Tokens("Fleur Delacour", 3, "🌸", 25, 0, "Sanacion Magica", 4, 10, -9, -9, -9, 15, 8);
+        player.Tokens[2] = new Tokens("Fleur Delacour", 3, "🌸", "Cura vida, Rango:", 25, 0, "Sanacion Magica", 4, 10, -9, -9, -9, 15, 8);
 
-        player.Tokens[3] = new Tokens("Viktor Krum", 4, "💪", 37, 0, "Draconifors", 4, 6, -8, -8, -9, 30, 1, 250);
+        player.Tokens[3] = new Tokens("Viktor Krum", 4, "💪", "Ataca con mayor daño, Distancia:", 37, 0, "Draconifors", 4, 6, -8, -8, -9, 30, 1, 250);
 
         string infoTarget = "Obtener la COPA y escapar del laberinto";
 
         player.SetTarget(ref infoTarget);
     }
 
-    // Metodo para crear las fichas malas
+    // Metodo para crear las fichas malas   ****************************************************
     private void CreateTokensBadPlayer(ref Players player)
     {
-        player.Tokens[0] = new Tokens("Acromántula", 5, "🕷️", 7, 43, "Veneno", 5, 8, 15, 3, 300);
+        player.Tokens[0] = new Tokens("Acromántula", 5, "🕷️", "Envenena, Distancia:", 7, 43, "Veneno", 5, 8, 15, 3, 300);
 
-        player.Tokens[1] = new Tokens("Esfinge", 6, "🦁", 19, 43, "Aumento de Fuerza", 6, 6, 25, 2, 320);
+        player.Tokens[1] = new Tokens("Esfinge", 6, "🦁", "Ataca con mayor daño, Distancia:",19, 43, "Aumento de Fuerza", 6, 6, 25, 2, 320);
 
-        player.Tokens[2] = new Tokens("Boggart", 7, "👻", 31, 43, "Copiar", 10, 12, 0, 0, 40);
+        player.Tokens[2] = new Tokens("Boggart", 7, "👻", "Copia a las fichas de su misma faccion", 31, 43, "Copiar", 10, 12, 0, 0, 40);
 
-        player.Tokens[3] = new Tokens("Blast-Ended Skrewts", 8, "🦂", 43, 43, "Lazar Fuego", 6, 10, 20, 5, 150);
+        player.Tokens[3] = new Tokens("Blast-Ended Skrewts", 8, "🦂", "Ataque de Area, Rango:", 43, 43, "Lazar Fuego", 6, 10, 20, 5, 150);
 
         string infoTarget = "Asesinar a los 4 elegidos y evitar que escapen del laberinto";
 
