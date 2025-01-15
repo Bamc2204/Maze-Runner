@@ -5,19 +5,23 @@ class Tokens
     #region Propiedades de las fichas           ////////////////////////////////////////////////////////////////////////////////////////
     private string _name;                       // Nombre de ficha
     private int _id;                            // Identidad de la ficha
-    public int CoordX;                         // Coordenada X
-    public int CoordY;                         // Coordenada Y
+    public int CoordX;                          // Coordenada X
+    public int CoordY;                          // Coordenada Y
     private string _character;                  // Caracter de la ficha
-    private int _health;                         // Salud
+    private int _health;                        // Salud
     private int _damage;                        // Daño
     private int _distAttack;                    // Distacia de ataque
     private string _skill;                      // Habilidad
     private bool _skillActivation = true;       // Verificador de Habilidad
-    public int ColdTime = 0;                      // Tiempo de enfriamiento de habilidad
+    private int _coldTime = 0;                    // Tiempo de enfriamiento de habilidad
     private int _speed;                         // Velocidad para recorrer casillas
     private int[] _box = new int[3];            // Bolsa con objetos
-    public bool ActiveShield = false;          // Escudo activo
+    public bool ActiveShield = false;           // Escudo activo
     private int _shield = 0;                    // Escudo
+    private bool _paralysis = false;            // Paralisis
+    private  int _contTurnParalysis = 0;        // Contador de turnos de la paralisis
+    private bool _poison = false;               // Veneno
+    private int _contTurnPoison = 0;            // Contador de turnos del veneno
 
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -36,7 +40,7 @@ class Tokens
         _damage = damage;
         _distAttack = distAttack;
         _skill = skill;
-        ColdTime = coldTime;
+        _coldTime = coldTime;
         _speed = speed;
         _box[0] = obj1;
         _box[1] = obj2;
@@ -56,7 +60,7 @@ class Tokens
         _damage = damage;
         _distAttack = distAttack;
         _skill = skill;
-        ColdTime = coldTime;
+        _coldTime = coldTime;
         _speed = speed;
     }
 
@@ -405,6 +409,18 @@ class Tokens
         return _speed;
     }
 
+    // Informacion de la Habilidad
+    public string infoSkill()
+    {
+        return _skill;
+    }
+
+    // Informacion del Tiempo de Enfriamiento de la Habilidad
+    public int InfoColdTime()
+    {
+        return _coldTime;
+    }
+
     // Informacion del Escudo
     public int InfoShield()
     {
@@ -417,19 +433,43 @@ class Tokens
         return _box[index];
     }
 
+    // Informacion de Paralisis
+    public bool InfoParalysis()
+    {
+        return _paralysis;
+    }
+    
+    // Informacion del contador de turnos de la Paralisis
+    public int InfoContTurnParalysis()
+    {
+        return _contTurnParalysis;
+    }
+    
+    // Informacion del Veneno
+    public bool InfoPoison()
+    {
+        return _poison;
+    }
+
+    // Informacion del contador de turnos del veneno
+    public int InfoContTurnPoison()
+    {
+        return _contTurnPoison;
+    }
+
     // Metodo para mostrar todo soble la ficha
     public void DisplayStatus()
     {
         //Informacion del Nombre, Salud, Velocidad, Habilidad, Tiempo de Enfrimiento
         Console.WriteLine("\n ***///PROPIEDADES DE LA FICHA///***");
-        Console.WriteLine($"\n FICHA: {_name} | DAÑO: {_damage} | SALUD: {_health} | VELOCIDAD: {_speed} | HABILIDAD: {_skill} | TIEMPO DE ENFRIAMIENTO: {ColdTime}"); 
+        Console.WriteLine($"\n FICHA: {_name} | DAÑO: {_damage} | SALUD: {_health} | VELOCIDAD: {_speed} | HABILIDAD: {_skill} | TIEMPO DE ENFRIAMIENTO: {_coldTime}"); 
         Console.WriteLine($"\n ***///OBJETOS///***"); 
         for(int i = 0; i < _box.Length; i++) 
         {
             Console.WriteLine($"\n Objeto #{(i + 1)}: {(Objects)_box[i]}");  //Objetos de la bolsa
         }
-    }
-    
+    }    
+
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
 
     #region Metodos de Modificacion             ////////////////////////////////////////////////////////////////////////////////////////
@@ -462,6 +502,42 @@ class Tokens
     public void ModifiDistAttack(int newDistAttack)
     {
         _distAttack = newDistAttack;
+    }
+
+    //  Metodo para modificar el Tiempo de enfriamiento
+    public void ModifiColdTime(int newColdTime)
+    {
+        _coldTime = newColdTime;
+    }
+
+    // Disminuye el tiempo de enfriamiento
+    public void MinusColdTime(int minus)
+    {
+        _coldTime -= minus;
+    }
+
+    // Metodo para modificar la propiedad paralisis
+    public void ModifiParalysis(bool newParalysis)
+    {
+        _paralysis = newParalysis;
+    }
+
+    // Metodo para modificar el contador de turnos de la paralisis
+    public void ModifiContTurnParalysis(int cont)
+    {
+        _contTurnParalysis +=  cont;
+    }
+
+    // Metodo para modificar la propiedad Veneno
+    public void ModifiPoison(bool newPoison)
+    {
+        _poison = newPoison;
+    }
+
+    // Metodo para modificar el contador de turnos del Veneno
+    public void ModifiContTurnPoison(int cont)
+    {
+        _contTurnPoison += cont;
     }
 
     #endregion              ////////////////////////////////////////////////////////////////////////////////////////

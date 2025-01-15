@@ -64,7 +64,7 @@ class GamePlay
         Console.ResetColor();
 
         // Pausa antes de continuar
-        Pause("\n\n\n\n\n\n\n\n\n\n\n\n\n\nPresiona cualquier tecla para continuar...");
+        Pause();
 
         // Historia del juego
         _history();
@@ -78,7 +78,7 @@ class GamePlay
         Console.ResetColor();
 
         // Pausa antes de continuar
-        Pause("\nPresiona cualquier tecla para continuar...");
+        Pause();
 
         // Selección de facciones
         Console.Clear();
@@ -110,7 +110,7 @@ class GamePlay
         player1.CreateTokensFaction(player1, player2);
 
         // Pausa antes de continuar
-        Pause("\nPresiona cualquier tecla para continuar...");
+        Pause();
 
         Console.Clear();
 
@@ -206,7 +206,7 @@ class GamePlay
         Console.ResetColor();
 
         // Pausa antes de continuar
-        Pause("\nPresiona cualquier tecla para continuar...");
+        Pause();
     }
 
     // Tiempo de demora de la presentacion
@@ -278,7 +278,7 @@ class GamePlay
         Console.ResetColor();
 
         // Pausa antes de continuar
-        Pause("\n\n\n\n\n\n\n\n\n\n\n\n\n\nPresiona cualquier tecla para continuar...");
+        Pause();
         Console.Clear();
     }
 
@@ -296,7 +296,7 @@ class GamePlay
         Console.WriteLine("\n USAR HABILIDAD DE LA FICHA: F (CADA FICHA TIENE UN TIEMPO DETERMINADO DE ENFRIAMIENTO) \n");
         Console.ResetColor();
 
-        Pause("\n\n\n\n\n\n\n\n Presione una tecla para continuar...");
+        Pause();
 
         
         string text = ("\n EL LABERINTO CADA 8 CICLOS DE TURNOS DE AMBOS JUGADORES, SE MODIFICA;" 
@@ -313,11 +313,11 @@ class GamePlay
         Console.WriteLine("\n\n\nESPERO QUE SE DIVIERTAN MUCHO");
         Console.ResetColor();
 
-        Pause("\n\n\n\n\n\n\n\n Presione una tecla para comencar a jugars...");
+        Pause("\n\n\n\n\n\n\n\n PRESIONE UNA TECLA PARA COMENZAR A JUGAR......");
     } 
 
     // Hace las pausas necesarias en el juego
-    public static void Pause(string message)
+    public static void Pause(string message = "\n\n\n\n\n\nPRESIONE UNA TECLA PARA CONTINUAR...")
     {
         Console.ForegroundColor = ConsoleColor.DarkGray;
         Console.WriteLine(message);
