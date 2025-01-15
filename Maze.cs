@@ -346,20 +346,6 @@ class Maze
         return false;
     }
 
-    // Verifica q en el mapa ya no haya una copa
-    private bool _checkCupInMaze()
-    {
-        for (int i = 0; i < _rows; i++)
-        {
-            for (int j = 0; j < _cols; j++)
-            {
-                if(Maze.GeneralMaze[i, j] == -6)
-                    return true;
-            }
-        }
-        return false;
-    }
-
     #endregion              //////////////////////////////////////////////////////////////////////////////////////////
 
     #region Metodos para imprimir el laberinto en consola           //////////////////////////////////////////////////////////////////////////////////////////
@@ -466,7 +452,7 @@ class Maze
     private void _checkBadWin(Players player1, Players player2, Maze maze, int newX, int newY, ref bool running)
     {
         //  Verifica si los MONSTRUOS mataron a todos los MAGOS
-        if(player2.Tokens.Length < 1 || _anotherWay(player1))
+        if(player2.Tokens.Length < 1)
         {
             running = false;
             foreach (var color in GamePlay.colors)
@@ -480,15 +466,6 @@ class Maze
             GamePlay.Pause("PRESIONE UNA TECLA PARA FINALIZAR");
             return;
         }
-    }
-
-    // Otra forma de ganar
-    private bool _anotherWay(Players player)
-    {
-        if(!CheckCup(player) && !_checkCupInMaze())
-            return true;
-
-        return false;
     }
 
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////

@@ -87,32 +87,28 @@ class Players
 
     #region Metodos para Crear/Eliminar de Fichas         ////////////////////////////////////////////////////////////////////////////////////////
 
-    // Metodo para crear las fichas buenas  ****************************************************
+    // Metodo para crear las fichas buenas
     public void CreateTokensGoodPlayer(ref Players player)
     {
         player.Tokens[0] = new Tokens("Harry Potter", 1, "⚡", 
         "Harry Potter, el niño que vivió, es conocido por su valentía y habilidades mágicas excepcionales. En el Torneo de los Tres Magos, Harry demuestra su capacidad para enfrentarse a desafíos peligrosos y salir victorioso. "
         + "Harry Potter participa en el Torneo de los Tres Magos, donde debe superar varias pruebas peligrosas. Su habilidad *Expellarmus* de un rango de 3 casillas permite paralizar a sus oponentes, dándole una ventaja crucial en el laberinto. "
-        + "Objetivo: Obtener la COPA y escapar del laberinto. "
         + "Historia: Harry Potter, junto a otros campeones, compite en el Torneo de los Tres Magos, enfrentándose a dragones, criaturas mágicas y laberintos encantados para ganar el Cáliz de Fuego.", 
         1, 0, "Expellarmus", 6, 1000000, -7, -8, -10, 20, 4, 150);
 
         player.Tokens[1] = new Tokens("Cedric Diggory", 2, "🦡", "Cedric Diggory, un estudiante de Hufflepuff, es conocido por su lealtad y habilidades mágicas. Como uno de los campeones del Torneo de los Tres Magos, Cedric demuestra su destreza en la magia elemental. "
         + "Cedric Diggory compite en el Torneo de los Tres Magos, utilizando su habilidad *Conjuro Elemental*, con una distancia de 4 casillas y un área de 2 casillas que le permite atacar a múltiples enemigos a la vez, lo que le permite despejar su camino hacia la COPA. "
-        + "Objetivo: Obtener la COPA y escapar del laberinto. "
         + "Historia: Cedric Diggory, junto a Harry Potter, enfrenta los desafíos del Torneo de los Tres Magos, demostrando su valentía y habilidades mágicas.", 
         13, 0, "Conjuro Elemental", 4, 8, -7, -7, -9, 20, 4, 150);
 
         player.Tokens[2] = new Tokens("Fleur Delacour", 3, "🌸", "Cura vida, Rango: 2"
         + "Fleur Delacour, una talentosa bruja de Beauxbatons, es conocida por su gracia y habilidades curativas. En el Torneo de los Tres Magos, Fleur demuestra su capacidad para sanar a sus compañeros. "
         + "Fleur Delacour utiliza su habilidad *Sanación Mágica* para curar a la persona con menos vida en un radio de 2 casillas alrededor de la ficha. "
-        + "Objetivo: Obtener la COPA y escapar del laberinto. "
         + "Historia: Fleur Delacour, una de las campeonas del Torneo de los Tres Magos, enfrenta desafíos mágicos mientras utiliza sus habilidades curativas para ayudar a sus compañeros.", 
         25, 0, "Sanacion Magica", 4, 10, -9, -9, -9, 15, 8);
 
         player.Tokens[3] = new Tokens("Viktor Krum", 4, "💪", "Viktor Krum, un famoso buscador de Quidditch de Durmstrang, es conocido por su fuerza y habilidades físicas excepcionales. En el Torneo de los Tres Magos, Viktor demuestra su capacidad para enfrentarse a desafíos físicos y mágicos. "
         + "Viktor Krum utiliza su habilidad *Draconifors* para aumentar su daño cuerpo a cuerpo, permitiéndole atacar con mayor fuerza a una distancia de 1 casilla. "
-        + "Objetivo: Obtener la COPA y escapar del laberinto. "
         + "Historia: Viktor Krum, uno de los campeones del Torneo de los Tres Magos, enfrenta desafíos mágicos y físicos mientras compite por el Cáliz de Fuego, demostrando su valentía y habilidades en cada prueba.", 
         37, 0, "Draconifors", 4, 6, -8, -8, -9, 30, 1, 250);
 
@@ -121,16 +117,32 @@ class Players
         player.SetTarget(ref infoTarget);
     }
 
-    // Metodo para crear las fichas malas   ****************************************************
+    // Metodo para crear las fichas malas
     private void CreateTokensBadPlayer(ref Players player)
     {
-        player.Tokens[0] = new Tokens("Acromántula", 5, "🕷️", "Envenena, Distancia: 3", 7, 43, "Veneno", 5, 8, 15, 3, 300);
+        player.Tokens[0] = new Tokens("Acromántula", 5, "🕷️", 
+        "Acromántula, una gigantesca araña mágica, es conocida por su veneno mortal y su capacidad para moverse rápidamente a través del laberinto. En el Torneo de los Tres Magos, las acromántulas representan uno de los muchos peligros que los campeones deben enfrentar. "
+        + "La habilidad *Veneno* de la Acromántula permite envenenar a sus oponentes a una distancia de 3 casillas, causando daño continuo durante varios turnos. "    
+        + "Historia: En el Torneo de los Tres Magos, las acromántulas son una de las criaturas mágicas que los campeones deben superar para obtener el Cáliz de Fuego. Su veneno y agilidad las convierten en adversarios formidables.", 
+        7, 43, "Veneno", 5, 8, 15, 3, 300);
 
-        player.Tokens[1] = new Tokens("Esfinge", 6, "🦁", "Ataca con mayor daño, Distancia: 1", 19, 43, "Aumento de Fuerza", 6, 6, 25, 2, 320);
+        player.Tokens[1] = new Tokens("Esfinge", 6, "🦁", 
+        "Esfinge, una criatura mágica con cuerpo de león y cabeza humana, es conocida por su inteligencia y fuerza. En el Torneo de los Tres Magos, la esfinge representa uno de los muchos desafíos que los campeones deben superar. "
+        + "La habilidad *Aumento de Fuerza* de la Esfinge permite atacar con mayor daño a una distancia de 1 casilla, haciendo que sus ataques sean devastadores. "
+        + "Historia: En el Torneo de los Tres Magos, la esfinge es uno de los obstáculos que los campeones deben enfrentar para obtener el Cáliz de Fuego. Su fuerza y astucia la convierten en un adversario formidable.", 
+        19, 43, "Aumento de Fuerza", 6, 6, 25, 2, 320);
 
-        player.Tokens[2] = new Tokens("Boggart", 7, "👻", "Copia a las fichas de su misma faccion", 31, 43, "Copiar", 10, 12, 0, 0, 40);
+        player.Tokens[2] = new Tokens("Boggart", 7, "👻", 
+        "Boggart, una criatura mágica que toma la forma del peor miedo de quien lo ve, es conocido por su habilidad para transformarse. En el Torneo de los Tres Magos, los boggarts representan un desafío psicológico para los campeones. "
+        + "La habilidad *Copiar* del Boggart le permite transformarse en cualquier ficha de su misma facción, adoptando sus habilidades y características. "
+        + "Historia: En el Torneo de los Tres Magos, los boggarts son una de las criaturas mágicas que los campeones deben superar para obtener el Cáliz de Fuego. Su capacidad para transformarse en los peores miedos de los campeones los convierte en adversarios formidables.", 
+        31, 43, "Copiar", 10, 12, 0, 0, 40);
 
-        player.Tokens[3] = new Tokens("Blast-Ended Skrewts", 8, "🦂", "Ataque de Area, Distancia: 5, Rango: 1", 43, 43, "Lazar Fuego", 6, 10, 20, 5, 150);
+        player.Tokens[3] = new Tokens("Blast-Ended Skrewts", 8, "🦂", 
+        "Blast-Ended Skrewts, criaturas mágicas híbridas creadas por Hagrid, son conocidas por su capacidad para lanzar fuego y causar explosiones. En el Torneo de los Tres Magos, los Blast-Ended Skrewts representan un peligro significativo para los campeones. "
+        + "La habilidad *Lanzar Fuego* de los Blast-Ended Skrewts permite atacar en un área de 1 casilla a una distancia de 5 casillas, causando daño a múltiples oponentes. "
+        + "Historia: En el Torneo de los Tres Magos, los Blast-Ended Skrewts son una de las criaturas mágicas que los campeones deben superar para obtener el Cáliz de Fuego. Su capacidad para lanzar fuego y causar explosiones los convierte en adversarios formidables.", 
+        43, 43, "Lazar Fuego", 6, 10, 20, 5, 150);
 
         string infoTarget = "Asesinar a los 4 elegidos y evitar que escapen del laberinto";
 

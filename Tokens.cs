@@ -142,7 +142,7 @@ class Tokens
                     if(token.InfoBox(j) == 0)
                     {
                         _saveObjects(i);
-                        Console.WriteLine($"\nHas obtenido: {((Object)i).ToString()}");
+                        Console.WriteLine($"\nHas obtenido: {((Objects)i).ToString()}");
                         _deleteObject(token);
                         return;
                     }
