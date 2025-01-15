@@ -81,7 +81,7 @@ class Tokens
         shield = -11,
     }
 
-    // Usar objetos bolsa*****************************************************************
+    // Usar objetos bolsa
     public void UseBoxObject( ref int newX, ref int newY, ref Tokens token, Players player1, Players player2)
     {
         //Tecla q toca el jugador en el teclado            
@@ -142,8 +142,7 @@ class Tokens
                     if(token.InfoBox(j) == 0)
                     {
                         _saveObjects(i);
-                        Object Object = (Object)i;
-                        Console.WriteLine($"\nHas obtenido: {Object}");
+                        Console.WriteLine($"\nHas obtenido: {((Object)i).ToString()}");
                         _deleteObject(token);
                         return;
                     }

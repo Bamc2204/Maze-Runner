@@ -90,13 +90,31 @@ class Players
     // Metodo para crear las fichas buenas  ****************************************************
     public void CreateTokensGoodPlayer(ref Players player)
     {
-        player.Tokens[0] = new Tokens("Harry Potter", 1, "⚡", "Paralisis, Rango:", 1, 0, "Expellarmus", 6, 6, -7, -8, -10, 20, 4, 150);
+        player.Tokens[0] = new Tokens("Harry Potter", 1, "⚡", 
+        "Harry Potter, el niño que vivió, es conocido por su valentía y habilidades mágicas excepcionales. En el Torneo de los Tres Magos, Harry demuestra su capacidad para enfrentarse a desafíos peligrosos y salir victorioso. "
+        + "Harry Potter participa en el Torneo de los Tres Magos, donde debe superar varias pruebas peligrosas. Su habilidad *Expellarmus* de un rango de 3 casillas permite paralizar a sus oponentes, dándole una ventaja crucial en el laberinto. "
+        + "Objetivo: Obtener la COPA y escapar del laberinto. "
+        + "Historia: Harry Potter, junto a otros campeones, compite en el Torneo de los Tres Magos, enfrentándose a dragones, criaturas mágicas y laberintos encantados para ganar el Cáliz de Fuego.", 
+        1, 0, "Expellarmus", 6, 1000000, -7, -8, -10, 20, 4, 150);
 
-        player.Tokens[1] = new Tokens("Cedric Diggory", 2, "🦡", "Ataque de Area, Rango:", 13, 0, "Conjuro Elemental", 4, 8, -7, -7, -9, 20, 4, 150);
+        player.Tokens[1] = new Tokens("Cedric Diggory", 2, "🦡", "Cedric Diggory, un estudiante de Hufflepuff, es conocido por su lealtad y habilidades mágicas. Como uno de los campeones del Torneo de los Tres Magos, Cedric demuestra su destreza en la magia elemental. "
+        + "Cedric Diggory compite en el Torneo de los Tres Magos, utilizando su habilidad *Conjuro Elemental*, con una distancia de 4 casillas y un área de 2 casillas que le permite atacar a múltiples enemigos a la vez, lo que le permite despejar su camino hacia la COPA. "
+        + "Objetivo: Obtener la COPA y escapar del laberinto. "
+        + "Historia: Cedric Diggory, junto a Harry Potter, enfrenta los desafíos del Torneo de los Tres Magos, demostrando su valentía y habilidades mágicas.", 
+        13, 0, "Conjuro Elemental", 4, 8, -7, -7, -9, 20, 4, 150);
 
-        player.Tokens[2] = new Tokens("Fleur Delacour", 3, "🌸", "Cura vida, Rango:", 25, 0, "Sanacion Magica", 4, 10, -9, -9, -9, 15, 8);
+        player.Tokens[2] = new Tokens("Fleur Delacour", 3, "🌸", "Cura vida, Rango: 2"
+        + "Fleur Delacour, una talentosa bruja de Beauxbatons, es conocida por su gracia y habilidades curativas. En el Torneo de los Tres Magos, Fleur demuestra su capacidad para sanar a sus compañeros. "
+        + "Fleur Delacour utiliza su habilidad *Sanación Mágica* para curar a la persona con menos vida en un radio de 2 casillas alrededor de la ficha. "
+        + "Objetivo: Obtener la COPA y escapar del laberinto. "
+        + "Historia: Fleur Delacour, una de las campeonas del Torneo de los Tres Magos, enfrenta desafíos mágicos mientras utiliza sus habilidades curativas para ayudar a sus compañeros.", 
+        25, 0, "Sanacion Magica", 4, 10, -9, -9, -9, 15, 8);
 
-        player.Tokens[3] = new Tokens("Viktor Krum", 4, "💪", "Ataca con mayor daño, Distancia:", 37, 0, "Draconifors", 4, 6, -8, -8, -9, 30, 1, 250);
+        player.Tokens[3] = new Tokens("Viktor Krum", 4, "💪", "Viktor Krum, un famoso buscador de Quidditch de Durmstrang, es conocido por su fuerza y habilidades físicas excepcionales. En el Torneo de los Tres Magos, Viktor demuestra su capacidad para enfrentarse a desafíos físicos y mágicos. "
+        + "Viktor Krum utiliza su habilidad *Draconifors* para aumentar su daño cuerpo a cuerpo, permitiéndole atacar con mayor fuerza a una distancia de 1 casilla. "
+        + "Objetivo: Obtener la COPA y escapar del laberinto. "
+        + "Historia: Viktor Krum, uno de los campeones del Torneo de los Tres Magos, enfrenta desafíos mágicos y físicos mientras compite por el Cáliz de Fuego, demostrando su valentía y habilidades en cada prueba.", 
+        37, 0, "Draconifors", 4, 6, -8, -8, -9, 30, 1, 250);
 
         string infoTarget = "Obtener la COPA y escapar del laberinto";
 
@@ -106,13 +124,13 @@ class Players
     // Metodo para crear las fichas malas   ****************************************************
     private void CreateTokensBadPlayer(ref Players player)
     {
-        player.Tokens[0] = new Tokens("Acromántula", 5, "🕷️", "Envenena, Distancia:", 7, 43, "Veneno", 5, 8, 15, 3, 300);
+        player.Tokens[0] = new Tokens("Acromántula", 5, "🕷️", "Envenena, Distancia: 3", 7, 43, "Veneno", 5, 8, 15, 3, 300);
 
-        player.Tokens[1] = new Tokens("Esfinge", 6, "🦁", "Ataca con mayor daño, Distancia:",19, 43, "Aumento de Fuerza", 6, 6, 25, 2, 320);
+        player.Tokens[1] = new Tokens("Esfinge", 6, "🦁", "Ataca con mayor daño, Distancia: 1", 19, 43, "Aumento de Fuerza", 6, 6, 25, 2, 320);
 
         player.Tokens[2] = new Tokens("Boggart", 7, "👻", "Copia a las fichas de su misma faccion", 31, 43, "Copiar", 10, 12, 0, 0, 40);
 
-        player.Tokens[3] = new Tokens("Blast-Ended Skrewts", 8, "🦂", "Ataque de Area, Rango:", 43, 43, "Lazar Fuego", 6, 10, 20, 5, 150);
+        player.Tokens[3] = new Tokens("Blast-Ended Skrewts", 8, "🦂", "Ataque de Area, Distancia: 5, Rango: 1", 43, 43, "Lazar Fuego", 6, 10, 20, 5, 150);
 
         string infoTarget = "Asesinar a los 4 elegidos y evitar que escapen del laberinto";
 
@@ -491,7 +509,7 @@ class Players
 
         while(running)
         {    
-            Console.WriteLine("\n Inroduzca cual de sus fichas va a coger (del 1 al 4)");
+            Console.WriteLine("\n Introduzca cual de sus fichas va a coger (del 1 al 4)");
 
             ConsoleKey key = Console.ReadKey().Key;
 
@@ -627,7 +645,7 @@ class Players
             bool isCup = Maze.GeneralMaze[newX, newY] == -6;
 
             // Si toca una tecla q no sea para moverse
-            if(key == ConsoleKey.I || key == ConsoleKey.E || key == ConsoleKey.Tab || key == ConsoleKey.Q || key == ConsoleKey.G) 
+            if(key == ConsoleKey.I || key == ConsoleKey.E || key == ConsoleKey.Tab || key == ConsoleKey.Q || key == ConsoleKey.G || key == ConsoleKey.F) 
                 continue;
 
             // Dentro de filas, columnas y si es un camino*********************************************

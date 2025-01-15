@@ -65,7 +65,7 @@ class GamePlay
 
         // Pausa antes de continuar
         Pause();
-
+        /*
         // Historia del juego
         _history();
 
@@ -86,9 +86,9 @@ class GamePlay
         Console.ForegroundColor = ConsoleColor.DarkCyan;
         Console.WriteLine("\nJugador 1, presiona la ***FLECHA IZQUIERDA*** para ser un *MAGO* o la ***FLECHA DERECHA*** para ser un *MONSTRUO*.");
         Console.ResetColor();
-
+        */
         int indexPlayer1 = 0, indexPlayer2 = 0;
-
+    
         while (true)
         {
             ConsoleKey key = Console.ReadKey().Key;
