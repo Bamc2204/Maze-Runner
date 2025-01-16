@@ -92,22 +92,24 @@ class Players
     {
         player.Tokens[0] = new Tokens("Harry Potter", 1, "⚡", 
         "Harry Potter, el niño que vivió, es conocido por su valentía y habilidades mágicas excepcionales. En el Torneo de los Tres Magos, Harry demuestra su capacidad para enfrentarse a desafíos peligrosos y salir victorioso. "
-        + "Harry Potter participa en el Torneo de los Tres Magos, donde debe superar varias pruebas peligrosas. Su habilidad *Expellarmus* de un rango de 3 casillas permite paralizar a sus oponentes, dándole una ventaja crucial en el laberinto. "
+        + "Harry Potter participa en el Torneo de los Tres Magos, donde debe superar varias pruebas peligrosas. Su habilidad *Expellarmus* de un rango de 2 casillas permite paralizar a sus oponentes, dándole una ventaja crucial en el laberinto. "
         + "Historia: Harry Potter, junto a otros campeones, compite en el Torneo de los Tres Magos, enfrentándose a dragones, criaturas mágicas y laberintos encantados para ganar el Cáliz de Fuego.", 
-        1, 0, "Expellarmus", 6, 1000000, -7, -8, -10, 20, 4, 150);
+        1, 0, "Expellarmus", 6, 6, -7, -8, -10, 20, 4, 150);
 
-        player.Tokens[1] = new Tokens("Cedric Diggory", 2, "🦡", "Cedric Diggory, un estudiante de Hufflepuff, es conocido por su lealtad y habilidades mágicas. Como uno de los campeones del Torneo de los Tres Magos, Cedric demuestra su destreza en la magia elemental. "
+        player.Tokens[1] = new Tokens("Cedric Diggory", 2, "🦡", 
+        "Cedric Diggory, un estudiante de Hufflepuff, es conocido por su lealtad y habilidades mágicas. Como uno de los campeones del Torneo de los Tres Magos, Cedric demuestra su destreza en la magia elemental. "
         + "Cedric Diggory compite en el Torneo de los Tres Magos, utilizando su habilidad *Conjuro Elemental*, con una distancia de 4 casillas y un área de 2 casillas que le permite atacar a múltiples enemigos a la vez, lo que le permite despejar su camino hacia la COPA. "
         + "Historia: Cedric Diggory, junto a Harry Potter, enfrenta los desafíos del Torneo de los Tres Magos, demostrando su valentía y habilidades mágicas.", 
         13, 0, "Conjuro Elemental", 4, 8, -7, -7, -9, 20, 4, 150);
 
-        player.Tokens[2] = new Tokens("Fleur Delacour", 3, "🌸", "Cura vida, Rango: 2"
-        + "Fleur Delacour, una talentosa bruja de Beauxbatons, es conocida por su gracia y habilidades curativas. En el Torneo de los Tres Magos, Fleur demuestra su capacidad para sanar a sus compañeros. "
-        + "Fleur Delacour utiliza su habilidad *Sanación Mágica* para curar a la persona con menos vida en un radio de 2 casillas alrededor de la ficha. "
+        player.Tokens[2] = new Tokens("Fleur Delacour", 3, "🌸", 
+        "Fleur Delacour, una talentosa bruja de Beauxbatons, es conocida por su gracia y habilidades curativas. En el Torneo de los Tres Magos, Fleur demuestra su capacidad para sanar a sus compañeros. "
+        + "Fleur Delacour utiliza su habilidad *Sanación Mágica* para curar a la persona con menos vida en un radio de 3 casillas alrededor de la ficha. "
         + "Historia: Fleur Delacour, una de las campeonas del Torneo de los Tres Magos, enfrenta desafíos mágicos mientras utiliza sus habilidades curativas para ayudar a sus compañeros.", 
         25, 0, "Sanacion Magica", 4, 10, -9, -9, -9, 15, 8);
 
-        player.Tokens[3] = new Tokens("Viktor Krum", 4, "💪", "Viktor Krum, un famoso buscador de Quidditch de Durmstrang, es conocido por su fuerza y habilidades físicas excepcionales. En el Torneo de los Tres Magos, Viktor demuestra su capacidad para enfrentarse a desafíos físicos y mágicos. "
+        player.Tokens[3] = new Tokens("Viktor Krum", 4, "💪", 
+        "Viktor Krum, un famoso buscador de Quidditch de Durmstrang, es conocido por su fuerza y habilidades físicas excepcionales. En el Torneo de los Tres Magos, Viktor demuestra su capacidad para enfrentarse a desafíos físicos y mágicos. "
         + "Viktor Krum utiliza su habilidad *Draconifors* para aumentar su daño cuerpo a cuerpo, permitiéndole atacar con mayor fuerza a una distancia de 1 casilla. "
         + "Historia: Viktor Krum, uno de los campeones del Torneo de los Tres Magos, enfrenta desafíos mágicos y físicos mientras compite por el Cáliz de Fuego, demostrando su valentía y habilidades en cada prueba.", 
         37, 0, "Draconifors", 4, 6, -8, -8, -9, 30, 1, 250);
@@ -124,13 +126,13 @@ class Players
         "Acromántula, una gigantesca araña mágica, es conocida por su veneno mortal y su capacidad para moverse rápidamente a través del laberinto. En el Torneo de los Tres Magos, las acromántulas representan uno de los muchos peligros que los campeones deben enfrentar. "
         + "La habilidad *Veneno* de la Acromántula permite envenenar a sus oponentes a una distancia de 3 casillas, causando daño continuo durante varios turnos. "    
         + "Historia: En el Torneo de los Tres Magos, las acromántulas son una de las criaturas mágicas que los campeones deben superar para obtener el Cáliz de Fuego. Su veneno y agilidad las convierten en adversarios formidables.", 
-        7, 43, "Veneno", 5, 8, 15, 3, 300);
+        7, 43, "Veneno", 5, 8, 25, 3, 300);
 
         player.Tokens[1] = new Tokens("Esfinge", 6, "🦁", 
         "Esfinge, una criatura mágica con cuerpo de león y cabeza humana, es conocida por su inteligencia y fuerza. En el Torneo de los Tres Magos, la esfinge representa uno de los muchos desafíos que los campeones deben superar. "
         + "La habilidad *Aumento de Fuerza* de la Esfinge permite atacar con mayor daño a una distancia de 1 casilla, haciendo que sus ataques sean devastadores. "
         + "Historia: En el Torneo de los Tres Magos, la esfinge es uno de los obstáculos que los campeones deben enfrentar para obtener el Cáliz de Fuego. Su fuerza y astucia la convierten en un adversario formidable.", 
-        19, 43, "Aumento de Fuerza", 6, 6, 25, 2, 320);
+        19, 43, "Aumento de Fuerza", 6, 6, 30, 2, 320);
 
         player.Tokens[2] = new Tokens("Boggart", 7, "👻", 
         "Boggart, una criatura mágica que toma la forma del peor miedo de quien lo ve, es conocido por su habilidad para transformarse. En el Torneo de los Tres Magos, los boggarts representan un desafío psicológico para los campeones. "
@@ -142,7 +144,7 @@ class Players
         "Blast-Ended Skrewts, criaturas mágicas híbridas creadas por Hagrid, son conocidas por su capacidad para lanzar fuego y causar explosiones. En el Torneo de los Tres Magos, los Blast-Ended Skrewts representan un peligro significativo para los campeones. "
         + "La habilidad *Lanzar Fuego* de los Blast-Ended Skrewts permite atacar en un área de 1 casilla a una distancia de 5 casillas, causando daño a múltiples oponentes. "
         + "Historia: En el Torneo de los Tres Magos, los Blast-Ended Skrewts son una de las criaturas mágicas que los campeones deben superar para obtener el Cáliz de Fuego. Su capacidad para lanzar fuego y causar explosiones los convierte en adversarios formidables.", 
-        43, 43, "Lazar Fuego", 6, 10, 20, 5, 150);
+        43, 43, "Lazar Fuego", 6, 10, 25, 5, 150);
 
         string infoTarget = "Asesinar a los 4 elegidos y evitar que escapen del laberinto";
 
@@ -186,16 +188,19 @@ class Players
     {
         if(token.InfoColdTime() != 0)
         {
-            GamePlay.Pause("\nAUN NO SE A RESTABLECIDO LA HABILIDAD \n\n\n\n\n\n\n\n\n\n\n\nPRESIONE UNA TECLA PLARA CONTINUAR...");
+            GamePlay.Pause("\nAUN NO SE HA ENFRIADO LA HABILIDAD \n\n\n\n\n\n\n\n\n\n\n\nPRESIONE UNA TECLA PLARA CONTINUAR...");
             return;
         }
 
+        // Habilidad de Harry Potter
         if(token.InfoId() == 1)
         {
             _expellarmus(token, ref player2);
             token.ModifiColdTime(6);
             return;
         }
+
+        // Habilidad de Cedric Diggory
         if(token.InfoId() == 2)
         {
             _elementalConjuration(token, ref player2);
@@ -203,20 +208,24 @@ class Players
             return;
         }
 
+        // Habilidad de Fleur Delacour
         if(token.InfoId() == 3)
+        {
+            _magicalHealing(token, ref player1);
+            token.ModifiColdTime(4);
+            return;
+            
+        }
+
+        // Habilidad de Viktor Krum
+        if(token.InfoId() == 4)
         {
             _draconifors(token, ref player2);
             token.ModifiColdTime(4);
             return;
         }
 
-        if(token.InfoId() == 4)
-        {
-            _magicalHealing(token, ref player1);
-            token.ModifiColdTime(4);
-            return;
-        }
-
+        // Habilidad de Acromantula
         if(token.InfoId() == 5)
         {
             _poison(token, ref player2);
@@ -224,6 +233,7 @@ class Players
             return;
         }
 
+        // Habilidad de Esfinge
         if(token.InfoId() == 6)
         {
             _strengthIncrease(token, ref player2);
@@ -231,6 +241,7 @@ class Players
             return;
         }
 
+        // Habilidad de Boggart
         if(token.InfoId() == 7)
         {
             _copy(token, player1);
@@ -238,6 +249,7 @@ class Players
             return;
         }
 
+        // Habilidad de Blast-Ended Skrewts
         if(token.InfoId() == 8)
         {
             _throwFire(token, ref player2);
@@ -249,16 +261,16 @@ class Players
     
     // Habilidades de MAGOS
     
-    // Metodo para paralizar un ficha
+    // Metodo para paralizar un ficha en un rango de 3 casillas
     private static void _expellarmus(Tokens token, ref Players player2)
     {
         int newX = token.CoordX;
         int newY = token.CoordY;
 
-        int upX = 3;             //X---
-        int downX = 3;           //X+++
-        int leftY = 3;           //Y---
-        int rightY = 3;          //Y+++
+        int upX = 2;             //X---
+        int downX = 2;           //X+++
+        int leftY = 2;           //Y---
+        int rightY = 2;          //Y+++
 
         while(true)
         {
@@ -279,18 +291,18 @@ class Players
         {
             for (int j = 0; j <= downX; j++)
             {
-                for (int k = 0; k < leftY; k++)
+                for (int k = 0; k <= leftY; k++)
                 {
-                    for (int l = 0; l < rightY; l++)
+                    for (int l = 0; l <= rightY; l++)
                     {
                         for (int m = 0; m < player2.Tokens.Length; m++)
                         {    
                             // Verifica si hay algun enemigo en esa area
                             bool checkArea = 
-                            (player2.Tokens[m].CoordX == newX + downX && player2.Tokens[m].CoordY == newY + rightY) || 
-                            (player2.Tokens[m].CoordX == newX + downX && player2.Tokens[m].CoordY == newY - leftY) ||
-                            (player2.Tokens[m].CoordX == newX - upX && player2.Tokens[m].CoordY == newY + rightY) ||
-                            (player2.Tokens[m].CoordX == newX - upX && player2.Tokens[m].CoordY == newY - leftY);
+                            (player2.Tokens[m].CoordX == newX + j && player2.Tokens[m].CoordY == newY + l) || 
+                            (player2.Tokens[m].CoordX == newX + j && player2.Tokens[m].CoordY == newY - k) ||
+                            (player2.Tokens[m].CoordX == newX - i && player2.Tokens[m].CoordY == newY + l) ||
+                            (player2.Tokens[m].CoordX == newX - i && player2.Tokens[m].CoordY == newY - k);
 
                             if(checkArea)
                             {
@@ -307,8 +319,8 @@ class Players
                     }
                 }
             }
-        }
-       
+        } 
+        Console.WriteLine("NO HAY NADA QUE PARALIZAR");
     }
 
     // Lazar un ataque Elemental en Area distancia de 4 casillas y radio de 2
@@ -331,7 +343,7 @@ class Players
     private static void _magicalHealing(Tokens token, ref Players player1)
     {
         int menor = int.MaxValue;
-        
+        int index = 3;
         int newX = token.CoordX;
         int newY = token.CoordY;
 
@@ -342,11 +354,11 @@ class Players
 
         while(true)
         {
-            if(newX - upX <= 0)
+            if(newX - upX < 0)
                 upX--;
             else if( newX + downX >= Maze.GeneralMaze.GetLength(0))
                 downX--;
-            else if(newY - leftY <= 0)
+            else if(newY - leftY < 0)
                 leftY--;
             else if(newY + rightY >= Maze.GeneralMaze.GetLength(1))
                 rightY--;
@@ -359,40 +371,34 @@ class Players
         {
             for (int j = 0; j <= downX; j++)
             {
-                for (int k = 0; k < leftY; k++)
+                for (int k = 0; k <= leftY; k++)
                 {
-                    for (int l = 0; l < rightY; l++)
+                    for (int l = 0; l <= rightY; l++)
                     {
                         for (int m = 0; m < player1.Tokens.Length; m++)
                         {    
                             // Verifica si hay algun enemigo en esa area
                             bool checkArea = 
-                            (player1.Tokens[m].CoordX == newX + downX && player1.Tokens[m].CoordY == newY + rightY) || 
-                            (player1.Tokens[m].CoordX == newX + downX && player1.Tokens[m].CoordY == newY - leftY) ||
-                            (player1.Tokens[m].CoordX == newX - upX && player1.Tokens[m].CoordY == newY + rightY) ||
-                            (player1.Tokens[m].CoordX == newX - upX && player1.Tokens[m].CoordY == newY - leftY);
+                            (player1.Tokens[m].CoordX == newX - i && player1.Tokens[m].CoordY == newY + l) ||
+                            (player1.Tokens[m].CoordX == newX - i && player1.Tokens[m].CoordY == newY - k)  ||
+                            (player1.Tokens[m].CoordX == newX + j && player1.Tokens[m].CoordY == newY + l) || 
+                            (player1.Tokens[m].CoordX == newX + j && player1.Tokens[m].CoordY == newY - k); 
 
                             if(checkArea && player1.Tokens[m].InfoHealth() < menor)
                             {
                                 menor = player1.Tokens[m].InfoHealth();
+                                index = m;
                             }
                         }
                     }
                 }
             }
         }
-       
-        for (int i = 0; i < player1.Tokens.Length; i++)
-        {
-            if(menor == player1.Tokens[i].InfoHealth())
-            {
-                player1.Tokens[i].AddHealth(20);
-                Console.WriteLine($"Se ha curado a {player1.Tokens[i].InfoName()}");
-                GamePlay.Pause();
-                return;
-            }
-        }
 
+        player1.Tokens[index].AddHealth(20);
+        Console.WriteLine($"Se ha curado a {player1.Tokens[index].InfoName()}");
+        GamePlay.Pause();
+    
     }
     
     // Habilidades de MONSTRUOS
@@ -432,7 +438,10 @@ class Players
         Console.WriteLine("En que Monstruo te quieres transformar(1-4)");
         ConsoleKey key = Console.ReadKey().Key;
         
-        if(key != ConsoleKey.NumPad1 && key != ConsoleKey.NumPad2 && key != ConsoleKey.NumPad3 && key != ConsoleKey.NumPad4)
+        bool CheckKey = key != ConsoleKey.NumPad1 && key != ConsoleKey.NumPad2 && key != ConsoleKey.NumPad3 && key != ConsoleKey.NumPad4
+        && key == ConsoleKey.D1 && key == ConsoleKey.D2 && key == ConsoleKey.D4 && key == ConsoleKey.D4;
+
+        if(CheckKey)
         {
             Console.WriteLine("\nNo escogio convertirse en algo"); 
             GamePlay.Pause();
@@ -456,7 +465,7 @@ class Players
                 token.ModifyCharacter("🕷️");
                 token.ModifiHealth(300 );
                 token.ModifySpeed(8);
-                token.ModifiDamage(15);
+                token.ModifiDamage(25);
                 token.ModifiDistAttack(3);
                 break;
 
@@ -464,7 +473,7 @@ class Players
                 token.ModifyCharacter("🦁");
                 token.ModifiHealth(320);
                 token.ModifySpeed(6);
-                token.ModifiDamage(25);
+                token.ModifiDamage(30);
                 token.ModifiDistAttack(2);
                 break;
 
@@ -480,7 +489,7 @@ class Players
                 token.ModifyCharacter("🦂");
                 token.ModifiHealth(150);
                 token.ModifySpeed(10);
-                token.ModifiDamage(20);
+                token.ModifiDamage(25);
                 token.ModifiDistAttack(5);
                 break;
         }
@@ -738,8 +747,7 @@ class Players
                 break;
 
             // Usar Habilidad
-            case ConsoleKey.F: Console.WriteLine("\nLA FICHA VA A USAR SU HABILIDAD"); if(token.InfoColdTime() == 0) _usedSkill(token, ref player1, ref player2); 
-                Console.WriteLine($"Todavia no se ha enfriado la habilidad. le queda {token.InfoColdTime()}"); 
+            case ConsoleKey.F: Console.WriteLine("\nLA FICHA VA A USAR SU HABILIDAD"); _usedSkill(token, ref player1, ref player2); 
                 break;
         }
     }
@@ -811,8 +819,12 @@ class Players
             {
                 if (player.Tokens[j].CoordX == newX && player.Tokens[j].CoordY == newY)
                 {
-                    player.Tokens[j].RemoveHealth(damage);
-                    Console.WriteLine($"Le has quitado {damage} puntos de vida a {player.Tokens[j].InfoName()}, Le queda {player.Tokens[j].InfoHealth()}");
+                    player.Tokens[j].RemoveHealth(damage, player.Tokens[j].ActiveShield, player.Tokens[j]);
+
+                    if(player.Tokens[j].ActiveShield == false || player.Tokens[j].InfoShield() < 0)
+                        Console.WriteLine($"Le has quitado {damage} puntos de vida a {player.Tokens[j].InfoName()}. Le queda {player.Tokens[j].InfoHealth()}");
+                    else
+                        Console.WriteLine($"Le has quitado {damage} puntos al escudo de {player.Tokens[j].InfoName()}. Le queda {player.Tokens[j].InfoShield()}");
 
                     step = 0;
 
@@ -889,9 +901,11 @@ class Players
             {
                 if (player.Tokens[j].CoordX == newX && player.Tokens[j].CoordY == newY)
                 {
-                    player.Tokens[j].RemoveHealth(damage);
-                    Console.WriteLine($"Le has quitado {damage} puntos de vida a {player.Tokens[j].InfoName()}, Le queda {player.Tokens[j].InfoHealth()}");
-
+                    player.Tokens[j].RemoveHealth(damage, player.Tokens[j].ActiveShield, player.Tokens[j]);
+                    if(player.Tokens[j].ActiveShield == false || player.Tokens[j].InfoShield() < 0)
+                        Console.WriteLine($"Le has quitado {damage} puntos de vida a {player.Tokens[j].InfoName()}. Le queda {player.Tokens[j].InfoHealth()}");
+                    else
+                        Console.WriteLine($"Le has quitado {damage} puntos al escudo de {player.Tokens[j].InfoName()}. Le queda {player.Tokens[j].InfoShield()}");
                     // Verifica si la ficha aún tiene vida
                     if (player.Tokens[j].InfoHealth() <= 0)
                     {
@@ -949,11 +963,11 @@ class Players
 
         while(true)
         {
-            if(newX - upX <= 0)
+            if(newX - upX < 0)
                 upX--;
             else if( newX + downX >= Maze.GeneralMaze.GetLength(0))
                 downX--;
-            else if(newY - leftY <= 0)
+            else if(newY - leftY < 0)
                 leftY--;
             else if(newY + rightY >= Maze.GeneralMaze.GetLength(1))
                 rightY--;
@@ -967,29 +981,33 @@ class Players
         {
             for (int j = 0; j <= downX; j++)
             {
-                for (int k = 0; k < leftY; k++)
+                for (int k = 0; k <= leftY; k++)
                 {
-                    for (int l = 0; l < rightY; l++)
+                    for (int l = 0; l <= rightY; l++)
                     {
                         for (int m = 0; m < player.Tokens.Length; m++)
                         {    
                             // Verifica si hay algun enemigo en esa area
                             bool checkArea = 
-                            (player.Tokens[m].CoordX == newX + downX && player.Tokens[m].CoordY == newY + rightY) || 
-                            (player.Tokens[m].CoordX == newX + downX && player.Tokens[m].CoordY == newY - leftY) ||
-                            (player.Tokens[m].CoordX == newX - upX && player.Tokens[m].CoordY == newY + rightY) ||
-                            (player.Tokens[m].CoordX == newX - upX && player.Tokens[m].CoordY == newY - leftY);
+                            (player.Tokens[m].CoordX == newX + j && player.Tokens[m].CoordY == newY + l) || 
+                            (player.Tokens[m].CoordX == newX + j && player.Tokens[m].CoordY == newY - k) ||
+                            (player.Tokens[m].CoordX == newX - i && player.Tokens[m].CoordY == newY + l) ||
+                            (player.Tokens[m].CoordX == newX - i && player.Tokens[m].CoordY == newY - k);
 
                             if (checkArea)
                             {
-                                player.Tokens[j].RemoveHealth(damage);
-                                Console.WriteLine($"Le has quitado {damage} puntos de vida a {player.Tokens[j].InfoName()}, Le queda {player.Tokens[j].InfoHealth()}");
+                                player.Tokens[m].RemoveHealth(damage, player.Tokens[m].ActiveShield, player.Tokens[m]);
+                                
+                                if(player.Tokens[m].ActiveShield == false || player.Tokens[j].InfoShield() < 0)
+                                    Console.WriteLine($"Le has quitado {damage} puntos de vida a {player.Tokens[m].InfoName()}. Le queda {player.Tokens[m].InfoHealth()}");
+                                else
+                                    Console.WriteLine($"Le has quitado {damage} puntos al escudo de {player.Tokens[m].InfoName()}. Le queda {player.Tokens[m].InfoShield()}");
 
                                 // Verifica si la ficha aún tiene vida
-                                if (player.Tokens[j].InfoHealth() <= 0)
+                                if (player.Tokens[m].InfoHealth() <= 0)
                                 {
-                                    Console.WriteLine($"{player.Tokens[j].InfoName()} ha sido eliminado.");
-                                    player.DeleteToken(ref player, j);
+                                    Console.WriteLine($"{player.Tokens[m].InfoName()} ha sido eliminado.");
+                                    player.DeleteToken(ref player, m);
                                 }
                                 GamePlay.Pause();
                                 Console.Clear();
@@ -1000,7 +1018,6 @@ class Players
                 }
             }
         }
-
         Console.WriteLine("\nNo se infligió daño en ninguna ficha\n");
         GamePlay.Pause();
     }
@@ -1063,7 +1080,7 @@ class Players
     {
         if(Maze.GeneralMaze[newX, newY] == -2) //Verificacion de trapas
         {
-            token.RemoveHealth(20, token.ActiveShield);
+            token.RemoveHealth(20, token.ActiveShield, token);
             Console.WriteLine("\n Has caido en una trampa y has perdido 20 puntos de vidas");
             if(token.InfoHealth() <= 0)
             { 

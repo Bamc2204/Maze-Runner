@@ -508,6 +508,6 @@ class Maze
         0 = CAMINO
         1 - 4 = PERSONAJES DEL JUGADOR 1
         5 - 8 = PERSONAJES DEL JUGADOR 2
-*/
+    */
 
 }

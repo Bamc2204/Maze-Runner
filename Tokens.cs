@@ -103,7 +103,7 @@ class Tokens
                     break;
                 
                 // Escudo 
-                case Objects.shield: Console.Write($"\n {_name}, "); Shield(ref token.ActiveShield); if(token.InfoShield() <= -100) {_deleteObject(index); Console.WriteLine("Has perdido el escudo");} 
+                case Objects.shield: Console.Write($"\n {_name}, "); Shield(ref token); if(token.InfoShield() <= -100) {_deleteObject(index); Console.WriteLine("Has perdido el escudo");} 
                     break;
                 
                 // Tijera Magica
@@ -127,6 +127,17 @@ class Tokens
     // Recoger recursos
     public void Collect(Tokens token)
     {
+        bool CheckToken = 
+        token.InfoId() == 1 || token.InfoId() == 2 ||
+        token.InfoId() == 3 || token.InfoId() == 4;
+
+        if(!CheckToken)
+        {
+            Console.WriteLine("La ficha no tiene una bolsa");
+            GamePlay.Pause();
+            return;
+        }
+
         for (int i = -11; i < -5; i++)
         {
             bool canCollect = 
@@ -209,10 +220,10 @@ class Tokens
     }
 
     // Metodo para quitar a la salud
-    public void RemoveHealth(int remove, bool activeShield) 
+    public void RemoveHealth(int remove, bool activeShield, Tokens token) 
     {
-        if(activeShield && _shield > 0)
-            _shield -= remove;
+        if(activeShield && token.InfoShield() > 0)
+            token.MinusShield(remove);
         else
             _health -= remove;
     }
@@ -238,23 +249,23 @@ class Tokens
     }
    
     // Metodo Escudo
-    public void Shield(ref bool activeShield)
+    public void Shield(ref Tokens token)
     {
-        if(!activeShield)
+        if(!token.ActiveShield)
         {
             Console.WriteLine(" El escudo se ha activado");
-            _shield += 100;
-            _speed -= 2;
-            if(_shield < 0)
+            token.MinusShield(-100);
+            token.SlowDown(2);
+            if(token.InfoShield() < 0)
                 Console.WriteLine("\n El escudo ya no funciona");
-            activeShield = true;
+            token.ActiveShield = true;
         }
         else
         {
             Console.WriteLine("\n El escudo se ha desactivado");
-            _shield -= 100;
-            _speed += 3;
-            activeShield = false;
+            token.MinusShield(100);
+            token.AddSpeed(2);
+            token.ActiveShield = false;
         }
     }
 
@@ -431,6 +442,12 @@ class Tokens
     public void ModifiContTurnPoison(int cont)
     {
         _contTurnPoison += cont;
+    }
+
+    // Metodo para modificar el valor de defensa del escudo
+    public void MinusShield(int damage)
+    {
+        _shield -= damage;
     }
 
     #endregion              ////////////////////////////////////////////////////////////////////////////////////////

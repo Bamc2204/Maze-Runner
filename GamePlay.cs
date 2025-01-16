@@ -51,6 +51,7 @@ class GamePlay
     //Multijugador
     private static void MultiPlayer()
     {
+        Console.Clear();
         
         // Solicitar nombres de los jugadores
         Console.ForegroundColor = ConsoleColor.Cyan;
@@ -298,6 +299,16 @@ class GamePlay
 
         Pause();
 
+        Console.Clear();
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine("////////////////////// LEYENDA //////////////////////\n\n\n");
+        Console.WriteLine("Pared: 🌿 \nCamino:    \nFicha1: ⚡ \nFicha2: 🦡 \nFicha3: 🌸 \nFicha4: 💪 \nFicha5: 🕷️ \nFicha6: 🦁 \nFicha7: 👻 \nFicha8: 🦂 ");
+        Console.WriteLine("\nTrampa de vida(quita vida): ☠️ \nTrampa de velocidad(quita velocidad): ❄️ \nTrampa de daño(quita daño): 💥");
+        Console.WriteLine("\nCopa: 🏆 \nPosion de vida: 🧬 \nPosion de velocidad: 🏃‍♂️ \nTijeras Magicas(sirve para abrir caminos): ✂️ \nEscoba: 🧹 \nEscudo: 🛡️");
+        Console.WriteLine("\nPortal/Salida: 🚪");
+        Console.ResetColor();
+
+        Pause();
         
         string text = ("\n EL LABERINTO CADA 8 CICLOS DE TURNOS DE AMBOS JUGADORES, SE MODIFICA;" 
         + "\n EL OBJETIVO DE LOS MAGOS ES OBTENER LA COPA Y ESCAPAR POR UNO DE LOS PORTALES;"
@@ -314,6 +325,7 @@ class GamePlay
         Console.ResetColor();
 
         Pause("\n\n\n\n\n\n\n\n PRESIONE UNA TECLA PARA COMENZAR A JUGAR......");
+
     } 
 
     // Hace las pausas necesarias en el juego
