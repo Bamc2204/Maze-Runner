@@ -196,7 +196,7 @@ class Players
         if(token.InfoId() == 1)
         {
             _expellarmus(token, ref player2);
-            token.ModifiColdTime(6);
+            token.ModifyColdTime(6);
             return;
         }
 
@@ -204,7 +204,7 @@ class Players
         if(token.InfoId() == 2)
         {
             _elementalConjuration(token, ref player2);
-            token.ModifiColdTime(4);
+            token.ModifyColdTime(4);
             return;
         }
 
@@ -212,7 +212,7 @@ class Players
         if(token.InfoId() == 3)
         {
             _magicalHealing(token, ref player1);
-            token.ModifiColdTime(4);
+            token.ModifyColdTime(4);
             return;
             
         }
@@ -221,7 +221,7 @@ class Players
         if(token.InfoId() == 4)
         {
             _draconifors(token, ref player2);
-            token.ModifiColdTime(4);
+            token.ModifyColdTime(4);
             return;
         }
 
@@ -229,7 +229,7 @@ class Players
         if(token.InfoId() == 5)
         {
             _poison(token, ref player2);
-            token.ModifiColdTime(5);
+            token.ModifyColdTime(5);
             return;
         }
 
@@ -237,7 +237,7 @@ class Players
         if(token.InfoId() == 6)
         {
             _strengthIncrease(token, ref player2);
-            token.ModifiColdTime(6);
+            token.ModifyColdTime(6);
             return;
         }
 
@@ -245,7 +245,7 @@ class Players
         if(token.InfoId() == 7)
         {
             _copy(token, player1);
-            token.ModifiColdTime(10);
+            token.ModifyColdTime(10);
             return;
         }
 
@@ -253,7 +253,7 @@ class Players
         if(token.InfoId() == 8)
         {
             _throwFire(token, ref player2);
-            token.ModifiColdTime(6);
+            token.ModifyColdTime(6);
             return;
         }
 
@@ -306,8 +306,8 @@ class Players
 
                             if(checkArea)
                             {
-                                player2.Tokens[m].ModifiParalysis(true);
-                                player2.Tokens[m].ModifiContTurnParalysis(2);
+                                player2.Tokens[m].ModifyParalysis(true);
+                                player2.Tokens[m].ModifyContTurnParalysis(2);
 
                                 Console.WriteLine($"Se ha paralizado a {player2.Tokens[m].InfoName()} por 3 turnos");
 
@@ -463,34 +463,34 @@ class Players
         {
             case 5: 
                 token.ModifyCharacter("🕷️");
-                token.ModifiHealth(300 );
+                token.ModifyHealth(300 );
                 token.ModifySpeed(8);
-                token.ModifiDamage(40);
-                token.ModifiDistAttack(3);
+                token.ModifyDamage(40);
+                token.ModifyDistAttack(3);
                 break;
 
             case 6: 
                 token.ModifyCharacter("🦁");
-                token.ModifiHealth(320);
+                token.ModifyHealth(320);
                 token.ModifySpeed(6);
-                token.ModifiDamage(55);
-                token.ModifiDistAttack(2);
+                token.ModifyDamage(55);
+                token.ModifyDistAttack(2);
                 break;
 
             case 7: 
                 token.ModifyCharacter("👻");
-                token.ModifiHealth(40);
+                token.ModifyHealth(40);
                 token.ModifySpeed(12);
-                token.ModifiDamage(0);
-                token.ModifiDistAttack(0);
+                token.ModifyDamage(0);
+                token.ModifyDistAttack(0);
                 break;
 
             case 8: 
                 token.ModifyCharacter("🦂");
-                token.ModifiHealth(150);
+                token.ModifyHealth(150);
                 token.ModifySpeed(10);
-                token.ModifiDamage(40);
-                token.ModifiDistAttack(5);
+                token.ModifyDamage(40);
+                token.ModifyDistAttack(5);
                 break;
         }
     }
@@ -546,7 +546,7 @@ class Players
             ReadBoard(key, ref indexPiece);
 
             // Se inicializan los turnos
-            if(player1.InfoTurn() == false && CanRunning == true)
+            if(!player1.InfoTurn() && CanRunning == true )
             {
                 Console.WriteLine("\n Has escogido la ficha a: " + player1.Tokens[indexPiece].InfoName());  
                 player1.StartTurn();
@@ -669,7 +669,7 @@ class Players
             if(key == ConsoleKey.I || key == ConsoleKey.E || key == ConsoleKey.Tab || key == ConsoleKey.Q || key == ConsoleKey.G || key == ConsoleKey.F) 
                 continue;
 
-            // Dentro de filas, columnas y si es un camino*********************************************
+            // Dentro de filas, columnas y si es un camino
             if (Maze.GeneralMaze[newX, newY] != -1 && !isPiece && !isCup )                    
             {
                 //Verifica si hay trampa y en caso de q si aplica la funcion de la trampa
@@ -1058,8 +1058,8 @@ class Players
             {
                 if(player2.Tokens[i].CoordX == newX && player2.Tokens[i].CoordY == newY)
                 {
-                    player2.Tokens[i].ModifiPoison(true);
-                    player2.Tokens[i].ModifiContTurnPoison(3); 
+                    player2.Tokens[i].ModifyPoison(true);
+                    player2.Tokens[i].ModifyContTurnPoison(3); 
 
                     Console.WriteLine($"Has envenenado a {player2.Tokens[j].InfoName()} por 3 turnos, se le restara 15 de vida en cada turno");
                     GamePlay.Pause();
@@ -1124,9 +1124,9 @@ class Players
         { 
             if(player2.Tokens[i].InfoParalysis())
             {
-                player2.Tokens[i].ModifiContTurnParalysis(-1);
+                player2.Tokens[i].ModifyContTurnParalysis(-1);
                 if(player2.Tokens[i].InfoContTurnParalysis() == 0)
-                    player2.Tokens[i].ModifiParalysis(false);
+                    player2.Tokens[i].ModifyParalysis(false);
             }   
         }
     }
@@ -1139,9 +1139,9 @@ class Players
             if(player1.Tokens[i].InfoPoison())
             {
                 player1.Tokens[i].RemoveHealth(15);
-                player1.Tokens[i].ModifiContTurnPoison(-1);
+                player1.Tokens[i].ModifyContTurnPoison(-1);
                 if(player1.Tokens[i].InfoContTurnPoison() == 0)
-                    player1.Tokens[i].ModifiPoison(false);
+                    player1.Tokens[i].ModifyPoison(false);
             }   
         }
     }

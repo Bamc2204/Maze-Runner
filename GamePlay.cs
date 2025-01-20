@@ -9,6 +9,9 @@ class GamePlay
     // Booleano para parar la musica cuando se termine el proyecto
     private static bool musicRunning = true;
 
+    // Variable para almacenar el proceso de la música
+    private static Process? musicProcess = null;
+
     public static void Main(string[] args)
     {
         // Ruta de las canciones (asegúrate de que los archivos existan)
@@ -46,6 +49,12 @@ class GamePlay
         musicRunning = false;
         Thread.Sleep(500); // Breve pausa para que el hilo de música termine correctamente
 
+        // Asegúrate de que el proceso de la música se cierre
+        if (musicProcess != null && !musicProcess.HasExited)
+        {
+            musicProcess.Kill();
+            musicProcess.Dispose();
+        }
     }
 
     //Multijugador
@@ -143,21 +152,19 @@ class GamePlay
         {
             try
             {
-                using (Process player = new Process())
-                {
-                    player.StartInfo.FileName = songs[currentSongIndex]; // Ruta de la canción actual
-                    player.StartInfo.UseShellExecute = true; // Indica que queremos usar un proceso externo
-                    player.StartInfo.WindowStyle = ProcessWindowStyle.Hidden; // Oculta la ventana del reproductor
-                    player.Start(); // Inicia la reproducción de la canción
+                musicProcess = new Process();
+                musicProcess.StartInfo.FileName = songs[currentSongIndex]; // Ruta de la canción actual
+                musicProcess.StartInfo.UseShellExecute = true; // Indica que queremos usar un proceso externo
+                musicProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden; // Oculta la ventana del reproductor
+                musicProcess.Start(); // Inicia la reproducción de la canción
 
-                    currentSongIndex++;
+                currentSongIndex++;
 
-                    if(currentSongIndex == 4)
-                        currentSongIndex = 0;
+                if(currentSongIndex == 4)
+                    currentSongIndex = 0;
 
-                    // Esperar a que el proceso termine (cuando la canción termine)
-                    player.WaitForExit();
-                }
+                // Esperar a que el proceso termine (cuando la canción termine)
+                musicProcess.WaitForExit();
             }
             catch (Exception ex)
             {
@@ -177,6 +184,12 @@ class GamePlay
     {
         foreach (char c in text)
         {
+            if (Console.KeyAvailable)
+            {
+                Console.ReadKey(true); // Limpiar la tecla presionada
+                Console.Write(text.Substring(text.IndexOf(c))); // Imprimir el resto del texto de una vez
+                break;
+            }
             Console.Write(c);
             Thread.Sleep(time); // Controla la velocidad de impresión
         }
@@ -302,7 +315,7 @@ class GamePlay
         Console.Clear();
         Console.ForegroundColor = ConsoleColor.Red;
         Console.WriteLine("////////////////////// LEYENDA //////////////////////\n\n\n");
-        Console.WriteLine("Pared: 🌿 \nCamino:    \nFicha1: ⚡ \nFicha2: 🦡 \nFicha3: 🌸 \nFicha4: 💪 \nFicha5: 🕷️ \nFicha6: 🦁 \nFicha7: 👻 \nFicha8: 🦂 ");
+        Console.WriteLine("Pared: 🌿 \nCamino:    \n\nMAGOS:\n \nFicha1: ⚡ \nFicha2: 🦡 \nFicha3: 🌸 \nFicha4: 💪 \n\nMONSTRUOS:\n \nFicha5: 🕷️ \nFicha6: 🦁 \nFicha7: 👻 \nFicha8: 🦂 ");
         Console.WriteLine("\nTrampa de vida(quita vida): ☠️(hace 20 pts de daño) \nTrampa de velocidad(quita velocidad): ❄️ \nTrampa de daño(quita daño): 💥");
         Console.WriteLine("\nCopa: 🏆 \nPosion de vida: 🧬 \nPosion de velocidad: 🏃‍♂️ \nTijeras Magicas(sirve para abrir caminos): ✂️ \nEscoba: 🧹 \nEscudo: 🛡️");
         Console.WriteLine("\nPortal/Salida: 🚪");

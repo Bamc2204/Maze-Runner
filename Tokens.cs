@@ -24,6 +24,8 @@ class Tokens
     private bool _poison = false;               // Veneno
     private int _contTurnPoison = 0;            // Contador de turnos del veneno
 
+    private bool _alive = true;
+
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
 
     #region Constructor de fichas           ////////////////////////////////////////////////////////////////////////////////////////
@@ -391,25 +393,25 @@ class Tokens
     }
 
     //Metodo para modificar la vida
-    public void ModifiHealth(int newHealth)
+    public void ModifyHealth(int newHealth)
     {
         _health = newHealth;
     }
 
     // Metodo para modificar el daño
-    public void ModifiDamage(int newDamage)
+    public void ModifyDamage(int newDamage)
     {
         _damage = newDamage;
     }
 
     // Metodo para modificar la distacia de ataque
-    public void ModifiDistAttack(int newDistAttack)
+    public void ModifyDistAttack(int newDistAttack)
     {
         _distAttack = newDistAttack;
     }
 
     //  Metodo para modificar el Tiempo de enfriamiento
-    public void ModifiColdTime(int newColdTime)
+    public void ModifyColdTime(int newColdTime)
     {
         _coldTime = newColdTime;
     }
@@ -421,25 +423,25 @@ class Tokens
     }
 
     // Metodo para modificar la propiedad paralisis
-    public void ModifiParalysis(bool newParalysis)
+    public void ModifyParalysis(bool newParalysis)
     {
         _paralysis = newParalysis;
     }
 
     // Metodo para modificar el contador de turnos de la paralisis
-    public void ModifiContTurnParalysis(int cont)
+    public void ModifyContTurnParalysis(int cont)
     {
         _contTurnParalysis +=  cont;
     }
 
     // Metodo para modificar la propiedad Veneno
-    public void ModifiPoison(bool newPoison)
+    public void ModifyPoison(bool newPoison)
     {
         _poison = newPoison;
     }
 
     // Metodo para modificar el contador de turnos del Veneno
-    public void ModifiContTurnPoison(int cont)
+    public void ModifyContTurnPoison(int cont)
     {
         _contTurnPoison += cont;
     }
@@ -448,6 +450,15 @@ class Tokens
     public void MinusShield(int damage)
     {
         _shield -= damage;
+    }
+
+    // Modifica el estado de vida del jugador
+    public void ModifyAlive()
+    {
+        if(_alive)
+            _alive = false;
+        else
+            _alive = true;
     }
 
     #endregion              ////////////////////////////////////////////////////////////////////////////////////////
@@ -543,6 +554,12 @@ class Tokens
     public int InfoContTurnPoison()
     {
         return _contTurnPoison;
+    }
+
+    // Informacion del estado de la ficha (vivo/true o muerto/false)
+    public bool IsAlive()
+    {
+        return _alive;
     }
 
     // Metodo para mostrar todo soble la ficha
