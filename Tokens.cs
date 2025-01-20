@@ -386,6 +386,12 @@ class Tokens
         _character = newCharacter;
     }
 
+    //Metodo para modificar el ID
+    public void ModifyId(int newId)
+    {
+        _id = newId;
+    }
+
     // Metodo para modificar la velocidad
     public void ModifySpeed(int newSpeed)
     {
@@ -453,9 +459,9 @@ class Tokens
     }
 
     // Modifica el estado de vida del jugador
-    public void ModifyAlive()
+    public void ModifyAlive(bool newAlive)
     {
-        if(_alive)
+        if(newAlive)
             _alive = false;
         else
             _alive = true;

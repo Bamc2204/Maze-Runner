@@ -401,6 +401,7 @@ class Maze
                         GeneralMaze[x, y] == -10 ? "🧹" : // Escoba
                         GeneralMaze[x, y] == -11 ? "🛡️" : // Escudo
                         GeneralMaze[x, y] == -12 ? "🚪" : // Salida
+                        GeneralMaze[x, y] == -13 ? "🪦" : // Tumba de jugadores
                         "  "                        // Camino vacío
                     );
                 }
@@ -452,7 +453,7 @@ class Maze
     private void _checkBadWin(Players player1, Players player2, Maze maze, int newX, int newY, ref bool running)
     {
         //  Verifica si los MONSTRUOS mataron a todos los MAGOS
-        if(player2.Tokens.Length < 1)
+        if(Players.ContDead == 4)
         {
             running = false;
             foreach (var color in GamePlay.colors)
@@ -505,6 +506,7 @@ class Maze
         -10 = Escoba
         -11 = Escudo
         -12 = Salida 
+        -13 = Tumba
         0 = CAMINO
         1 - 4 = PERSONAJES DEL JUGADOR 1
         5 - 8 = PERSONAJES DEL JUGADOR 2

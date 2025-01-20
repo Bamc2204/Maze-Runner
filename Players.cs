@@ -10,6 +10,7 @@ class Players
     private int _index = 0;             // Indice para escoger la faccion
     private string _faction;            // Faccion del jugador
     private string _InfoTarget;         // Objetivo del jugador
+    public static int ContDead = 0;
     public static int countTurns = 0;   // Ciclos de turnos
 
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
@@ -151,22 +152,23 @@ class Players
         player.SetTarget(ref infoTarget);
     }
 
-    // Metodo para eliminar la ficha de la posicion i del array de fichas del jugador
+    // Metodo para eliminar la ficha de la posicion i del array de fichas del jugador ******************************
     public void DeleteToken(ref Players player, int index)
     {
-        Tokens[] token = new Tokens [player.Tokens.Length - 1];
-        
-        for(int i = 0; i < token.Length; i++)
+        if(player.InfoFaction() == "MAGOS")
         {
-            if(i < index)
-                token[i] = player.Tokens[i];
-            else
-                token[i] = player.Tokens[i + 1];
+            ContDead++;
         }
 
-        Maze.GeneralMaze[player.Tokens[index].CoordX,player.Tokens[index].CoordY] = 0;
+        player.Tokens[index].ModifySpeed(0);
 
-        player.Tokens = token;
+        player.Tokens[index].ModifyDamage(0);
+
+        player.Tokens[index].ModifyCharacter("🪦");
+
+        player.Tokens[index].ModifyId(-13);
+
+        player.Tokens[index].ModifyAlive(true);
     }
 
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
@@ -564,9 +566,9 @@ class Players
             // Se verifica de quien es el turno
             if(player1.InfoTurn())
             {
-                if(indexPiece > player1.Tokens.Length)
+                if(!player1.Tokens[indexPiece].IsAlive())
                 {
-                    Console.WriteLine("Hay una fichas eliminadas por lo que esa posicion ya no existe. \nVuelva a escoger ficha");
+                    Console.WriteLine("Esta ficha esta muerta. \nVuelva a escoger ficha");
                     GamePlay.Pause();
                     CanRunning = false;
                     continue;
@@ -576,9 +578,17 @@ class Players
             }
             else if(player2.InfoTurn())
             {
-                if(indexPiece > player2.Tokens.Length || player2.Tokens[indexPiece].InfoParalysis())
+                if(player2.Tokens[indexPiece].InfoParalysis())
                 {
-                    Console.WriteLine("Hay una fichas eliminadas por lo que esa posicion ya no existe o  esta paralizada. \nVuelva a escoger ficha");
+                    Console.WriteLine("La ficha está paralizada. \nVuelva a escoger ficha");
+                    GamePlay.Pause();
+                    CanRunning = false;
+                    continue;
+                }
+
+                if(!player2.Tokens[indexPiece].IsAlive())
+                {
+                    Console.WriteLine("Esta ficha esta muerta. \nVuelva a escoger ficha");
                     GamePlay.Pause();
                     CanRunning = false;
                     continue;
