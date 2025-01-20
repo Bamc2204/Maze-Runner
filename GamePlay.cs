@@ -303,7 +303,7 @@ class GamePlay
         Console.ForegroundColor = ConsoleColor.Red;
         Console.WriteLine("////////////////////// LEYENDA //////////////////////\n\n\n");
         Console.WriteLine("Pared: 🌿 \nCamino:    \nFicha1: ⚡ \nFicha2: 🦡 \nFicha3: 🌸 \nFicha4: 💪 \nFicha5: 🕷️ \nFicha6: 🦁 \nFicha7: 👻 \nFicha8: 🦂 ");
-        Console.WriteLine("\nTrampa de vida(quita vida): ☠️ \nTrampa de velocidad(quita velocidad): ❄️ \nTrampa de daño(quita daño): 💥");
+        Console.WriteLine("\nTrampa de vida(quita vida): ☠️(hace 20 pts de daño) \nTrampa de velocidad(quita velocidad): ❄️ \nTrampa de daño(quita daño): 💥");
         Console.WriteLine("\nCopa: 🏆 \nPosion de vida: 🧬 \nPosion de velocidad: 🏃‍♂️ \nTijeras Magicas(sirve para abrir caminos): ✂️ \nEscoba: 🧹 \nEscudo: 🛡️");
         Console.WriteLine("\nPortal/Salida: 🚪");
         Console.ResetColor();
@@ -311,6 +311,7 @@ class GamePlay
         Pause();
         
         string text = ("\n EL LABERINTO CADA 8 CICLOS DE TURNOS DE AMBOS JUGADORES, SE MODIFICA;" 
+        + "\n Si pasa por ensima de algun objeto excepto la copa, este sera eliminado si no lo coge"
         + "\n EL OBJETIVO DE LOS MAGOS ES OBTENER LA COPA Y ESCAPAR POR UNO DE LOS PORTALES;"
         + "\n EL OBJETIVO DE LOS MONSTRUOS ES EVITAR QUE ALGUN MAGO LOGRE ESCAPAR CON VIDA DEL LABERINTO," 
         + "\n EN CASO DE QUE PASE HABRAN FRACASADO SU MISION;" 

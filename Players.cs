@@ -126,13 +126,13 @@ class Players
         "Acromántula, una gigantesca araña mágica, es conocida por su veneno mortal y su capacidad para moverse rápidamente a través del laberinto. En el Torneo de los Tres Magos, las acromántulas representan uno de los muchos peligros que los campeones deben enfrentar. "
         + "La habilidad *Veneno* de la Acromántula permite envenenar a sus oponentes a una distancia de 3 casillas, causando daño continuo durante varios turnos. "    
         + "Historia: En el Torneo de los Tres Magos, las acromántulas son una de las criaturas mágicas que los campeones deben superar para obtener el Cáliz de Fuego. Su veneno y agilidad las convierten en adversarios formidables.", 
-        7, 43, "Veneno", 5, 8, 25, 3, 300);
+        7, 43, "Veneno", 5, 8, 40, 3, 300);
 
         player.Tokens[1] = new Tokens("Esfinge", 6, "🦁", 
         "Esfinge, una criatura mágica con cuerpo de león y cabeza humana, es conocida por su inteligencia y fuerza. En el Torneo de los Tres Magos, la esfinge representa uno de los muchos desafíos que los campeones deben superar. "
         + "La habilidad *Aumento de Fuerza* de la Esfinge permite atacar con mayor daño a una distancia de 1 casilla, haciendo que sus ataques sean devastadores. "
         + "Historia: En el Torneo de los Tres Magos, la esfinge es uno de los obstáculos que los campeones deben enfrentar para obtener el Cáliz de Fuego. Su fuerza y astucia la convierten en un adversario formidable.", 
-        19, 43, "Aumento de Fuerza", 6, 6, 30, 2, 320);
+        19, 43, "Aumento de Fuerza", 6, 6, 55, 2, 320);
 
         player.Tokens[2] = new Tokens("Boggart", 7, "👻", 
         "Boggart, una criatura mágica que toma la forma del peor miedo de quien lo ve, es conocido por su habilidad para transformarse. En el Torneo de los Tres Magos, los boggarts representan un desafío psicológico para los campeones. "
@@ -144,7 +144,7 @@ class Players
         "Blast-Ended Skrewts, criaturas mágicas híbridas creadas por Hagrid, son conocidas por su capacidad para lanzar fuego y causar explosiones. En el Torneo de los Tres Magos, los Blast-Ended Skrewts representan un peligro significativo para los campeones. "
         + "La habilidad *Lanzar Fuego* de los Blast-Ended Skrewts permite atacar en un área de 1 casilla a una distancia de 5 casillas, causando daño a múltiples oponentes. "
         + "Historia: En el Torneo de los Tres Magos, los Blast-Ended Skrewts son una de las criaturas mágicas que los campeones deben superar para obtener el Cáliz de Fuego. Su capacidad para lanzar fuego y causar explosiones los convierte en adversarios formidables.", 
-        43, 43, "Lazar Fuego", 6, 10, 25, 5, 150);
+        43, 43, "Lazar Fuego", 6, 10, 40, 5, 150);
 
         string infoTarget = "Asesinar a los 4 elegidos y evitar que escapen del laberinto";
 
@@ -465,7 +465,7 @@ class Players
                 token.ModifyCharacter("🕷️");
                 token.ModifiHealth(300 );
                 token.ModifySpeed(8);
-                token.ModifiDamage(25);
+                token.ModifiDamage(40);
                 token.ModifiDistAttack(3);
                 break;
 
@@ -473,7 +473,7 @@ class Players
                 token.ModifyCharacter("🦁");
                 token.ModifiHealth(320);
                 token.ModifySpeed(6);
-                token.ModifiDamage(30);
+                token.ModifiDamage(55);
                 token.ModifiDistAttack(2);
                 break;
 
@@ -489,7 +489,7 @@ class Players
                 token.ModifyCharacter("🦂");
                 token.ModifiHealth(150);
                 token.ModifySpeed(10);
-                token.ModifiDamage(25);
+                token.ModifiDamage(40);
                 token.ModifiDistAttack(5);
                 break;
         }
@@ -1111,7 +1111,7 @@ class Players
                 GamePlay.Pause("\n\n\n\n\nPRESIONE UAN TECLA PARA CONTINUAR...");
                 return;
             }
-            token.RemoveDamage(35);
+            token.RemoveDamage(10);
             Console.WriteLine("\n Has caido en una trampa y has perdido 30 puntos de daño, ahora haces menos daño");
             GamePlay.Pause("\n\n\n\n\nPRESIONE UAN TECLA PARA CONTINUAR...");
         }
