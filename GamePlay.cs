@@ -318,7 +318,7 @@ class GamePlay
         Console.WriteLine("Pared: 🌿 \nCamino:    \n\nMAGOS:\n \nFicha1: ⚡ \nFicha2: 🦡 \nFicha3: 🌸 \nFicha4: 💪 \n\nMONSTRUOS:\n \nFicha5: 🕷️ \nFicha6: 🦁 \nFicha7: 👻 \nFicha8: 🦂 ");
         Console.WriteLine("\nTrampa de vida(quita vida): ☠️(hace 20 pts de daño) \nTrampa de velocidad(quita velocidad): ❄️ \nTrampa de daño(quita daño): 💥");
         Console.WriteLine("\nCopa: 🏆 \nPosion de vida: 🧬 \nPosion de velocidad: 🏃‍♂️ \nTijeras Magicas(sirve para abrir caminos): ✂️ \nEscoba: 🧹 \nEscudo: 🛡️");
-        Console.WriteLine("\nPortal/Salida: 🚪");
+        Console.WriteLine("\nPortal/Salida: 🚪 \nPiedra Filosofal(revive a los magos) 💎 \nTumba de Mago: 🪦");
         Console.ResetColor();
 
         Pause();

@@ -23,7 +23,6 @@ class Tokens
     private  int _contTurnParalysis = 0;        // Contador de turnos de la paralisis
     private bool _poison = false;               // Veneno
     private int _contTurnPoison = 0;            // Contador de turnos del veneno
-
     private bool _alive = true;
 
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
@@ -81,6 +80,7 @@ class Tokens
         magicScissors = -9,
         broom = -10,
         shield = -11,
+        FilosofalStone = -12
     }
 
     // Usar objetos bolsa
@@ -115,11 +115,15 @@ class Tokens
                 // Escoba
                 case Objects.broom: __broom(ref token, player1, player2); Console.WriteLine("HAS USADO LA ESCOBA"); _deleteObject(index);
                     break;
+
+                // Piedra Filosofal
+                case Objects.FilosofalStone: _filosofalStone(token, ref player1); Console.WriteLine("HAS USADO LA PIEDRA FILOSOFAL"); _deleteObject(index);
+                    break;
             }
              // Elimina el objeto de la bolsa
         }
         else
-            System.Console.WriteLine("\n No hay nada en esa espacio de la bolsa");
+            Console.WriteLine("\n No hay nada en esa espacio de la bolsa");
     }
 
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
@@ -140,7 +144,7 @@ class Tokens
             return;
         }
 
-        for (int i = -11; i < -5; i++)
+        for (int i = -12; i < -5; i++)
         {
             bool canCollect = 
             Maze.GeneralMaze[token.CoordX + 1, token.CoordY] == i ||
@@ -187,32 +191,58 @@ class Tokens
     // Elimina el objeto obtenido del mapa
     private void _deleteObject(Tokens token)
     {
-         for (int i = -11; i < -5; i++)
+        for (int i = -12; i < -5; i++)
         {
             if(Maze.GeneralMaze[token.CoordX + 1, token.CoordY] == i)
             {
+                if(i == -12)
+                {
+                    Maze.GeneralMaze[token.CoordX + 1, token.CoordY] = -1;
+                    return;                    
+                }
+                
                 Maze.GeneralMaze[token.CoordX + 1, token.CoordY] = 0;
                 return;
             } 
             
             if(Maze.GeneralMaze[token.CoordX - 1, token.CoordY] == i)
             {
+                if(i == -12)
+                {
+                    Maze.GeneralMaze[token.CoordX - 1, token.CoordY] = -1;
+                    return;                    
+                }
+
                 Maze.GeneralMaze[token.CoordX - 1, token.CoordY] = 0;
                 return;
             } 
 
             if(Maze.GeneralMaze[token.CoordX, token.CoordY + 1] == i)
             {
+                if(i == -12)
+                {
+                    Maze.GeneralMaze[token.CoordX, token.CoordY + 1] = -1;
+                    return;                    
+                }
+
                 Maze.GeneralMaze[token.CoordX, token.CoordY + 1] = 0;
                 return;
             } 
 
             if(Maze.GeneralMaze[token.CoordX, token.CoordY - 1] == i)
             {
+                if(i == -12)
+                {
+                    Maze.GeneralMaze[token.CoordX, token.CoordY - 1] = -1;
+                    return;                    
+                }
+
                 Maze.GeneralMaze[token.CoordX, token.CoordY - 1] = 0;
                 return;
             } 
         }
+
+        
     }
 
     // Metodo para agregar salud
@@ -350,6 +380,96 @@ class Tokens
         return false;
     }
 
+    // Piedra Filosofal
+    private void _filosofalStone(Tokens token, ref Players player1)
+    {
+        int indexToken;
+        
+        if(_checkDead(-14, token.CoordX, token.CoordY))
+        {
+            indexToken = _indexDead(player1, -14);    
+            player1.Tokens[indexToken].ModifyAlive(true);
+            player1.Tokens[indexToken].ModifyCharacter("⚡");
+            player1.Tokens[indexToken].ModifyId(1); 
+            player1.Tokens[indexToken].ModifySpeed(4);
+            player1.Tokens[indexToken].ModifyDamage(15);
+            player1.Tokens[indexToken].AddHealth(100);
+            Maze.GeneralMaze[player1.Tokens[indexToken].CoordX, player1.Tokens[indexToken].CoordY] = 1;
+            Players.ContDead --;
+        }
+
+        else if(_checkDead(-15, token.CoordX, token.CoordY))
+        {
+            indexToken = _indexDead(player1, -15);
+            player1.Tokens[indexToken].ModifyAlive(true);
+            player1.Tokens[indexToken].ModifyCharacter("🦡");
+            player1.Tokens[indexToken].ModifyId(2); 
+            player1.Tokens[indexToken].ModifySpeed(6);
+            player1.Tokens[indexToken].ModifyDamage(15); 
+            player1.Tokens[indexToken].AddHealth(100);
+            Maze.GeneralMaze[player1.Tokens[indexToken].CoordX, player1.Tokens[indexToken].CoordY] = 2;
+            Players.ContDead --;
+        }
+        
+        else if(_checkDead(-16, token.CoordX, token.CoordY))
+        {
+            indexToken = _indexDead(player1, -16); 
+            player1.Tokens[indexToken].ModifyAlive(true);
+            player1.Tokens[indexToken].ModifyCharacter("🌸");
+            player1.Tokens[indexToken].ModifyId(3); 
+            player1.Tokens[indexToken].ModifySpeed(8);
+            player1.Tokens[indexToken].ModifyDamage(15);
+            player1.Tokens[indexToken].AddHealth(100);
+            Maze.GeneralMaze[player1.Tokens[indexToken].CoordX, player1.Tokens[indexToken].CoordY] = 3;
+            Players.ContDead --;
+        }
+        
+        else if(_checkDead(-17, token.CoordX, token.CoordY))
+        {
+            indexToken = _indexDead(player1, -17);
+            player1.Tokens[indexToken].ModifyAlive(true);
+            player1.Tokens[indexToken].ModifyCharacter("💪");
+            player1.Tokens[indexToken].ModifyId(4); 
+            player1.Tokens[indexToken].ModifySpeed(4);
+            player1.Tokens[indexToken].ModifyDamage(20);
+            player1.Tokens[indexToken].AddHealth(100);
+            Maze.GeneralMaze[player1.Tokens[indexToken].CoordX, player1.Tokens[indexToken].CoordY] = 4;
+            Players.ContDead --;
+        }
+        else
+        {
+            Console.WriteLine("NO HAY NINGUN MAGO AL CUAL REVIVIR");
+            GamePlay.Pause();  
+            return;          
+        } 
+
+        
+
+    }
+
+    // Verificar Muerto
+    private bool _checkDead(int DeadId, int coordX, int coordY)
+    {
+        bool thereIsDead = 
+        Maze.GeneralMaze[coordX + 1, coordY] == DeadId ||
+        Maze.GeneralMaze[coordX - 1, coordY] == DeadId ||
+        Maze.GeneralMaze[coordX, coordY + 1] == DeadId ||
+        Maze.GeneralMaze[coordX, coordY - 1] == DeadId;
+
+        return thereIsDead;
+    }
+
+    // Verifica el indice del muerto
+    private int _indexDead(Players player, int IdDead)
+    {
+        for (int i = 0; i < player.Tokens.Length; i++)
+        {
+            if(IdDead == player.Tokens[i].InfoId())
+            return i;
+        }
+        return -1;
+    }
+
     // Metodo para quitar fuerza
     public void RemoveDamage(int remove)
     {
@@ -461,10 +581,7 @@ class Tokens
     // Modifica el estado de vida del jugador
     public void ModifyAlive(bool newAlive)
     {
-        if(newAlive)
-            _alive = false;
-        else
-            _alive = true;
+        _alive = newAlive;
     }
 
     #endregion              ////////////////////////////////////////////////////////////////////////////////////////

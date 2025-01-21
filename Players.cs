@@ -155,20 +155,50 @@ class Players
     // Metodo para eliminar la ficha de la posicion i del array de fichas del jugador ******************************
     public void DeleteToken(ref Players player, int index)
     {
-        if(player.InfoFaction() == "MAGOS")
+        if(player.InfoFaction() == "MAGOS" && player.Tokens[index].IsAlive())
         {
             ContDead++;
+
+            player.Tokens[index].ModifySpeed(0);
+
+            player.Tokens[index].ModifyDamage(0);
+
+            player.Tokens[index].ModifyCharacter("🪦");
+
+            switch(player.Tokens[index].InfoId())
+            {
+                case 1: player.Tokens[index].ModifyId(-14); 
+                    Maze.GeneralMaze[player.Tokens[index].CoordX, player.Tokens[index].CoordY] = -14; 
+                    break;
+
+                case 2: player.Tokens[index].ModifyId(-15); 
+                    Maze.GeneralMaze[player.Tokens[index].CoordX, player.Tokens[index].CoordY] = -15; 
+                    break;
+
+                case 3: player.Tokens[index].ModifyId(-16); 
+                    Maze.GeneralMaze[player.Tokens[index].CoordX, player.Tokens[index].CoordY] = -16; 
+                    break;
+
+                case 4: player.Tokens[index].ModifyId(-17); 
+                    Maze.GeneralMaze[player.Tokens[index].CoordX, player.Tokens[index].CoordY] = -17; 
+                    break;
+            }
+
+            player.Tokens[index].ModifyAlive(false);
         }
-
-        player.Tokens[index].ModifySpeed(0);
-
-        player.Tokens[index].ModifyDamage(0);
-
-        player.Tokens[index].ModifyCharacter("🪦");
-
-        player.Tokens[index].ModifyId(-13);
-
-        player.Tokens[index].ModifyAlive(true);
+        // Si es un monstruo se paraliza
+        else if(player.Tokens[index].IsAlive())
+        {
+            player.Tokens[index].ModifyParalysis(true);
+            player.Tokens[index].ModifyContTurnParalysis(3);
+        }
+        // Si ya esta muerta la ficha no hace nada
+        else
+        {
+            Console.Clear();
+            Console.WriteLine("La ficha ya ha sido asesinada");
+            GamePlay.Pause();
+        }
     }
 
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
@@ -566,33 +596,31 @@ class Players
             // Se verifica de quien es el turno
             if(player1.InfoTurn())
             {
+                // Verifica si esta muerta la ficha
                 if(!player1.Tokens[indexPiece].IsAlive())
                 {
-                    Console.WriteLine("Esta ficha esta muerta. \nVuelva a escoger ficha");
-                    GamePlay.Pause();
-                    CanRunning = false;
-                    continue;
-                }
-                _displacement(player1.Tokens[indexPiece].InfoSpeed(), maze, ref player1.Tokens[indexPiece], player1, player2, ref running);
-                CanRunning = true;
-            }
-            else if(player2.InfoTurn())
-            {
-                if(player2.Tokens[indexPiece].InfoParalysis())
-                {
-                    Console.WriteLine("La ficha está paralizada. \nVuelva a escoger ficha");
+                    Console.Clear();
+                    Console.WriteLine("ESTA FICHA ESTA MUERTA. \n\nVUELVA A ESCOGER FICHA");
                     GamePlay.Pause();
                     CanRunning = false;
                     continue;
                 }
 
-                if(!player2.Tokens[indexPiece].IsAlive())
+                _displacement(player1.Tokens[indexPiece].InfoSpeed(), maze, ref player1.Tokens[indexPiece], player1, player2, ref running);
+                CanRunning = true;
+            }
+            else if(player2.InfoTurn())
+            {
+                // Verifica q los mounstruos no hayan sido paralizados
+                if(player2.Tokens[indexPiece].InfoParalysis())
                 {
-                    Console.WriteLine("Esta ficha esta muerta. \nVuelva a escoger ficha");
+                    Console.Clear();
+                    Console.WriteLine("LA FICHA ESTA PARALIZADA. \n\nVUELVA A ESCOGER FICHA");
                     GamePlay.Pause();
                     CanRunning = false;
                     continue;
                 }
+
                 _displacement(player2.Tokens[indexPiece].InfoSpeed(), maze, ref player2.Tokens[indexPiece], player2, player1, ref running);
                 CanRunning = true;
                 countTurns++;
@@ -646,12 +674,14 @@ class Players
             // Lee el teclado
             ReadBoard(key, ref newX, ref newY, ref steps, ref token, player1, player2);
 
-            if(key == ConsoleKey.Escape)                                            // Termina la simulacion
+            // Termina la simulacion si presiona escape
+            if(key == ConsoleKey.Escape)                                            
             {
                 running = false;
                 return;
             }
 
+            // Verifica q las direcciones no se hayan ido fuera del rango
             if(!(newX >= 0 && newX < Maze.GeneralMaze.GetLength(0) && newY >= 0 && newY < Maze.GeneralMaze.GetLength(1)))
             {
                 Console.Clear();
@@ -665,12 +695,17 @@ class Players
             if(!running)
                 return;
             
-            // Verifica si hay algun jugador en la proxima posicion
+            // Verifica si hay alguna ficha en esa posicion
             bool isPiece = 
             Maze.GeneralMaze[newX, newY] == 1 || Maze.GeneralMaze[newX, newY] == 2 ||
             Maze.GeneralMaze[newX, newY] == 3 || Maze.GeneralMaze[newX, newY] == 4 ||
             Maze.GeneralMaze[newX, newY] == 5 || Maze.GeneralMaze[newX, newY] == 6 ||
             Maze.GeneralMaze[newX, newY] == 7 || Maze.GeneralMaze[newX, newY] == 8;
+
+            // Verifica si hay una ficha muerta en esa posicion
+            bool isDeadPiece = 
+            Maze.GeneralMaze[newX, newY] == -14 || Maze.GeneralMaze[newX, newY] == -15 ||
+            Maze.GeneralMaze[newX, newY] == -16 || Maze.GeneralMaze[newX, newY] == -17;
 
             // Verifica si la copa esta en la proxima posicion;
             bool isCup = Maze.GeneralMaze[newX, newY] == -6;
@@ -680,15 +715,15 @@ class Players
                 continue;
 
             // Dentro de filas, columnas y si es un camino
-            if (Maze.GeneralMaze[newX, newY] != -1 && !isPiece && !isCup )                    
+            if (Maze.GeneralMaze[newX, newY] != -1 && !isPiece && !isCup && !isDeadPiece)                    
             {
                 //Verifica si hay trampa y en caso de q si aplica la funcion de la trampa
-                CheckTrap(maze, ref newX, ref newY, ref running, ref token, ref player1);
+                CheckTrap(maze, ref newX, ref newY, ref running, ref token, ref player1, player2);
                 
                 // Actualiza el tablero
-                Maze.GeneralMaze[token.CoordX, token.CoordY] = 0;                 // Vacía la posición actual
-                Maze.GeneralMaze[newX, newY] = token.InfoId();                       // Mueve la ficha
-                token.CoordX = newX;                                          // Actualiza las coordenadas actuales
+                Maze.GeneralMaze[token.CoordX, token.CoordY] = 0;               // Vacía la posición actual
+                Maze.GeneralMaze[newX, newY] = token.InfoId();                  // Mueve la ficha
+                token.CoordX = newX;                                            // Actualiza las coordenadas actuales
                 token.CoordY = newY;
                 steps --;                                                       // Pasos q puede recorer cada ficha
             }
@@ -700,12 +735,12 @@ class Players
                 Console.WriteLine("\n LOS PASOS NO SON VALIDOS, INTRODUZCA OTRA DIRECCION\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
                 newX = token.CoordX; newY = token.CoordY;   
                     
-                GamePlay.Pause("\n PRESIONE UNA TECLA PARA CONTINUAR");            
+                GamePlay.Pause();            
             }
 
             Maze.PrintMaze(player1, player2);                                    // Imprime el laberinto
         } 
-        GamePlay.Pause("\n PRESIONE UNA TECLA PARA CAMBIAR TURNO"); 
+        GamePlay.Pause(); 
     }
     
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
@@ -1086,44 +1121,50 @@ class Players
     #region Metodos de Verificacion           ////////////////////////////////////////////////////////////////////////////////////////
     
     // Chequea si caiste en una trampa
-    public static void CheckTrap(Maze lab, ref int newX, ref int newY, ref bool running, ref Tokens token, ref Players player)
+    public static void CheckTrap(Maze lab, ref int newX, ref int newY, ref bool running, ref Tokens token, ref Players player1, Players player2)
     {
         if(Maze.GeneralMaze[newX, newY] == -2) //Verificacion de trapas
         {
+            Console.Clear();
             token.RemoveHealth(20, token.ActiveShield, token);
             Console.WriteLine("\n Has caido en una trampa y has perdido 20 puntos de vidas");
             if(token.InfoHealth() <= 0)
             { 
                 Console.WriteLine($"\n {token.InfoName()} HA MUERTO");
-                GamePlay.Pause("\n\n\n\n\nPRESIONE UAN TECLA PARA CONTINUAR...");
-                for(int i = 0; i < player.Tokens.Length; i++)
-                    if(player.Tokens[i] == token)
-                        player.DeleteToken(ref player, i);
+                for(int i = 0; i < player1.Tokens.Length; i++)
+                    if(player1.Tokens[i] == token)
+                        player1.DeleteToken(ref player1, i);
             }
+            GamePlay.Pause();
+            Maze.PrintMaze(player1, player2);
         }
         else if(Maze.GeneralMaze[newX, newY] == -3)
         {
+            Console.Clear();
             if(token.InfoSpeed() == 2)
             {
                 Console.WriteLine("ESTAS EN TU LIMITE DE VELOCIDAD");
-                GamePlay.Pause("\n\n\n\n\nPRESIONE UAN TECLA PARA CONTINUAR...");
+                GamePlay.Pause();
                 return;
             }
             token.SlowDown(2);
             Console.WriteLine("\n Has caido en una trampa de reduccion de velocidad y has perdido 2 puntos de velocidad");
-            GamePlay.Pause("\n\n\n\n\nPRESIONE UAN TECLA PARA CONTINUAR...");
+            GamePlay.Pause();
+            Maze.PrintMaze(player1, player2);
         }
         else if(Maze.GeneralMaze[newX, newY] == -4)
         {
+            Console.Clear();
             if(token.InfoDamage() == 0)
             {
                 Console.WriteLine("\n Has caido muchas veces en trampas de debilitacion de furza, ya tus ataques no hacen daño");
                 GamePlay.Pause("\n\n\n\n\nPRESIONE UAN TECLA PARA CONTINUAR...");
                 return;
             }
-            token.RemoveDamage(10);
+            token.RemoveDamage(5);
             Console.WriteLine("\n Has caido en una trampa y has perdido 30 puntos de daño, ahora haces menos daño");
-            GamePlay.Pause("\n\n\n\n\nPRESIONE UAN TECLA PARA CONTINUAR...");
+            GamePlay.Pause();
+            Maze.PrintMaze(player1, player2);
         }
     }
 

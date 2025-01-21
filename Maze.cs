@@ -36,6 +36,7 @@ class Maze
         _setCup();                          // Genera la COPA
         _setExit();                         // Genera las Salidas
         _setObject();                       // Genera los Objetos para ayudar al Jugador
+        _setFilosofalSTone();               // Genera la Piedra Filosofal para revivir al los Magos
     }
 
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
@@ -106,6 +107,7 @@ class Maze
         _setCup();                          // Genera la COPA
         _setExit();                         // Genera las Salidas
         _setObject();                       // Genera los Objetos para ayudar al Jugador
+        _setFilosofalSTone();               // Coloca la Piedra Filosofal
     }
 
     #endregion          ////////////////////////////////////////////////////////////////////////////////////////
@@ -118,6 +120,18 @@ class Maze
         T1 = -2,
         T2 = -3,
         T3 = -4
+    }
+
+    // Colocar Piedra Filosofal
+    private void _setFilosofalSTone()
+    {
+        int num = _random.Next(1, 3);
+        switch(num)
+        {
+            case 1: Maze.GeneralMaze[2, 48] = -12; break;
+
+            case 2: Maze.GeneralMaze[48,48] = -12; break;
+        }
     }
 
     //Establece las trampas
@@ -142,7 +156,7 @@ class Maze
     private void _setRoad()
     {
         int cont = 0;
-        while(cont < 80)
+        while(cont < 100)
         {
             //posiciones en el centro del mapa
             int x = _random.Next(3, _rows - 3); 
@@ -211,7 +225,7 @@ class Maze
             y = _random.Next(5, 20);
             if(GeneralMaze[x, y] == 0 && _validExit(x, y))
             {
-                GeneralMaze[x, y] = -12;
+                GeneralMaze[x, y] = -13;
                 cont++;
             }
         }
@@ -224,7 +238,7 @@ class Maze
     // Verifica si es la salida del Laberinto
     public bool IsExit(int x, int y)
     {
-        if(Maze.GeneralMaze[x, y] == -12)
+        if(Maze.GeneralMaze[x, y] == -13)
             return true;
         return false;
     }
@@ -238,10 +252,10 @@ class Maze
             {
                 // Verifica q las salidas no esten cerca
                 bool exitAway =
-                (GeneralMaze[x + i, y + j] == -12) || 
-                (GeneralMaze[x - i, y - j] == -12) || 
-                (GeneralMaze[x + i, y - j] == -12) || 
-                (GeneralMaze[x - i, y + j] == -12);
+                (GeneralMaze[x + i, y + j] == -13) || 
+                (GeneralMaze[x - i, y - j] == -13) || 
+                (GeneralMaze[x + i, y - j] == -13) || 
+                (GeneralMaze[x - i, y + j] == -13);
 
                 if(exitAway)
                     return false;
@@ -391,17 +405,23 @@ class Maze
                     // Si no hay fichas en la posicion x,y del laberinto entonces imprimimos el contenido normal del laberinto
                     Console.Write(
                         GeneralMaze[x, y] == -1 ? "🌿" : // Pared
+                        /*
                         GeneralMaze[x, y] == -2 ? "☠️" : // Trampa tipo 1
                         GeneralMaze[x, y] == -3 ? "❄️" : // Trampa tipo 2
                         GeneralMaze[x, y] == -4 ? "💥" : // Trampa tipo 3
+                        */
                         GeneralMaze[x, y] == -6 ? "🏆" : // COPA
                         GeneralMaze[x, y] == -7 ? "🧬" : // Posion de vida
                         GeneralMaze[x, y] == -8 ? "🏃" : // Posion de velocidad
                         GeneralMaze[x, y] == -9 ? "✂️" : // Tijera Magica
                         GeneralMaze[x, y] == -10 ? "🧹" : // Escoba
                         GeneralMaze[x, y] == -11 ? "🛡️" : // Escudo
-                        GeneralMaze[x, y] == -12 ? "🚪" : // Salida
-                        GeneralMaze[x, y] == -13 ? "🪦" : // Tumba de jugadores
+                        GeneralMaze[x, y] == -12 ? "💎" :   // Piedra Filosofal q Revive a los Magos 
+                        GeneralMaze[x, y] == -13 ? "🚪" : // Salida
+                        GeneralMaze[x, y] == -14 ? "🪦" : // Tumba de jugadores1
+                        GeneralMaze[x, y] == -15 ? "🪦" : // Tumba de jugadores2
+                        GeneralMaze[x, y] == -16 ? "🪦" : // Tumba de jugadores3
+                        GeneralMaze[x, y] == -17 ? "🪦" : // Tumba de jugadores4
                         "  "                        // Camino vacío
                     );
                 }
@@ -505,8 +525,9 @@ class Maze
         -9 = Tijera Magica
         -10 = Escoba
         -11 = Escudo
-        -12 = Salida 
-        -13 = Tumba
+        -12 = Piedra Filosofal
+        -13 = Salida 
+        -14 = Tumba
         0 = CAMINO
         1 - 4 = PERSONAJES DEL JUGADOR 1
         5 - 8 = PERSONAJES DEL JUGADOR 2
