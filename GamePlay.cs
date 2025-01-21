@@ -6,9 +6,6 @@ class GamePlay
     // Array de colores disponibles
     public static ConsoleColor[] colors = { ConsoleColor.Red,ConsoleColor.Green, ConsoleColor.Blue, ConsoleColor.Yellow, ConsoleColor.Magenta};
 
-    // Ruta de las canciones (asegúrate de que los archivos existan)
-    static string[] songs = {Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "musica", "1.M4A"),};
-
     // Booleano para parar la musica cuando se termine el proyecto
     private static bool musicRunning = true;
 
@@ -17,6 +14,11 @@ class GamePlay
 
     public static void Main(string[] args)
     {
+        // Ruta de las canciones (asegúrate de que los archivos existan)
+        string[] songs = {
+            @"D:\Programacion\Maze-Runner\Backend\musica\1.M4A",
+        };
+
         // Crear un hilo separado para reproducir música en bucle
         Thread musicThread = new Thread(() => PlayMusicLoop(songs));
         musicThread.IsBackground = true; // El hilo se detendrá automáticamente cuando termine el programa
