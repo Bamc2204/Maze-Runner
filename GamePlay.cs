@@ -15,10 +15,8 @@ class GamePlay
     public static void Main(string[] args)
     {
         // Ruta de las canciones (asegúrate de que los archivos existan)
-        string[] songs = {
-            @"D:\Programacion\Maze-Runner\Backend\musica\1.M4A",
-        };
-
+        string[] songs = {Directory.GetCurrentDirectory() + @"\musica\1.M4A"};
+        
         // Crear un hilo separado para reproducir música en bucle
         Thread musicThread = new Thread(() => PlayMusicLoop(songs));
         musicThread.IsBackground = true; // El hilo se detendrá automáticamente cuando termine el programa
