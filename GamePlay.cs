@@ -24,6 +24,7 @@ class GamePlay
 
         // Limpiar consola y mostrar título del juego
         Console.Clear();
+        
         _printGameTitle();
 
         // Mensaje de bienvenida
@@ -158,7 +159,7 @@ class GamePlay
 
                 currentSongIndex++;
 
-                if(currentSongIndex == 4)
+                if(currentSongIndex >= 4) //if(currentSongIndex == 4)
                     currentSongIndex = 0;
 
                 // Esperar a que el proceso termine (cuando la canción termine)
@@ -170,6 +171,7 @@ class GamePlay
                 Console.WriteLine($"Error al reproducir la canción: {songs[currentSongIndex]}");
                 Console.WriteLine($"Detalles: {ex.Message}");
                 Console.ResetColor();
+                musicRunning = false;
             }
 
             // Avanzar a la siguiente canción (y volver al inicio si llegamos al final)
