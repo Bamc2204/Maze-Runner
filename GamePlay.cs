@@ -157,13 +157,11 @@ class GamePlay
                 musicProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden; // Oculta la ventana del reproductor
                 musicProcess.Start(); // Inicia la reproducción de la canción
 
-                currentSongIndex++;
-
-                if(currentSongIndex >= 4) //if(currentSongIndex == 4)
-                    currentSongIndex = 0;
-
                 // Esperar a que el proceso termine (cuando la canción termine)
                 musicProcess.WaitForExit();
+
+                // Avanzar a la siguiente canción (y volver al inicio si llegamos al final)
+                currentSongIndex = (currentSongIndex + 1) % songs.Length;
             }
             catch (Exception ex)
             {
@@ -173,9 +171,6 @@ class GamePlay
                 Console.ResetColor();
                 musicRunning = false;
             }
-
-            // Avanzar a la siguiente canción (y volver al inicio si llegamos al final)
-            currentSongIndex = (currentSongIndex + 1) % songs.Length;
         }
     }
 
