@@ -404,24 +404,24 @@ class Maze
                 {
                     // Si no hay fichas en la posicion x,y del laberinto entonces imprimimos el contenido normal del laberinto
                     Console.Write(
-                        GeneralMaze[x, y] == -1 ? "🌿" : // Pared
+                        GeneralMaze[x, y] == -1 ? "██" : // Pared
                         /*
                         GeneralMaze[x, y] == -2 ? "☠️" : // Trampa tipo 1
                         GeneralMaze[x, y] == -3 ? "❄️" : // Trampa tipo 2
                         GeneralMaze[x, y] == -4 ? "💥" : // Trampa tipo 3
                         */
-                        GeneralMaze[x, y] == -6 ? "🏆" : // COPA
-                        GeneralMaze[x, y] == -7 ? "🧬" : // Posion de vida
-                        GeneralMaze[x, y] == -8 ? "🏃" : // Posion de velocidad
-                        GeneralMaze[x, y] == -9 ? "✂️" : // Tijera Magica
-                        GeneralMaze[x, y] == -10 ? "🧹" : // Escoba
-                        GeneralMaze[x, y] == -11 ? "🛡️" : // Escudo
-                        GeneralMaze[x, y] == -12 ? "💎" :   // Piedra Filosofal q Revive a los Magos 
-                        GeneralMaze[x, y] == -13 ? "🚪" : // Salida
-                        GeneralMaze[x, y] == -14 ? "🪦" : // Tumba de jugadores1
-                        GeneralMaze[x, y] == -15 ? "🪦" : // Tumba de jugadores2
-                        GeneralMaze[x, y] == -16 ? "🪦" : // Tumba de jugadores3
-                        GeneralMaze[x, y] == -17 ? "🪦" : // Tumba de jugadores4
+                        GeneralMaze[x, y] == -6 ? "Cu" : // COPA
+                        GeneralMaze[x, y] == -7 ? "He" : // Posion de vida
+                        GeneralMaze[x, y] == -8 ? "Sp" : // Posion de velocidad
+                        GeneralMaze[x, y] == -9 ? "Sc" : // Tijera Magica
+                        GeneralMaze[x, y] == -10 ? "Br" : // Escoba
+                        GeneralMaze[x, y] == -11 ? "Sh" : // Escudo
+                        GeneralMaze[x, y] == -12 ? "PS" :   // Piedra Filosofal q Revive a los Magos 
+                        GeneralMaze[x, y] == -13 ? "Do" : // Salida
+                        GeneralMaze[x, y] == -14 ? "Gr" : // Tumba de jugadores1
+                        GeneralMaze[x, y] == -15 ? "Gr" : // Tumba de jugadores2
+                        GeneralMaze[x, y] == -16 ? "Gr" : // Tumba de jugadores3
+                        GeneralMaze[x, y] == -17 ? "Gr" : // Tumba de jugadores4
                         "  "                        // Camino vacío
                     );
                 }

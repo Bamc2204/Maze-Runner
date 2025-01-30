@@ -310,10 +310,10 @@ class GamePlay
         Console.Clear();
         Console.ForegroundColor = ConsoleColor.Red;
         Console.WriteLine("////////////////////// LEYENDA //////////////////////\n\n\n");
-        Console.WriteLine("Pared: 🌿 \nCamino:    \n\nMAGOS:\n \nFicha1: ⚡ \nFicha2: 🦡 \nFicha3: 🌸 \nFicha4: 💪 \n\nMONSTRUOS:\n \nFicha5: 🕷️ \nFicha6: 🦁 \nFicha7: 👻 \nFicha8: 🦂 ");
+        Console.WriteLine("Pared: ██ \nCamino:   \n\nMAGOS:\n \nFicha1: HP \nFicha2: CD \nFicha3: FD \nFicha4: VK \n\nMONSTRUOS:\n \nFicha5: Ac \nFicha6: Es \nFicha7: Bo \nFicha8: Bl ");
         Console.WriteLine("\nTrampa de vida(quita vida): ☠️(hace 20 pts de daño) \nTrampa de velocidad(quita velocidad): ❄️ \nTrampa de daño(quita daño): 💥");
-        Console.WriteLine("\nCopa: 🏆 \nPosion de vida: 🧬 \nPosion de velocidad: 🏃‍♂️ \nTijeras Magicas(sirve para abrir caminos): ✂️ \nEscoba: 🧹 \nEscudo: 🛡️");
-        Console.WriteLine("\nPortal/Salida: 🚪 \nPiedra Filosofal(revive a los magos) 💎 \nTumba de Mago: 🪦");
+        Console.WriteLine("\nCopa: Cu \nPosion de vida: He \nPosion de velocidad: Sp \nTijeras Magicas(sirve para abrir caminos): Sc \nEscoba: Br \nEscudo: Sh");
+        Console.WriteLine("\nPortal/Salida: Do \nPiedra Filosofal(revive a los magos) PS \nTumba de Mago: Gr");
         Console.ResetColor();
 
         Pause();
