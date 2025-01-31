@@ -1,0 +1,131 @@
+Informe del Juego de Laberinto
+
+Controles del Juego
+
+El juego se controla mediante las siguientes teclas:
+
+Desplazamiento:
+
+Flecha Arriba: Mover hacia arriba.
+
+Flecha Abajo: Mover hacia abajo.
+
+Flecha Izquierda: Mover hacia la izquierda.
+
+Flecha Derecha: Mover hacia la derecha.
+
+Información:
+
+I: Muestra información de la ficha seleccionada.
+
+J: Muestra información sobre la facción.
+
+Bolsa (Solo Magos):
+
+TAB: Acceder a la bolsa del jugador.
+
+1, 2, 3: Seleccionar los objetos en esas posiciones respectivamente.
+
+Ataque:
+
+E: Atacar. Cada ficha tiene su propia distancia de ataque y, al atacar, termina el turno del jugador.
+
+Recolección de Objetos (Solo Magos):
+
+Q: Recoger objetos dentro de una distancia de 1 casilla.
+
+Uso de Habilidades:
+
+F: Usar la habilidad de la ficha, cada una con su respectivo tiempo de enfriamiento.
+
+Elementos del Laberinto
+
+El laberinto está compuesto por diversos elementos que afectan el desarrollo del juego:
+
+Terreno:
+
+Pared: ██ (Obstáculo infranqueable).
+
+Camino: Espacio vacío (permitiendo el paso de los jugadores).
+
+Magos:
+
+Ficha1: HP
+
+Ficha2: CD
+
+Ficha3: FD
+
+Ficha4: VK
+
+Monstruos:
+
+Ficha5: Ac
+
+Ficha6: Es
+
+Ficha7: Bo
+
+Ficha8: Bl
+
+Objetos y Elementos Clave:
+
+Copa (Cu): Elemento clave para ganar el juego.
+
+Poción de vida (He): Restaura la salud.
+
+Poción de velocidad (Sp): Aumenta la velocidad.
+
+Tijeras Mágicas (Sc): Permiten abrir caminos bloqueados.
+
+Escoba (Br): Objeto especial con utilidad en el juego.
+
+Escudo (Sh): Ofrece protección adicional.
+
+Portal/Salida (Do): Punto de escape del laberinto.
+
+Piedra Filosofal (PS): Permite revivir a los magos.
+
+Tumba de Mago (Gr): Indica el lugar donde un mago ha caído.
+
+Mecánicas del Juego
+
+El laberinto cambia su estructura cada 8 ciclos de turnos de ambos jugadores. Además, cualquier objeto sobre el cual pase un jugador sin recogerlo (excepto la copa) desaparecerá.
+
+Objetivos del Juego
+
+Magos: Deben obtener la copa y escapar a través de uno de los portales.
+
+Monstruos: Deben impedir que los magos escapen con la copa. Si un mago logra escapar con ella, los monstruos habrán fracasado en su misión.
+
+Recomendaciones
+
+Se recomienda a los jugadores leer la información de su facción y de cada ficha para conocer mejor sus habilidades y estrategias dentro del juego.
+
+Música del Juego
+
+El juego cuenta con música de fondo, la cual se reproduce a través del reproductor predeterminado del sistema utilizando los archivos de sonido del proyecto.
+
+Nota: El audio puede presentar errores si la versión de .NET instalada no es compatible. Se recomienda verificar la versión y actualizar en caso de ser necesario.
+
+Versiones en GitHub
+
+El proyecto cuenta con dos ramas distintas:
+
+Rama con emojis: Brinda una mejor experiencia visual utilizando emojis. Para ejecutarla, es necesario correr dotnet run en una terminal compatible con emojis.
+
+Rama Main (sin emojis): Presenta una versión optimizada para consola sin emojis, utilizando caracteres basados en las iniciales de los objetos y elementos en inglés. Esta versión puede ejecutarse directamente desde el ejecutable del proyecto.
+
+Desarrollo y Arquitectura del Código
+
+El juego ha sido desarrollado en consola utilizando .NET 9. Su estructura está organizada en las siguientes clases:
+
+GamePlay: Clase principal que ejecuta todo el código, incluyendo la visualización del juego.
+
+Tokens: Administra las propiedades de las fichas.
+
+Maze: Contiene las propiedades y lógica de funcionamiento del laberinto.
+
+Players: Gestiona las fichas, las facciones y define las interacciones y accesibilidades disponibles para los jugadores.
+
+Este diseño modular permite una mayor organización y escalabilidad del proyecto.
