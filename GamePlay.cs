@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics; // Para iniciar procesos
+using System.IO; // Para manejar rutas de archivos
 using System.Threading;  // Para manejar hilos
 class GamePlay
 {
