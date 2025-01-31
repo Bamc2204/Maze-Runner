@@ -1,1 +1,1 @@
-[Documentación](hhttps://github.com/Bamc2204/Maze-Runner/blob/main/Informe/Informe%20del%20laberinto.txt)
+[Documentación](https://github.com/Bamc2204/Maze-Runner/blob/main/Informe/Informe%20del%20laberinto.txt)
