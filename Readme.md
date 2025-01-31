@@ -1,1 +1,1 @@
-(Documentación)[https://github.com/Bamc2204/Maze-Runner/tree/main/Informe]
+[Documentación](https://github.com/Bamc2204/Maze-Runner/tree/main/Informe)
