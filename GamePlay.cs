@@ -149,6 +149,16 @@ class GamePlay
 
         while (musicRunning) // El bucle se detiene cuando musicRunning es falso
         {
+            // Verificar si el índice de la canción actual es válido
+            if (songs.Length == 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("No hay canciones disponibles para reproducir.");
+                Console.ResetColor();
+                musicRunning = false;
+                return;
+            }
+            // Reproducir la canción actual
             try
             {
                 musicProcess = new Process();
